@@ -36,7 +36,7 @@ import org.mili.core.logging.*;
  *
  */
 public class XmlAccess {
-    private final static DefaultLogger log = DefaultLogger.getLogger(XmlAccess.class);
+    private final static Logger log = DefaultLogger.getLogger(XmlAccess.class);
 
     /**
      * Unmarshalls a XML file to an object structure.

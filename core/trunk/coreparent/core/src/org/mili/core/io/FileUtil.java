@@ -32,7 +32,7 @@ import java.net.URL;
  * @author Michael Lieshoff
  */
 public final class FileUtil {
-    private static DefaultLogger log = DefaultLogger.getLogger(FileUtil.class);
+    private static Logger log = DefaultLogger.getLogger(FileUtil.class);
 
     /**
      * Creates an input stream from a filename. The order of search the file is as first the
