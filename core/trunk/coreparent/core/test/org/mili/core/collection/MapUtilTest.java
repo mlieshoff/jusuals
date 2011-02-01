@@ -102,6 +102,20 @@ public class MapUtilTest {
                 DelimiterMode.AllAndLastButNotFirst)) == 0);
     }
 
+    @Test(expected=IllegalStateException.class)
+    public void shouldFailBecauseTransformationFunctionThrowsException() {
+        UnaryFunction<FooId, Integer> f = new UnaryFunction<FooId, Integer>() {
+            @Override
+            public Integer evaluate(FooId o) {
+                throw new IllegalStateException("fails");
+            }
+        };
+        List<FooId> l = new ArrayList<FooId>();
+        FooId fi0 = new FooId(4711, "lala");
+        l.add(fi0);
+        MapUtil.listAsMap(l, f);
+    }
+
     @Test
     public void testListAsMap_List_Function() {
         UnaryFunction<FooId, Integer> f = new UnaryFunction<FooId, Integer>() {
