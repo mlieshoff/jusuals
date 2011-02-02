@@ -14,12 +14,21 @@
     <property name="dir.src" value="src"/>
     <property name="dir.tst" value="test"/>
     <path id="cp">
-    <pathelement location="${dir.bin}"/>
-        <fileset dir="${dir.lib}" includes="**/*.jar" />
+        <pathelement location="${dir.bin}"/>
+        <fileset dir="${dir.lib}">
+            <include name="commons-functor-1.0-SNAPSHOT.jar"/>
+            <include name="commons-lang-2.4.jar"/>
+            <include name="log4j-1.2.13.jar"/>
+            <include name="poi-3.0.1-FINAL-20070705.jar"/>
+        </fileset>
     </path>
     <path id="test.cp">
-        <pathelement location="${dir.bin}"/>
-        <fileset dir="${dir.lib}" includes="**/*.jar" />
+        <path refid="cp"/>
+        <fileset dir="${dir.lib}">
+            <include name="commons-io-1.4.jar"/>
+            <include name="junit-4.8.2.jar"/>
+            <include name="jusuals-test-1.0.0.jar"/>
+        </fileset>
     </path>
     <target name="clean" description="Cleans.">
         <delete dir="${dir.tmp}" failonerror="true"/>
