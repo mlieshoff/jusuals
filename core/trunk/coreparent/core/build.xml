@@ -6,13 +6,13 @@
     <property name="version.java" value="1.5"/>
     <property name="file.build" value="${ant.project.name}-${version}.jar"/>
     <property name="file.javadoc" value="${ant.project.name}-${version}-api.zip"/>
-    <property name="dir.tmp" value="tmp"/>
+    <property name="dir.tmp" value="target"/>
     <property name="dir.lib" value="${env.REPO}"/>
-    <property name="dir.bin" value="${dir.tmp}/bin"/>
+    <property name="dir.bin" value="${dir.tmp}/classes"/>
     <property name="dir.build" value="${dir.tmp}/build"/>
     <property name="dir.javadoc" value="${dir.tmp}/javadoc"/>
-    <property name="dir.src" value="src"/>
-    <property name="dir.tst" value="test"/>
+    <property name="dir.src" value="src/main/java"/>
+    <property name="dir.tst" value="src/test/java"/>
     <path id="cp">
         <pathelement location="${dir.bin}"/>
         <fileset dir="${dir.lib}">
