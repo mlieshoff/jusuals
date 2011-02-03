@@ -122,8 +122,8 @@
     </build>
 
     <modules>
-        <module>../../../core/coreparent/core</module>
-        <module>../../../test/testparent/test</module>
+        <module>../../core/coreparent/core</module>
+        <module>../../test/testparent/test</module>
     </modules>
 
     <dependencies>
