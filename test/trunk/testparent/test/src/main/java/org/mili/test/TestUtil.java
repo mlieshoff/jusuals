@@ -40,6 +40,10 @@ public final class TestUtil {
     /** The Constant DB_DIR. */
     public static final File DB_DIR = new File(DB_FOLDER);
 
+    private TestUtil() {
+        super();
+    }
+
     /**
      * Gets the db info.
      *

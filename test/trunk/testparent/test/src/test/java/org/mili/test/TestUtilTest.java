@@ -20,11 +20,11 @@
 package org.mili.test;
 
 
+import static org.junit.Assert.*;
+
 import java.sql.*;
 
 import org.junit.*;
-
-import static org.junit.Assert.*;
 
 /**
  * @author Michael Lieshoff
@@ -36,6 +36,8 @@ public class TestUtilTest {
 
     @Before
     public void setUp() throws SQLException, ClassNotFoundException {
+        TestUtil.TMP_DIR.mkdirs();
+        TestUtil.DB_DIR.mkdirs();
         this.connection = TestUtil.getConnection(TestUtil.class);
     }
 
