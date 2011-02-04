@@ -20,8 +20,6 @@
 
 package org.mili.core.io;
 
-import static org.junit.Assert.*;
-
 import java.io.*;
 
 import org.apache.commons.io.*;

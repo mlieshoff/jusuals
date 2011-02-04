@@ -20,10 +20,10 @@
 package org.mili.core.io;
 
 
-import org.mili.core.logging.*;
-
 import java.io.*;
-import java.net.URL;
+import java.net.*;
+
+import org.mili.core.logging.*;
 
 
 /**
