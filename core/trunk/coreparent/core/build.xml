@@ -1,89 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="jusuals-core" default="build" basedir=".">
-    <property name="version" value="1.0.0"/>
-    <property name="vendor" value="org.mili"/>
-    <property environment="env"/>
-    <property name="version.java" value="1.5"/>
-    <property name="file.build" value="${ant.project.name}-${version}.jar"/>
-    <property name="file.javadoc" value="${ant.project.name}-${version}-api.zip"/>
-    <property name="dir.tmp" value="target"/>
-    <property name="dir.lib" value="${env.REPO}"/>
-    <property name="dir.bin" value="${dir.tmp}/classes"/>
-    <property name="dir.build" value="${dir.tmp}/build"/>
-    <property name="dir.javadoc" value="${dir.tmp}/javadoc"/>
-    <property name="dir.src" value="src/main/java"/>
-    <property name="dir.tst" value="src/test/java"/>
-    <path id="cp">
-        <pathelement location="${dir.bin}"/>
-        <fileset dir="${dir.lib}">
-            <include name="commons-functor-1.0-SNAPSHOT.jar"/>
-            <include name="commons-lang-2.4.jar"/>
-            <include name="log4j-1.2.13.jar"/>
-            <include name="poi-3.0.1-FINAL-20070705.jar"/>
-        </fileset>
-    </path>
-    <path id="test.cp">
-        <path refid="cp"/>
-        <fileset dir="${dir.lib}">
-            <include name="commons-io-1.4.jar"/>
-            <include name="junit-4.8.2.jar"/>
-            <include name="jusuals-test-1.0.0.jar"/>
-        </fileset>
-    </path>
-    <target name="clean" description="Cleans.">
-        <delete dir="${dir.tmp}" failonerror="true"/>
-    </target>
-    <target name="prepare" depends="clean" description="Prepares.">
-        <mkdir dir="${dir.build}" />
-        <mkdir dir="${dir.bin}" />
-    </target>
-    <target name="build" depends="prepare" description="Builds project.">
-        <javac classpathref="cp" debug="on" destdir="${dir.bin}" srcdir="${dir.src}"
-               verbose="no" deprecation="no" target="${version.java}" includes="**/*.java"
-               failonerror="true">
-        </javac>
-        <jar jarfile="${dir.build}/${file.build}">
-            <manifest>
-                <section name="Implementation infos" >
-                    <attribute name="Implementation-Title" value="${ant.project.name}" />
-                    <attribute name="Implementation-Vendor" value="${vendor}" />
-                    <attribute name="Implementation-Version" value="${version}"/>
-                </section>
-            </manifest>
-            <fileset dir="${dir.bin}" includes="**/*" />
-        </jar>
-    </target>
-    <target name="test" depends="build" description="Tests.">
-        <javac classpathref="test.cp" debug="on" destdir="${dir.bin}" srcdir="${dir.tst}"
-               sourcepath="${dir.src}" verbose="no" deprecation="no" target="${version.java}"
-               includes="**/*.java" failonerror="true">
-        </javac>
-        <junit errorproperty="test.failure" failureProperty="test.failure"
-                dir="${basedir}" fork="true" printsummary="true">
-            <classpath refid="test.cp" />
-            <formatter type="brief" usefile="false" />
-            <batchtest fork="true">
-                <fileset dir="${dir.bin}" includes="**/*Test.class" />
-            </batchtest>
-        </junit>
-        <fail message="!!! TESTS FAILED !!!" if="test.failure" />
-    </target>
-    <target name="javadoc" description="Generates JavaDocs.">
-        <delete dir="${dir.javadoc}" failonerror="true" />
-        <mkdir dir="${dir.javadoc}" />
-        <javadoc classpathref="cp" destdir="${dir.javadoc}" private="yes"
-                 additionalparam="-J-Xmx256m " splitindex="true" use="true" author="true"
-                 version="true" failonerror="true" windowtitle="${ant.project.name}">
-            <packageset dir="${dir.src}" defaultexcludes="yes" includes="**/*" />
-            <doctitle><![CDATA[<h1>${ant.project.name}</h1>]]></doctitle>
-            <bottom><![CDATA[<i>Copyright &#169; 2007 - 2011 ${vendor}. All Rights Reserved.</i>]]></bottom>
-            <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
-        </javadoc>
-        <delete file="${dir.build}/${file.javadoc}" failonerror="false"/>
-        <zip destfile="${dir.build}/${file.javadoc}">
-            <zipfileset dir="${dir.javadoc}" prefix="">
-                <include name="**/*" />
-            </zipfileset>
-        </zip>
+<project name="helper" default="release">
+
+    <property name="release.name" value="jusuals-core"/>
+    <property name="release.version" value="1.0"/>
+    <property name="release.dir" value="target"/>
+    <property name="release.file" value="${release.dir}/${release.name}-${release.version}.zip"/>
+
+    <target name="release" description="makes release.">
+       <copy file="${release.dir}/${release.name}-${release.version}-SNAPSHOT.jar" tofile="${release.dir}/${release.name}-${release.version}.jar"/>
     </target>
 </project>
