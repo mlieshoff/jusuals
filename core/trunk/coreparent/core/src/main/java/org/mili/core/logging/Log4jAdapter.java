@@ -143,6 +143,23 @@ public class Log4jAdapter implements Logger {
     }
 
     @Override
+    public void trace(Throwable t, Object... o) {
+        Level l = this.logger.getEffectiveLevel();
+        if (Level.TRACE.isGreaterOrEqual(l)) {
+            this.logger.trace(this.getO(o));
+            this.logException(l, t);
+        }
+    }
+
+    @Override
+    public void trace(Object... o) {
+        Level l = this.logger.getEffectiveLevel();
+        if (Level.TRACE.isGreaterOrEqual(l)) {
+            this.logger.trace(this.getO(o));
+        }
+    }
+    
+    @Override
     public void fatal(Throwable t, Object... o) {
         Level l = this.logger.getEffectiveLevel();
         if (Level.FATAL.isGreaterOrEqual(l)) {

@@ -41,6 +41,7 @@ public class Log4jAdapterTest {
     @Before
     public void setUp() {
         BasicConfigurator.configure(this.testAppender);
+        this.baseLogger.setLevel(Level.ALL);
     }
 
     @Test
@@ -301,6 +302,20 @@ public class Log4jAdapterTest {
     @Test
     public void testGetLogger() {
         assertNotNull(this.baseLogger);
+    }
+
+    @Test
+    public void shouldLogsATrace() {
+        this.baseLogger.setLevel(Level.TRACE);
+        this.logger.trace("a");
+        assertEquals("a", this.actMessage);
+    }
+
+    @Test
+    public void shouldLogsATraceException() {
+        this.baseLogger.setLevel(Level.TRACE);
+        this.logger.trace(new NullPointerException(), "a");
+        assertNotNull(this.actMessage);
     }
 
     class TestAppender implements Appender {

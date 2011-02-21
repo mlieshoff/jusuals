@@ -228,4 +228,15 @@ public class DefaultLogger implements Logger {
         return root.warnVarArgsToParamString(o);
     }
 
+    @Override
+    public void trace(Object... o) {
+        root.trace(o);
+    }
+
+    @Override
+    public void trace(Throwable t, Object... o) {
+        root.trace(t, o);
+    }
+
+    
 }

@@ -34,6 +34,21 @@ public interface Logger {
 	 */
     Object getLogger();
 
+    /**
+     * Traces a message and a throwable represented as array of objects.
+     * 
+     * @param t Throwable.
+     * @param o Message represented as array of objects.
+     */
+    void trace(Throwable t, Object... o);
+
+    /**
+     * Traces a message represented as array of objects.
+     *
+     * @param o Message represented as array of objects.
+     */
+    void trace(Object... o);
+
 	/**
 	 * Warns a message and a throwable represented as array of objects.
 	 * 
