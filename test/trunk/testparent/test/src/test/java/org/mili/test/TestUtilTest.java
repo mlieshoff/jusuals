@@ -39,11 +39,32 @@ public class TestUtilTest {
         TestUtil.TMP_DIR.mkdirs();
         TestUtil.DB_DIR.mkdirs();
         this.connection = TestUtil.getConnection(TestUtil.class);
+        TableFactory.create(this.connection);
     }
 
     @After
     public void after() throws SQLException {
         TestUtil.shutdownConnection(this.connection);
+    }
+
+    @Test
+    public void shouldCreateNewConnectionUtil() {
+        new ConnectionUtil();
+    }
+
+    @Test
+    public void shouldCreateNewUpdateUtil() {
+        new UpdateUtil();
+    }
+
+    @Test
+    public void shouldCreateNewQueryUtil() {
+        new QueryUtil();
+    }
+
+    @Test
+    public void shouldCreateNewTestUtil() {
+        new TestUtil();
     }
 
     @Test(expected=IllegalArgumentException.class)
@@ -53,25 +74,10 @@ public class TestUtilTest {
     }
 
     @Test(expected=IllegalArgumentException.class)
-    public void shouldFailedToShutdownConnectionBecauseNull() throws SQLException {
-        TestUtil.shutdownConnection(null);
+    public void shouldFailsBecauseNoClassDefFound() throws Exception {
+        TestUtil.getConnection(DbInfoFactory.createDefect());
     }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void shouldFailedToUpdateSqlBecauseNullConnection() throws SQLException {
-        TestUtil.update(null, "abbas");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void shouldFailedToUpdateSqlBecauseNullSql() throws SQLException {
-        TestUtil.update(this.connection, null);
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void shouldFailedToUpdateSqlBecauseEmptySql() throws SQLException {
-        TestUtil.update(this.connection, "");
-    }
-
+    
     @Test
     public void shouldGetConnectionByClass() throws Exception {
         Connection c = TestUtil.getConnection(String.class);
@@ -84,6 +90,55 @@ public class TestUtilTest {
         Connection c = TestUtil.getConnection("lala");
         assertNotNull(c);
         TestUtil.shutdownConnection(c);
+    }
+
+    @Test
+    public void shouldGetConnectionByDbInfos() throws Exception {
+        Connection c = TestUtil.getConnection(DbInfoFactory.create());
+        assertNotNull(c);
+        TestUtil.shutdownConnection(c);
+    }
+    
+    @Test
+    public void shouldGetDbInfos() {
+        assertEquals(DbInfoFactory.create(), TestUtil.getDBInfo("xyz"));
+    }
+    
+    @Test
+    public void shouldCountNumberOfRows() throws Exception {
+        assertEquals(3, TestUtil.count(this.connection, "A"));
+    }
+
+    @Test
+    public void shouldCountNumberOfRowsWithWhere() throws Exception {
+        assertEquals(1, TestUtil.count(this.connection, "A", "s='s1'"));
+    }
+
+    @Test
+    public void shouldCountNumberOfRowsWithDatabasename() throws Exception {
+        assertEquals(3, TestUtil.count("TestUtil", "A"));
+    }
+
+    @Test
+    public void shouldCountNumberOfRowsWithDatabasenameAndWhere() throws Exception {
+        assertEquals(1, TestUtil.count("TestUtil", "A", "s='s1'"));
+    }
+
+    @Test
+    public void shouldUpdate() throws Exception {
+        TestUtil.update(this.connection, "delete from A where s='s1'");
+        assertEquals(2, TestUtil.count(this.connection, "A"));
+    }
+
+    @Test
+    public void shouldUpdateWithDatabasename() throws Exception {
+        TestUtil.update("TestUtil", "delete from A where s='s1'");
+        assertEquals(2, TestUtil.count(this.connection, "A"));
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void shouldFailUpdateBecauseEmptySql() throws Exception {
+        TestUtil.update(this.connection, "");
     }
 
 }

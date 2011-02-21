@@ -23,8 +23,6 @@ import java.io.*;
 import java.sql.*;
 import java.util.*;
 
-import org.apache.commons.lang.*;
-
 /**
  * This utility class provides some useful methods for testing.
  *
@@ -36,11 +34,14 @@ public final class TestUtil {
     /** The Constant TMP_DIR. */
     public static final File TMP_DIR = new File(TMP_FOLDER);
     /** The Constant DB_FOLDER. */
-    public static final String DB_FOLDER = TMP_FOLDER + "/testdb";
+    public static final String DB_FOLDER = ConnectionUtil.DB_FOLDER;
     /** The Constant DB_DIR. */
-    public static final File DB_DIR = new File(DB_FOLDER);
+    public static final File DB_DIR = ConnectionUtil.DB_DIR;
 
-    private TestUtil() {
+    /**
+     * creates a new test util. 
+     */
+    public TestUtil() {
         super();
     }
 
@@ -51,12 +52,7 @@ public final class TestUtil {
      * @return the db info
      */
     public static Properties getDBInfo(String name) {
-        Properties p = new Properties();
-        p.setProperty("driver", "org.hsqldb.jdbcDriver");
-        p.setProperty("url", "jdbc:hsqldb:file:" + DB_FOLDER + "/" + name);
-        p.setProperty("user", "sa");
-        p.setProperty("password", "");
-        return p;
+        return ConnectionUtil.getDBInfo(name);
     }
 
     /**
@@ -65,14 +61,9 @@ public final class TestUtil {
      * @param dbInfo the db info
      * @return the connection
      * @throws SQLException if errors occurs
-     * @throws ClassNotFoundException
      */
-    public static Connection getConnection(Properties dbInfo) throws SQLException,
-            ClassNotFoundException {
-        Validate.notNull(dbInfo);
-        Class.forName(dbInfo.getProperty("driver"));
-        return DriverManager.getConnection(dbInfo.getProperty("url"), dbInfo.getProperty(
-                "user"), dbInfo.getProperty("password"));
+    public static Connection getConnection(Properties dbInfo) throws SQLException {
+        return ConnectionUtil.getConnection(dbInfo);
     }
 
     /**
@@ -81,12 +72,9 @@ public final class TestUtil {
      * @param name the name of db
      * @return the connection
      * @throws SQLException if errors occurs
-     * @throws ClassNotFoundException
      */
-    public static Connection getConnection(String name) throws SQLException,
-            ClassNotFoundException {
-        Validate.notEmpty(name);
-        return getConnection(getDBInfo(name));
+    public static Connection getConnection(String name) throws SQLException {
+        return ConnectionUtil.getConnection(name);
     }
 
     /**
@@ -95,12 +83,9 @@ public final class TestUtil {
      * @param cls the class of test, to get a db by it's simple name
      * @return the connection
      * @throws SQLException if errors occurs
-     * @throws ClassNotFoundException
      */
-    public static Connection getConnection(Class<?> cls) throws SQLException,
-            ClassNotFoundException {
-        Validate.notNull(cls);
-        return getConnection(getDBInfo(cls.getSimpleName()));
+    public static Connection getConnection(Class<?> cls) throws SQLException {
+        return ConnectionUtil.getConnection(cls);
     }
 
     /**
@@ -110,28 +95,79 @@ public final class TestUtil {
      * @throws SQLException if errors occurs
      */
     public static void shutdownConnection(Connection c) throws SQLException {
-        Validate.notNull(c);
-        update(c, "SHUTDOWN");
-        if (!c.isClosed()) {
-            c.close();
-        }
+        ConnectionUtil.shutdownConnection(c);
     }
 
     /**
-     * Update.
+     * Executes a sql string on specified connection.
      *
-     * @param c the connection
-     * @param sql the sql
+     * @param connection the connection
+     * @param sql update sql
      * @return the result of update operation
      * @throws SQLException if errors occurs
      */
-    public static int update(Connection c, String sql) throws SQLException {
-        Validate.notNull(c);
-        Validate.notEmpty(sql);
-        Statement statement = c.createStatement();
-        int result = statement.executeUpdate(sql);
-        statement.close();
-        return result;
+    public static int update(Connection connection, String sql) throws SQLException {
+        return UpdateUtil.update(connection, sql);
+    }
+
+    /**
+     * Executes a sql string on a database specified with name.
+     *
+     * @param databaseName name of database
+     * @param sql update sql
+     * @return the result of update operation
+     * @throws SQLException if errors occurs
+     */
+    public static int update(String databaseName, String sql) throws SQLException {
+        return UpdateUtil.update(TestUtil.getConnection(databaseName), sql);
+    }
+
+    /**
+     * Counts rows in defined table of specified connection.
+     *
+     * @param databaseName the name of database
+     * @param tablename the tablename
+     * @return the number of row count
+     */
+    public static int count(String databaseName, String tablename) throws SQLException {
+        return QueryUtil.count(TestUtil.getConnection(databaseName), tablename);
+    }
+
+    /**
+     * Counts rows in defined table of specified connection.
+     *
+     * @param databaseName the name of database
+     * @param tablename the tablename
+     * @param where the where
+     * @return the number of row count
+     */
+    public static int count(String databaseName, String tablename, String where) 
+            throws SQLException {
+        return QueryUtil.count(TestUtil.getConnection(databaseName), tablename, where);
+    }
+
+    /**
+     * Counts rows in defined table of specified connection.
+     *
+     * @param connection the connection
+     * @param tablename the tablename
+     * @return the number of row count
+     */
+    public static int count(Connection connection, String tablename) throws SQLException {
+        return QueryUtil.count(connection, tablename);
+    }
+
+    /**
+     * Counts rows in defined table of specified connection.
+     *
+     * @param databaseName the name of database
+     * @param tablename the tablename
+     * @param where the where
+     * @return the number of row count
+     */
+    public static int count(Connection connection, String tablename, String where) 
+            throws SQLException {
+        return QueryUtil.count(connection, tablename, where);
     }
 
 }
