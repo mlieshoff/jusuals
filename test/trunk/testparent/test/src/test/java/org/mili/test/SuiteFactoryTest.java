@@ -28,10 +28,6 @@ import org.junit.*;
  */
 public class SuiteFactoryTest {
 
-    @Before
-    public void setUp() throws Exception {
-    }
-
     @Test(expected=IllegalArgumentException.class)
     public void shouldFailBecauseDirectoryIsNull() throws Exception {
         SuiteFactory.createStandardDirectorySuite(null);
