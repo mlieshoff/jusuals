@@ -20,6 +20,8 @@
 
 package org.mili.test;
 
+import static org.junit.Assert.*;
+import junitx.util.*;
 
 import org.junit.*;
 
@@ -41,6 +43,26 @@ public class SuiteFactoryTest {
     @Test(expected=IllegalArgumentException.class)
     public void shouldFailBecauseDirectoryNoExisted() throws Exception {
         SuiteFactory.createStandardDirectorySuite("a.b.b.a.s");
+    }
+
+    @Test
+    public void shouldCreateTestsuiteWithStandardFilter() throws Exception {
+        assertNotNull(SuiteFactory.createStandardDirectorySuite("./target/classes"));
+    }
+
+    @Test
+    public void shouldCreateTestsuiteWithCustomFilter() throws Exception {
+        assertNotNull(SuiteFactory.createStandardDirectorySuite("./target/classes", 
+                new TestFilter() {
+            @Override
+            public boolean include(Class arg0) {
+                return true;
+            }
+            @Override
+            public boolean include(String arg0) {
+                return true;
+            }
+        }));
     }
 
 }
