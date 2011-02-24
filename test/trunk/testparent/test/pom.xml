@@ -34,6 +34,11 @@
     </parent>
     <dependencies>
         <dependency>
+            <groupId>org.mili.core</groupId>
+            <artifactId>jusuals-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.6</version>
