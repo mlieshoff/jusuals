@@ -23,6 +23,8 @@ import java.io.*;
 import java.sql.*;
 import java.util.*;
 
+import org.mili.core.database.*;
+
 /**
  * This utility class provides some useful methods for testing.
  *
@@ -168,6 +170,41 @@ public final class TestUtil {
     public static int count(Connection connection, String tablename, String where) 
             throws SQLException {
         return QueryUtil.count(connection, tablename, where);
+    }
+
+    /**
+     * Shows table at console.
+     *
+     * @param databasename the databasename
+     * @param tablename the tablename
+     */
+    public static void showTable(String databasename, String tablename) throws SQLException {
+        showTable(databasename, tablename, null);
+    }
+
+    /**
+     * Shows table at console.
+     *
+     * @param databasename the databasename
+     * @param tablename the tablename
+     * @param where the where
+     */
+    public static void showTable(String databasename, String tablename, String where) 
+            throws SQLException  {
+        showTable(databasename, tablename, where, null);
+    }
+
+    /**
+     * Shows table at console.
+     *
+     * @param databasename the databasename
+     * @param tablename the tablename
+     * @param where the where
+     * @param columns the columns
+     */
+    public static void showTable(String databasename, String tablename, String where, 
+            String... columns) throws SQLException {
+        DumpUtil.showTable(getConnection(databasename), tablename, where, columns);
     }
 
 }

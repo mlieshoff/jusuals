@@ -141,4 +141,19 @@ public class TestUtilTest {
         TestUtil.update(this.connection, "");
     }
 
+    @Test
+    public void shouldShowCompleteTableWithDatabasename() throws Exception {
+        TestUtil.showTable("TestUtil", "A");
+    }
+    
+    @Test
+    public void shouldShowCompleteTableWithDatabasenameAndColumns() throws Exception {
+        TestUtil.showTable("TestUtil", "A", null, "s", "i");
+    }
+
+    @Test
+    public void shouldShowCompleteTableWithDatabasenameAndWhereAndColumns() throws Exception {
+        TestUtil.showTable("TestUtil", "A", "s='1'", "s", "i");
+    }
+
 }
