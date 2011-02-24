@@ -113,6 +113,33 @@ public class DumpUtil {
     }
 
     /**
+     * Shows table at console.
+     *
+     * @param connection the connection
+     * @param tablename the tablename
+     * @param where the where
+     * @param columns the columns
+     */
+    public static void showTable(Connection c, String tablename, String where, 
+            String... columns) {
+        Table t = null;
+        try {
+            t = DumpUtil.tableToTextTable(c, tablename, where, columns);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (!c.isClosed()) {
+                    c.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println(String.valueOf(t));
+    }
+
+    /**
      * Dumpt eine Tabelle.
      *
      * @param c Connection.
