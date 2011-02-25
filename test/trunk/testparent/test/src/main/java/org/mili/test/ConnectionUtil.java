@@ -32,7 +32,7 @@ import org.apache.commons.lang.*;
  */
 public final class ConnectionUtil {
     /** The Constant DB_FOLDER. */
-    static final String DB_FOLDER = TestUtil.TMP_FOLDER + "/testdb";
+    static final String DB_FOLDER = TestUtils.TMP_FOLDER + "/testdb";
     /** The Constant DB_DIR. */
     static final File DB_DIR = new File(DB_FOLDER);
 
@@ -104,7 +104,7 @@ public final class ConnectionUtil {
      * @throws SQLException if errors occurs
      */
     static void shutdownConnection(Connection c) throws SQLException {
-        TestUtil.update(c, "SHUTDOWN");
+        TestUtils.update(c, "SHUTDOWN");
         if (!c.isClosed()) {
             c.close();
         }

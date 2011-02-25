@@ -37,7 +37,7 @@ public class DbInfoFactory {
     static Properties create() {
         Properties p = new Properties();
         p.setProperty("driver", "org.hsqldb.jdbcDriver");
-        p.setProperty("url", "jdbc:hsqldb:file:" + TestUtil.DB_FOLDER + "/" + "xyz");
+        p.setProperty("url", "jdbc:hsqldb:file:" + TestUtils.DB_FOLDER + "/" + "xyz");
         p.setProperty("user", "sa");
         p.setProperty("password", "");
         return p;
@@ -51,7 +51,7 @@ public class DbInfoFactory {
     static Properties createDefect() {
         Properties p = new Properties();
         p.setProperty("driver", "a.b.C");
-        p.setProperty("url", "jdbc:hsqldb:file:" + TestUtil.DB_FOLDER + "/" + "xyz");
+        p.setProperty("url", "jdbc:hsqldb:file:" + TestUtils.DB_FOLDER + "/" + "xyz");
         p.setProperty("user", "sa");
         p.setProperty("password", "");
         return p;
