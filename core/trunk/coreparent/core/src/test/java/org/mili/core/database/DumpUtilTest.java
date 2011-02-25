@@ -40,19 +40,19 @@ public class DumpUtilTest {
     public static void createDB() throws Exception {
         Connection c = null;
         try {
-            c = TestUtil.getConnection(TestUtil.getDBInfo("DumpUtil"));
-            TestUtil.update(c, "drop table if exists a;");
-            TestUtil.update(c, "create table a (a integer primary key, b varchar(50), c integer);");
-            TestUtil.update(c, "insert into a (a, b, c) values (1, 'a', 10);");
-            TestUtil.update(c, "insert into a (a, b, c) values (2, 'b', 11);");
-            TestUtil.update(c, "insert into a (a, b, c) values (3, 'c', 12);");
-            TestUtil.update(c, "insert into a (a, b, c) values (4, 'd', 13);");
-            TestUtil.update(c, "insert into a (a, b, c) values (5, 'e', 14);");
+            c = TestUtils.getConnection(TestUtils.getDBInfo("DumpUtil"));
+            TestUtils.update(c, "drop table if exists a;");
+            TestUtils.update(c, "create table a (a integer primary key, b varchar(50), c integer);");
+            TestUtils.update(c, "insert into a (a, b, c) values (1, 'a', 10);");
+            TestUtils.update(c, "insert into a (a, b, c) values (2, 'b', 11);");
+            TestUtils.update(c, "insert into a (a, b, c) values (3, 'c', 12);");
+            TestUtils.update(c, "insert into a (a, b, c) values (4, 'd', 13);");
+            TestUtils.update(c, "insert into a (a, b, c) values (5, 'e', 14);");
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
-                TestUtil.shutdownConnection(c);
+                TestUtils.shutdownConnection(c);
             } catch (SQLException e) {
                 e.printStackTrace();
                 fail();
@@ -64,7 +64,7 @@ public class DumpUtilTest {
     public void test() throws Exception {
         Connection c = null;
         try {
-            c = TestUtil.getConnection(TestUtil.getDBInfo("DumpUtil"));
+            c = TestUtils.getConnection(TestUtils.getDBInfo("DumpUtil"));
             List<List<Object>> l = DumpUtil.dumpTable(c, "a");
             assertTrue(l != null && l.size() > 0);
             assertTrue(l.get(0).toString().compareTo("[a]") == 0);
@@ -129,7 +129,7 @@ public class DumpUtilTest {
             fail();
         } finally {
             try {
-                TestUtil.shutdownConnection(c);
+                TestUtils.shutdownConnection(c);
             } catch (SQLException e) {
                 e.printStackTrace();
                 fail();

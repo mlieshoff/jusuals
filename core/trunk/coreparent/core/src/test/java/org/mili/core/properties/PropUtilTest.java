@@ -33,7 +33,7 @@ import org.mili.test.*;
  */
 public class PropUtilTest {
 
-    private File file = new File(TestUtil.TMP_FOLDER, "abbas.properties");
+    private File file = new File(TestUtils.TMP_FOLDER, "abbas.properties");
 
     @Before
     public void setUp() throws Exception {
