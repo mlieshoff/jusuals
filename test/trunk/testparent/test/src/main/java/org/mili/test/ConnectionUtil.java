@@ -23,6 +23,7 @@ import java.io.*;
 import java.sql.*;
 import java.util.*;
 
+import org.apache.commons.io.*;
 import org.apache.commons.lang.*;
 
 /**
@@ -107,6 +108,25 @@ public final class ConnectionUtil {
         TestUtils.update(c, "SHUTDOWN");
         if (!c.isClosed()) {
             c.close();
+        }
+    }
+
+    /**
+     * Drops the database.
+     *
+     * @param databaseName the database name
+     * @throws SQLException if errors occurs
+     */
+    static void dropDatabase(String databaseName) throws SQLException {
+        shutdownConnection(getConnection(databaseName));
+        File dir = new File(DB_FOLDER + "/" + databaseName);
+        try {
+            FileUtils.deleteDirectory(dir);
+        } catch (IOException e) {
+            throw new SQLException(dir.getAbsolutePath() + " cant be dropped!", e);
+        }
+        if (dir.exists()) {
+            throw new SQLException(dir.getAbsolutePath() + " cant be dropped!");
         }
     }
 

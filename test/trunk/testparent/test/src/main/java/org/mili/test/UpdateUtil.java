@@ -20,6 +20,7 @@
 package org.mili.test;
 
 import java.sql.*;
+import java.util.*;
 
 import org.apache.commons.lang.*;
 
@@ -52,5 +53,31 @@ public class UpdateUtil {
         int result = statement.executeUpdate(sql);
         statement.close();
         return result;
+    }
+
+    /**
+     * Executes sql batch commands.
+     *
+     * @param sqlCmds the sql commands
+     * @param connection the connection
+     * @throws SQLException if errors occurs
+     */
+    public static void executeBatch(List<String> sqlCmds, Connection connection) 
+            throws SQLException {
+        for (int i = 0, n = sqlCmds.size(); i < n; i++) {
+            update(connection, sqlCmds.get(i));
+        }
+    }
+
+    /**
+     * Executes sql batch commands.
+     *
+     * @param sqlCmds the sql commands
+     * @param databaseName the database name
+     * @throws SQLException if errors occurs
+     */
+    public static void executeBatch(List<String> sqlCmds, String databaseName) 
+            throws SQLException {
+        executeBatch(sqlCmds,ConnectionUtil.getConnection(databaseName));
     }
 }
