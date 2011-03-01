@@ -1,5 +1,5 @@
 /*
- * ConnectionUtil.java
+ * ConnectionUtils.java
  *
  * 21.02.2011
  *
@@ -31,16 +31,12 @@ import org.apache.commons.lang.*;
  *
  * @author Michael Lieshoff
  */
-public final class ConnectionUtil {
-    /** The Constant DB_FOLDER. */
-    static final String DB_FOLDER = TestUtils.TMP_FOLDER + "/testdb";
-    /** The Constant DB_DIR. */
-    static final File DB_DIR = new File(DB_FOLDER);
+public final class ConnectionUtils {
 
     /**
      * creates a new connection util. 
      */
-    public ConnectionUtil() {
+    public ConnectionUtils() {
     }
     
     /**
@@ -52,7 +48,7 @@ public final class ConnectionUtil {
     static Properties getDBInfo(String name) {
         Properties p = new Properties();
         p.setProperty("driver", "org.hsqldb.jdbcDriver");
-        p.setProperty("url", "jdbc:hsqldb:file:" + DB_FOLDER + "/" + name);
+        p.setProperty("url", "jdbc:hsqldb:file:" + FolderUtils.DB_FOLDER + "/" + name);
         p.setProperty("user", "sa");
         p.setProperty("password", "");
         return p;
@@ -119,7 +115,7 @@ public final class ConnectionUtil {
      */
     static void dropDatabase(String databaseName) throws SQLException {
         shutdownConnection(getConnection(databaseName));
-        File dir = new File(DB_FOLDER + "/" + databaseName);
+        File dir = new File(FolderUtils.DB_FOLDER + "/" + databaseName);
         try {
             FileUtils.deleteDirectory(dir);
         } catch (IOException e) {

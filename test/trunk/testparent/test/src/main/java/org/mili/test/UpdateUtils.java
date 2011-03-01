@@ -1,5 +1,5 @@
 /*
- * UpdateUtil.java
+ * UpdateUtils.java
  *
  * 21.02.2011
  *
@@ -31,12 +31,12 @@ import org.apache.commons.lang.*;
  * @author Michael Lieshoff
  *
  */
-public class UpdateUtil {
+public class UpdateUtils {
 
     /**
      * creates a new update util. 
      */
-    public UpdateUtil() {
+    public UpdateUtils() {
     }
 
     /**
@@ -78,6 +78,6 @@ public class UpdateUtil {
      */
     public static void executeBatch(List<String> sqlCmds, String databaseName) 
             throws SQLException {
-        executeBatch(sqlCmds,ConnectionUtil.getConnection(databaseName));
+        executeBatch(sqlCmds,ConnectionUtils.getConnection(databaseName));
     }
 }

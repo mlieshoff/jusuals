@@ -1,5 +1,5 @@
 /*
- * QueryUtil.java
+ * QueryUtils.java
  *
  * 21.02.2011
  *
@@ -29,12 +29,12 @@ import org.apache.commons.lang.*;
  * @author Michael Lieshoff
  *
  */
-public class QueryUtil {
+public class QueryUtils {
 
     /**
      * creates a new query util. 
      */
-    public QueryUtil() {
+    public QueryUtils() {
     }
 
     /**

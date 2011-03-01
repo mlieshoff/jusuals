@@ -30,20 +30,20 @@ import org.mili.core.database.*;
  *
  * @author Michael Lieshoff
  */
-public final class TestUtil {
+public final class TestUtils {
     /** The Constant TMP_FOLDER. */
-    public static final String TMP_FOLDER = "./tmp";
+    public static final String TMP_FOLDER = FolderUtils.TMP_FOLDER;
     /** The Constant TMP_DIR. */
-    public static final File TMP_DIR = new File(TMP_FOLDER);
+    public static final File TMP_DIR = FolderUtils.TMP_DIR;
     /** The Constant DB_FOLDER. */
-    public static final String DB_FOLDER = ConnectionUtil.DB_FOLDER;
+    public static final String DB_FOLDER = FolderUtils.DB_FOLDER;
     /** The Constant DB_DIR. */
-    public static final File DB_DIR = ConnectionUtil.DB_DIR;
+    public static final File DB_DIR = FolderUtils.DB_DIR;
 
     /**
      * creates a new test util. 
      */
-    public TestUtil() {
+    public TestUtils() {
         super();
     }
 
@@ -54,7 +54,7 @@ public final class TestUtil {
      * @return the db info
      */
     public static Properties getDBInfo(String name) {
-        return ConnectionUtil.getDBInfo(name);
+        return ConnectionUtils.getDBInfo(name);
     }
 
     /**
@@ -65,7 +65,7 @@ public final class TestUtil {
      * @throws SQLException if errors occurs
      */
     public static Connection getConnection(Properties dbInfo) throws SQLException {
-        return ConnectionUtil.getConnection(dbInfo);
+        return ConnectionUtils.getConnection(dbInfo);
     }
 
     /**
@@ -76,7 +76,7 @@ public final class TestUtil {
      * @throws SQLException if errors occurs
      */
     public static Connection getConnection(String name) throws SQLException {
-        return ConnectionUtil.getConnection(name);
+        return ConnectionUtils.getConnection(name);
     }
 
     /**
@@ -87,7 +87,7 @@ public final class TestUtil {
      * @throws SQLException if errors occurs
      */
     public static Connection getConnection(Class<?> cls) throws SQLException {
-        return ConnectionUtil.getConnection(cls);
+        return ConnectionUtils.getConnection(cls);
     }
 
     /**
@@ -97,7 +97,28 @@ public final class TestUtil {
      * @throws SQLException if errors occurs
      */
     public static void shutdownConnection(Connection c) throws SQLException {
-        ConnectionUtil.shutdownConnection(c);
+        ConnectionUtils.shutdownConnection(c);
+    }
+
+    /**
+     * Drop the database.
+     *
+     * @param databaseName the database name
+     * @throws Exception if errors occurs
+     */
+    public static void dropDatabase(String databaseName) throws Exception {
+        ConnectionUtils.dropDatabase(databaseName);
+    }
+
+    /**
+     * Gets the tmp folder.
+     *
+     * @param cls the class based for tmp folder creation
+     * @return the tmp folder
+     * @throws Exception if errors occurs
+     */
+    public static File getTmpFolder(Class<?> cls) {
+        return FolderUtils.getTmpFolder(cls);
     }
 
     /**
@@ -109,7 +130,7 @@ public final class TestUtil {
      * @throws SQLException if errors occurs
      */
     public static int update(Connection connection, String sql) throws SQLException {
-        return UpdateUtil.update(connection, sql);
+        return UpdateUtils.update(connection, sql);
     }
 
     /**
@@ -121,7 +142,31 @@ public final class TestUtil {
      * @throws SQLException if errors occurs
      */
     public static int update(String databaseName, String sql) throws SQLException {
-        return UpdateUtil.update(TestUtil.getConnection(databaseName), sql);
+        return UpdateUtils.update(TestUtils.getConnection(databaseName), sql);
+    }
+
+    /**
+     * Executes SQL batch commands.
+     *
+     * @param sqlCmds the sql commands
+     * @param connection the connection
+     * @throws SQLException if errors occurs
+     */
+    public static void executeBatch(List<String> sqlCmds, Connection connection) 
+            throws SQLException {
+        UpdateUtils.executeBatch(sqlCmds, connection);
+    }
+
+    /**
+     * Executes SQL batch commands.
+     *
+     * @param sqlCmds the sql commands
+     * @param databaseName the database name
+     * @throws SQLException if errors occurs
+     */
+    public static void executeBatch(List<String> sqlCmds, String databaseName) 
+            throws SQLException {
+        UpdateUtils.executeBatch(sqlCmds, databaseName);
     }
 
     /**
@@ -132,7 +177,7 @@ public final class TestUtil {
      * @return the number of row count
      */
     public static int count(String databaseName, String tablename) throws SQLException {
-        return QueryUtil.count(TestUtil.getConnection(databaseName), tablename);
+        return QueryUtils.count(TestUtils.getConnection(databaseName), tablename);
     }
 
     /**
@@ -145,7 +190,7 @@ public final class TestUtil {
      */
     public static int count(String databaseName, String tablename, String where) 
             throws SQLException {
-        return QueryUtil.count(TestUtil.getConnection(databaseName), tablename, where);
+        return QueryUtils.count(TestUtils.getConnection(databaseName), tablename, where);
     }
 
     /**
@@ -156,7 +201,7 @@ public final class TestUtil {
      * @return the number of row count
      */
     public static int count(Connection connection, String tablename) throws SQLException {
-        return QueryUtil.count(connection, tablename);
+        return QueryUtils.count(connection, tablename);
     }
 
     /**
@@ -169,7 +214,7 @@ public final class TestUtil {
      */
     public static int count(Connection connection, String tablename, String where) 
             throws SQLException {
-        return QueryUtil.count(connection, tablename, where);
+        return QueryUtils.count(connection, tablename, where);
     }
 
     /**
