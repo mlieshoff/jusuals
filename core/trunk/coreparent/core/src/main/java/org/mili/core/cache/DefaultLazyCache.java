@@ -27,7 +27,7 @@ import java.util.*;
  *
  * @author Michael Lieshoff
  */
-public class DefaultLazyCache<K, V> implements LazyCache<K, V> {
+public class DefaultLazyCache<K, V> extends DefaultCache<K, V> implements LazyCache<K, V> {
     private Map<K, V> model = new Hashtable<K, V>();
     private LoadFunction<K, V> loadFunction = null;
 
@@ -52,11 +52,6 @@ public class DefaultLazyCache<K, V> implements LazyCache<K, V> {
     }
 
     @Override
-    public void clear() {
-        this.model.clear();
-    }
-
-    @Override
     public V get(K k) {
         V v = this.model.get(k);
         if (v == null) {
@@ -66,11 +61,6 @@ public class DefaultLazyCache<K, V> implements LazyCache<K, V> {
             this.model.put(k, v);
         }
         return v;
-    }
-
-    @Override
-    public V remove(K k) {
-        return this.model.remove(k);
     }
 
     @Override

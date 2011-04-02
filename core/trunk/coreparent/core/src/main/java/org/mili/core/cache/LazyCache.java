@@ -26,7 +26,7 @@ package org.mili.core.cache;
  *
  * @author Michael Lieshoff
  */
-public interface LazyCache<K, V> {
+public interface LazyCache<K, V> extends Cache<K, V> {
 
     /**
      * Gets the load function.
@@ -35,24 +35,4 @@ public interface LazyCache<K, V> {
      */
     LoadFunction<K, V> getLoadFunction();
 
-    /**
-     * Gets the value.
-     *
-     * @param key the key
-     * @return the value
-     */
-    V get(K key);
-
-    /**
-     * Removes the value.
-     *
-     * @param key the key
-     * @return the value
-     */
-    V remove(K key);
-
-    /**
-     * Clears.
-     */
-    void clear();
 }

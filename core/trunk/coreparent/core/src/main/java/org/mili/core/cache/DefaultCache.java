@@ -20,6 +20,7 @@
 
 package org.mili.core.cache;
 
+import java.beans.*;
 import java.util.*;
 
 import org.apache.commons.functor.*;
@@ -31,7 +32,8 @@ import org.apache.commons.functor.*;
  */
 public class DefaultCache<K, V> implements Cache<K, V> {
     private Map<K, V> model = new Hashtable<K, V>();
-
+    private PropertyChangeListener pcl = null;
+    
     /**
      * Instantiates a new default cache.
      */
