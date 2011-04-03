@@ -20,6 +20,8 @@
 
 package org.mili.core.cache;
 
+import org.mili.core.properties.*;
+
 
 /**
  * This class is a default implementation of interface {@link MultiCache}.
@@ -27,7 +29,7 @@ package org.mili.core.cache;
  * @author Michael Lieshoff
  */
 public class DefaultMultiCache<K> implements MultiCache<K> {
-    private DefaultCache<K, Cache<?, ?>> model = DefaultCache.create();
+    private Cache<K, Cache<?, ?>> model = DefaultCache.create();
 
     /**
      * Instantiates a new default multi cache.
@@ -87,4 +89,9 @@ public class DefaultMultiCache<K> implements MultiCache<K> {
         this.model.clear();
     }
 
+    @Override
+    public ChangeSupport getChangeSupport() {
+        return this.model.getChangeSupport();
+    }
+    
 }

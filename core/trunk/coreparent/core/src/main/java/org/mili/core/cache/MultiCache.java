@@ -19,12 +19,14 @@
  */
 package org.mili.core.cache;
 
+import org.mili.core.properties.*;
+
 /**
  * This interface defines a multi cache. A multi cache is a cache of caches.
  *
  * @author Michael Lieshoff
  */
-public interface MultiCache<K> {
+public interface MultiCache<K> extends ChangeSupportable {
 
     /**
      * Put a value in the super cache with key superKey and in the inner cache under the key.

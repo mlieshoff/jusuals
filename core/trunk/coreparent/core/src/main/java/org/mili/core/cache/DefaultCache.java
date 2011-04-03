@@ -20,10 +20,10 @@
 
 package org.mili.core.cache;
 
-import java.beans.*;
 import java.util.*;
 
 import org.apache.commons.functor.*;
+import org.mili.core.properties.*;
 
 /**
  * This class is a default implementation of interface {@link Cache}.
@@ -32,8 +32,8 @@ import org.apache.commons.functor.*;
  */
 public class DefaultCache<K, V> implements Cache<K, V> {
     private Map<K, V> model = new Hashtable<K, V>();
-    private PropertyChangeListener pcl = null;
-    
+    private ChangeSupport cs = DefaultChangeSupport.create(this);
+
     /**
      * Instantiates a new default cache.
      */
@@ -69,7 +69,10 @@ public class DefaultCache<K, V> implements Cache<K, V> {
 
     @Override
     public void clear() {
-        this.model.clear();
+        for(Map.Entry<K, V> entry : this.model.entrySet()) {
+            V old = this.model.remove(entry.getKey());
+            this.cs.firePropertyChange(entry.getKey().toString(), old, null);
+        }
     }
 
     @Override
@@ -79,12 +82,21 @@ public class DefaultCache<K, V> implements Cache<K, V> {
 
     @Override
     public void put(K k, V v) {
+        V old = this.get(k);
         this.model.put(k, v);
+        this.cs.firePropertyChange(k.toString(), old, v);
     }
 
     @Override
     public V remove(K k) {
-        return this.model.remove(k);
+        V old = this.model.remove(k);
+        this.cs.firePropertyChange(k.toString(), old, null);
+        return old;
     }
 
+    @Override
+    public ChangeSupport getChangeSupport() {
+        return this.cs;
+    }
+    
 }

@@ -20,13 +20,15 @@
 
 package org.mili.core.cache;
 
+import org.mili.core.properties.*;
+
 
 /**
  * This interface defines a cache.
  *
  * @author Michael Lieshoff
  */
-public interface Cache<K, V> {
+public interface Cache<K, V> extends ChangeSupportable {
 
     /**
      * Gets the value.
