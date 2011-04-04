@@ -20,7 +20,6 @@
 
 package org.mili.core.cache;
 
-import java.util.*;
 
 /**
  * This class is a default implementation of interface {@link core.cache.LazyCache}.
@@ -28,7 +27,6 @@ import java.util.*;
  * @author Michael Lieshoff
  */
 public class DefaultLazyCache<K, V> extends DefaultCache<K, V> implements LazyCache<K, V> {
-    private Map<K, V> model = new Hashtable<K, V>();
     private LoadFunction<K, V> loadFunction = null;
 
     /**
@@ -53,12 +51,12 @@ public class DefaultLazyCache<K, V> extends DefaultCache<K, V> implements LazyCa
 
     @Override
     public V get(K k) {
-        V v = this.model.get(k);
+        V v = super.get(k);
         if (v == null) {
             v = this.loadFunction.evaluate(k);
         }
         if (v != null) {
-            this.model.put(k, v);
+            super.put(k, v);
         }
         return v;
     }

@@ -58,4 +58,11 @@ public interface Cache<K, V> extends ChangeSupportable {
      * Clears the cache.
      */
     void clear();
+
+    /**
+     * Returns the number of stored elements.
+     *
+     * @return the number of stored elements
+     */
+    int size();
 }

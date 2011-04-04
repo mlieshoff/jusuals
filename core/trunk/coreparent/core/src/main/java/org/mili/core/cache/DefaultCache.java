@@ -82,7 +82,7 @@ public class DefaultCache<K, V> implements Cache<K, V> {
 
     @Override
     public void put(K k, V v) {
-        V old = this.get(k);
+        V old = this.model.get(k);
         this.model.put(k, v);
         this.cs.firePropertyChange(k.toString(), old, v);
     }
@@ -95,8 +95,13 @@ public class DefaultCache<K, V> implements Cache<K, V> {
     }
 
     @Override
+    public int size() {
+        return this.model.size();
+    }
+
+    @Override
     public ChangeSupport getChangeSupport() {
         return this.cs;
     }
-    
+
 }

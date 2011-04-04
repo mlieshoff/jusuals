@@ -68,4 +68,12 @@ public interface MultiCache<K> extends ChangeSupportable {
      * Clears.
      */
     void clear();
+
+    /**
+     * Returns the number of stored elements.
+     *
+     * @return the number of stored elements
+     */
+    int size();
+
 }

@@ -90,8 +90,13 @@ public class DefaultMultiCache<K> implements MultiCache<K> {
     }
 
     @Override
+    public int size() {
+        return this.model.size();
+    }
+
+    @Override
     public ChangeSupport getChangeSupport() {
         return this.model.getChangeSupport();
     }
-    
+
 }
