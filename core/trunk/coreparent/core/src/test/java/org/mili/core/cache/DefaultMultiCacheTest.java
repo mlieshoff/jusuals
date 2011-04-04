@@ -19,63 +19,65 @@
  */
 package org.mili.core.cache;
 
-import static org.junit.Assert.*;
-
 import org.junit.*;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Michael Lieshoff
  */
 public class DefaultMultiCacheTest {
 
-    @Test
-    public void testDefaultMultiCache() {
-        DefaultMultiCache<String> c = new DefaultMultiCache<String>();
-    }
+    private DefaultMultiCache<String> cache = DefaultMultiCache.create();
 
     @Test
     public void testCreate() {
-        assertNotNull(DefaultMultiCache.create());
+        assertEquals(0, this.cache.size());
     }
 
     @Test
     public void testGetObject() {
-        DefaultMultiCache<String> c = DefaultMultiCache.create();
-        c.put("a", "b", 4711);
-        assertEquals(4711, c.get("a", "b"));
+        this.cache.put("a", "b", 4711);
+        assertEquals(4711, this.cache.get("a", "b"));
     }
 
     @Test
     public void testPutObject() {
-        DefaultMultiCache<String> c = DefaultMultiCache.create();
-        c.put("a", "b", 4711);
-        assertEquals(4711, c.get("a", "b"));
+        this.cache.put("a", "b", 4711);
+        assertEquals(4711, this.cache.get("a", "b"));
+        assertEquals(1, this.cache.size());
     }
 
     @Test
     public void testRemove() {
-        DefaultMultiCache<String> c = DefaultMultiCache.create();
-        c.put("a", "b", 4711);
-        assertEquals(4711, c.remove("a", "b"));
-        assertNull(c.get("a", "b"));
+        this.cache.put("a", "b", 4711);
+        assertEquals(4711, this.cache.remove("a", "b"));
+        assertNull(this.cache.get("a", "b"));
+    }
+
+    @Test
+    public void shouldRemoveNothing() {
+        assertNull(this.cache.remove("x", "y"));
     }
 
     @Test
     public void testClear_K() {
-        DefaultMultiCache<String> c = DefaultMultiCache.create();
-        c.put("a", "b", 4711);
-        assertEquals(4711, c.remove("a", "b"));
-        c.clear("a");
-        assertNull(c.get("a", "b"));
+        this.cache.put("a", "b", 4711);
+        assertEquals(4711, this.cache.remove("a", "b"));
+        this.cache.clear("a");
+        assertNull(this.cache.get("a", "b"));
     }
 
     @Test
     public void testClear() {
-        DefaultMultiCache<String> c = DefaultMultiCache.create();
-        c.put("a", "b", 4711);
-        assertEquals(4711, c.remove("a", "b"));
-        c.clear();
-        assertNull(c.get("a", "b"));
+        this.cache.put("a", "b", 4711);
+        assertEquals(4711, this.cache.remove("a", "b"));
+        this.cache.clear();
+        assertNull(this.cache.get("a", "b"));
     }
 
+    @Test
+    public void shouldChangeSupport() {
+        assertNotNull(this.cache.getChangeSupport());
+    }
 }

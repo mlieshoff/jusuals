@@ -19,12 +19,12 @@
  */
 package org.mili.core.cache;
 
-import static org.junit.Assert.*;
-
 import java.util.*;
 
 import org.apache.commons.functor.*;
 import org.junit.*;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Michael Lieshoff
@@ -87,6 +87,7 @@ public class DefaultCacheTest {
         DefaultCache<String, Integer> c = new DefaultCache<String, Integer>();
         c.put("a", 4711);
         assertEquals(4711, (int) c.get("a"));
+        assertEquals(1, c.size());
     }
 
     @Test
