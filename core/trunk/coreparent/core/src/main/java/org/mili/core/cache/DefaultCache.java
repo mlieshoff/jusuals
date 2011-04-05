@@ -69,9 +69,11 @@ public class DefaultCache<K, V> implements Cache<K, V> {
 
     @Override
     public void clear() {
-        for(Map.Entry<K, V> entry : this.model.entrySet()) {
-            V old = this.model.remove(entry.getKey());
-            this.cs.firePropertyChange(entry.getKey().toString(), old, null);
+        for (Iterator<K> i = this.model.keySet().iterator(); i.hasNext();) {
+            K key = i.next();
+            V old = this.model.get(key);
+            i.remove();
+            this.cs.firePropertyChange(key.toString(), old, null);
         }
     }
 
