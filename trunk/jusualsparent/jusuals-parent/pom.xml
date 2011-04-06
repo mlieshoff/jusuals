@@ -122,8 +122,8 @@
     </build>
 
     <modules>
-        <module>../../jusuals-core</module>
-        <module>../../jusuals-test</module>
+        <module>../jusuals-core</module>
+        <module>../jusuals-test</module>
     </modules>
 
     <dependencies>
