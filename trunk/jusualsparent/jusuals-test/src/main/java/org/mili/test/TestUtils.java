@@ -23,8 +23,6 @@ import java.io.*;
 import java.sql.*;
 import java.util.*;
 
-import org.mili.core.database.*;
-
 /**
  * This utility class provides some useful methods for testing.
  *
@@ -41,7 +39,7 @@ public final class TestUtils {
     public static final File DB_DIR = FolderUtils.DB_DIR;
 
     /**
-     * creates a new test util. 
+     * creates a new test util.
      */
     public TestUtils() {
         super();
@@ -152,7 +150,7 @@ public final class TestUtils {
      * @param connection the connection
      * @throws SQLException if errors occurs
      */
-    public static void executeBatch(List<String> sqlCmds, Connection connection) 
+    public static void executeBatch(List<String> sqlCmds, Connection connection)
             throws SQLException {
         UpdateUtils.executeBatch(sqlCmds, connection);
     }
@@ -164,7 +162,7 @@ public final class TestUtils {
      * @param databaseName the database name
      * @throws SQLException if errors occurs
      */
-    public static void executeBatch(List<String> sqlCmds, String databaseName) 
+    public static void executeBatch(List<String> sqlCmds, String databaseName)
             throws SQLException {
         UpdateUtils.executeBatch(sqlCmds, databaseName);
     }
@@ -188,7 +186,7 @@ public final class TestUtils {
      * @param where the where
      * @return the number of row count
      */
-    public static int count(String databaseName, String tablename, String where) 
+    public static int count(String databaseName, String tablename, String where)
             throws SQLException {
         return QueryUtils.count(TestUtils.getConnection(databaseName), tablename, where);
     }
@@ -212,7 +210,7 @@ public final class TestUtils {
      * @param where the where
      * @return the number of row count
      */
-    public static int count(Connection connection, String tablename, String where) 
+    public static int count(Connection connection, String tablename, String where)
             throws SQLException {
         return QueryUtils.count(connection, tablename, where);
     }
@@ -234,8 +232,8 @@ public final class TestUtils {
      * @param tablename the tablename
      * @param where the where
      */
-    public static void showTable(String databasename, String tablename, String where) 
-            throws SQLException  {
+    public static void showTable(String databasename, String tablename, String where)
+            throws SQLException {
         showTable(databasename, tablename, where, null);
     }
 
@@ -247,9 +245,17 @@ public final class TestUtils {
      * @param where the where
      * @param columns the columns
      */
-    public static void showTable(String databasename, String tablename, String where, 
+    public static void showTable(String databasename, String tablename, String where,
             String... columns) throws SQLException {
-        DumpUtil.showTable(getConnection(databasename), tablename, where, columns);
+        DumpUtilInterface dui = null;
+        try {
+            Class<? extends DumpUtilInterface> cls = (Class<? extends DumpUtilInterface>) Class
+                    .forName("org.mili.core.database.DumpUtil");
+            dui = (DumpUtilInterface) cls.newInstance();
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+        dui.printTable(getConnection(databasename), tablename, where, columns);
     }
 
 }
