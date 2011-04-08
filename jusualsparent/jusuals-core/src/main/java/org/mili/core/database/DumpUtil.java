@@ -24,13 +24,14 @@ import java.util.*;
 
 import org.mili.core.collection.*;
 import org.mili.core.text.*;
+import org.mili.test.*;
 
 /**
  * This utility class provides some useful methods for dumping.
  *
  * @author Michael Lieshoff
  */
-public class DumpUtil {
+public class DumpUtil implements DumpUtilInterface {
 
     private final static String SQL_SELECT_ALL = "select * from %1";
 
@@ -120,7 +121,7 @@ public class DumpUtil {
      * @param where the where
      * @param columns the columns
      */
-    public static void showTable(Connection c, String tablename, String where, 
+    public static void showTable(Connection c, String tablename, String where,
             String... columns) {
         Table t = null;
         try {
@@ -240,6 +241,11 @@ public class DumpUtil {
         }
         rs.close();
         return l;
+    }
+
+    @Override
+    public void printTable(Connection c, String tablename, String where, String... columns) {
+        DumpUtil.showTable(c, tablename, where, columns);
     }
 
 }

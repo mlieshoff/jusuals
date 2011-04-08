@@ -20,13 +20,13 @@
 package org.mili.test;
 
 
+import static org.junit.Assert.*;
+
 import java.io.*;
 import java.sql.*;
 import java.util.*;
 
 import org.junit.*;
-
-import static org.junit.Assert.*;
 
 /**
  * @author Michael Lieshoff
@@ -85,7 +85,7 @@ public class TestUtilsTest {
     public void shouldFailsBecauseNoClassDefFound() throws Exception {
         TestUtils.getConnection(DbInfoFactory.createDefect());
     }
-    
+
     @Test
     public void shouldGetConnectionByClass() throws Exception {
         Connection c = TestUtils.getConnection(String.class);
@@ -113,12 +113,12 @@ public class TestUtilsTest {
         TestUtils.dropDatabase("abc");
         assertFalse(new File(TestUtils.DB_DIR, "abc").exists());
     }
-    
+
     @Test
     public void shouldGetDbInfos() {
         assertEquals(DbInfoFactory.create(), TestUtils.getDBInfo("xyz"));
     }
-    
+
     @Test
     public void shouldCountNumberOfRows() throws Exception {
         assertEquals(3, TestUtils.count(this.connection, "A"));
@@ -156,17 +156,17 @@ public class TestUtilsTest {
         TestUtils.update(this.connection, "");
     }
 
-    @Test
+    @Ignore
     public void shouldShowCompleteTableWithDatabasename() throws Exception {
         TestUtils.showTable("TestUtil", "A");
     }
-    
-    @Test
+
+    @Ignore
     public void shouldShowCompleteTableWithDatabasenameAndColumns() throws Exception {
         TestUtils.showTable("TestUtil", "A", null, "s", "i");
     }
 
-    @Test
+    @Ignore
     public void shouldShowCompleteTableWithDatabasenameAndWhereAndColumns() throws Exception {
         TestUtils.showTable("TestUtil", "A", "s='1'", "s", "i");
     }
@@ -176,7 +176,7 @@ public class TestUtilsTest {
         File f = new File(TestUtils.TMP_DIR, "/java/lang/String");
         assertEquals(f, TestUtils.getTmpFolder(String.class));
     }
-    
+
     @Test
     public void shouldExecuteBatchWithConnection() throws SQLException {
         TestUtils.executeBatch(this.commands, this.connection);
