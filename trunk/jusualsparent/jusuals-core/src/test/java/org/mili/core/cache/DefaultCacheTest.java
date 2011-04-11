@@ -30,11 +30,7 @@ import static org.junit.Assert.*;
  * @author Michael Lieshoff
  */
 public class DefaultCacheTest {
-
-    @Test
-    public void testDefaultCache() {
-        DefaultCache<String, Integer> c = new DefaultCache<String, Integer>();
-    }
+    private DefaultCache<String, Integer> cache = new DefaultCache<String, Integer>();
 
     @Test
     public void testCreate() {
@@ -68,35 +64,52 @@ public class DefaultCacheTest {
 
     @Test
     public void testClear() {
-        DefaultCache<String, Integer> c = new DefaultCache<String, Integer>();
-        c.put("a", 4711);
-        assertEquals(4711, (int) c.get("a"));
-        c.clear();
-        assertNull(c.get("a"));
+        this.cache.put("a", 4711);
+        assertEquals(4711, (int) this.cache.get("a"));
+        this.cache.clear();
+        assertNull(this.cache.get("a"));
     }
 
     @Test
     public void testGet() {
-        DefaultCache<String, Integer> c = new DefaultCache<String, Integer>();
-        c.put("a", 4711);
-        assertEquals(4711, (int) c.get("a"));
+        this.cache.put("a", 4711);
+        assertEquals(4711, (int) this.cache.get("a"));
     }
 
     @Test
     public void testPut() {
-        DefaultCache<String, Integer> c = new DefaultCache<String, Integer>();
-        c.put("a", 4711);
-        assertEquals(4711, (int) c.get("a"));
-        assertEquals(1, c.size());
+        this.cache.put("a", 4711);
+        assertEquals(4711, (int) this.cache.get("a"));
+        assertEquals(1, this.cache.size());
     }
 
     @Test
     public void testRemove() {
-        DefaultCache<String, Integer> c = new DefaultCache<String, Integer>();
-        c.put("a", 4711);
-        assertEquals(4711, (int) c.get("a"));
-        assertEquals(4711, (int) c.remove("a"));
-        assertNull(c.get("a"));
+        this.cache.put("a", 4711);
+        assertEquals(4711, (int) this.cache.get("a"));
+        assertEquals(4711, (int) this.cache.remove("a"));
+        assertNull(this.cache.get("a"));
     }
 
+    @Test
+    public void shouldHaveValidKeys() {
+        this.cache.put("a", 4711);
+        this.cache.put("b", 4712);
+        this.cache.put("c", 4713);
+        Set<String> keys = this.cache.keySet();
+        assertTrue(keys.contains("a"));
+        assertTrue(keys.contains("b"));
+        assertTrue(keys.contains("c"));
+    }
+
+    @Test
+    public void shouldHaveValidValues() {
+        this.cache.put("a", 4711);
+        this.cache.put("b", 4712);
+        this.cache.put("c", 4713);
+        Collection<Integer> values = this.cache.values();
+        assertTrue(values.contains(4711));
+        assertTrue(values.contains(4712));
+        assertTrue(values.contains(4713));
+    }
 }
