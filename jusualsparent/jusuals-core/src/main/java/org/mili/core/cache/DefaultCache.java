@@ -106,4 +106,14 @@ public class DefaultCache<K, V> implements Cache<K, V> {
         return this.cs;
     }
 
+    @Override
+    public Set<K> keySet() {
+        return this.model.keySet();
+    }
+
+    @Override
+    public Collection<V> values() {
+        return this.model.values();
+    }
+
 }

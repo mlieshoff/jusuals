@@ -20,6 +20,8 @@
 
 package org.mili.core.cache;
 
+import java.util.*;
+
 import org.mili.core.properties.*;
 
 
@@ -65,4 +67,19 @@ public interface Cache<K, V> extends ChangeSupportable {
      * @return the number of stored elements
      */
     int size();
+
+    /**
+     * Return a key set.
+     *
+     * @return set with keys.
+     */
+    Set<K> keySet();
+
+    /**
+     * Return a value set.
+     *
+     * @return set with values.
+     */
+    Collection<V> values();
+
 }
