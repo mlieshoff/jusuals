@@ -40,4 +40,28 @@
             <!--scope>test</scope-->
         </dependency>
     </dependencies>
+    <build>
+          <plugins>
+             <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <executions>
+                   <execution>
+                      <id>resources</id>
+                      <goals>
+                         <goal>generate</goal>
+                      </goals>
+                      <configuration>
+                         <schemaDirectory>src/main/resources/xsd/resources</schemaDirectory>
+                         <schemaIncludes>
+                            <include>resources.xsd</include>
+                         </schemaIncludes>
+                         <generatePackage>org.mili.core.resource.generated</generatePackage>
+                         <generateDirectory>target/generated-sources/xjc/xml/resources</generateDirectory>
+                      </configuration>
+                   </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

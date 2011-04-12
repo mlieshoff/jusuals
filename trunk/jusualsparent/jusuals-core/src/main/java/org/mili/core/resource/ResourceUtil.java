@@ -25,9 +25,13 @@ import java.net.*;
 import java.util.*;
 import java.util.Map.*;
 
+import javax.xml.bind.*;
+
 import org.apache.commons.lang.*;
 import org.mili.core.io.*;
 import org.mili.core.logging.*;
+import org.mili.core.resource.generated.*;
+import org.mili.core.xml.*;
 
 /**
  * This class is a helper for resources and bundles. It's implemented that a kind of developer
@@ -40,6 +44,7 @@ import org.mili.core.logging.*;
 public class ResourceUtil {
     private final static DefaultLogger log = DefaultLogger.getLogger(ResourceUtil.class);
     private final static String ID = ResourceUtil.class.getName() + ".";
+    public final static String NAMESPACE = "org.mili.core.resource.generated";
     /** the constant for property PROP_LOGMISSINGRESOURCE. */
     public final static String PROP_LOGMISSINGRESOURCE = ID + "LogMissingResource";
     /** the constant for property PROP_THROWEXCEPTIONONMISSINGRESOURCE. */
@@ -51,6 +56,9 @@ public class ResourceUtil {
     /* dev map base -> locale -> resourcebundle */
     private static Map<String, Map<Locale, Map<String, String>>> devcache =
             new Hashtable<String, Map<Locale, Map<String, String>>>();
+
+    private static Map<String, Map<String, String>> cacheXml = new Hashtable<String,
+            Map<String, String>>();
 
     /**
      * List all basenames.
@@ -167,6 +175,47 @@ public class ResourceUtil {
         return;
     }
 
+    // TODO
+    public static synchronized void loadFromXml(String filename, Locale locale)
+            throws IOException, JAXBException {
+        loadFromXml(filename, locale, ResourceUtil.class.getClassLoader());
+    }
+
+    // TODO
+    public static synchronized void loadFromXml(String filename, Locale locale,
+            ClassLoader cl) throws IOException, JAXBException {
+        // make filename
+        StringBuilder fn = new StringBuilder();
+        fn.append(filename);
+        if (locale != null) {
+            fn.append("_");
+            fn.append(locale.getLanguage());
+            fn.append("_");
+            fn.append(locale.getCountry());
+            fn.append(".xml");
+        }
+        InputStream is = FileUtil.getInputStream(fn.toString(),
+                FileAccessOrder.FilesystemThenClassloader, cl);
+        Resources r = (Resources) XmlAccess.read(is, NAMESPACE);
+        // check references
+        for (int j = 0, m = r.getReference().size(); j < m; j++) {
+            Reference ref = r.getReference().get(j);
+            // TODO fixing win/linux ok?
+            int l = fn.toString().lastIndexOf("\\");
+            l = l <= 0 ? fn.toString().lastIndexOf("/") : l;
+            String base = "";
+            if (l >= 0) {
+                base = fn.substring(0, l).concat(String.valueOf(File.separatorChar));
+            }
+            fn = new StringBuilder();
+            fn.append(base);
+            fn.append(ref.getFilename());
+            loadFromXml(fn.toString(), locale);
+        }
+        cacheText(r, locale);
+        is.close();
+    }
+
     /**
      * Returns a label from locale and basename. The key is generated from objects class and
      * package concatenated with specified key.
@@ -220,6 +269,7 @@ public class ResourceUtil {
         Validate.notEmpty(key);
         Map<Locale, ResourceBundle> m = cache.get(baseName);
         Map<Locale, Map<String, String>> m0 = devcache.get(baseName);
+        Map<String, String> m1 = cacheXml.get(baseName.toLowerCase());
         if (m != null) {
             ResourceBundle rb = m.get(locale);
             String devres = null;
@@ -234,6 +284,8 @@ public class ResourceUtil {
                     String res = rb.getString(key);
                     return res;
                 } catch (MissingResourceException e) {
+                    // get from xml
+
                     if (devres != null) {
                         return devres;
                     }
@@ -252,14 +304,35 @@ public class ResourceUtil {
             }
             throw new IllegalStateException("no resource-bundle for locale defined ! "
                     + getInfo(locale, baseName, key));
+        } else {
+            // get from xml
         }
         throw new IllegalStateException("no locales for base-name defined ! "
                 + getInfo(locale, baseName, key));
     }
 
+
+    public static String getFromXml(Locale locale, String key) {
+        String base = "%1_%2".replace("%1", locale.getLanguage()).replace("%2", locale
+                .getCountry()).toLowerCase();
+        Map<String, String> map = cacheXml.get(base.toLowerCase());
+        if (map == null || key == null) {
+            log.warn("No ressource bundle for " + base + " !");
+            return "";
+        }
+        String s = map.get(key);
+        if (s == null) {
+            log.warn("No ressource for " + base + " and " + key + " !");
+            s = "!" + key.toUpperCase() + "!";
+        }
+        return s;
+    }
+
+
     static void clear() {
         cache.clear();
         devcache.clear();
+        cacheXml.clear();
     }
 
     private static String getInfo(Locale l, String baseName, String key) {
@@ -270,4 +343,30 @@ public class ResourceUtil {
                 .replace("%3", baseName)
                 .replace("%4", key);
     }
+
+    private static void cacheText(Resources r, Locale locale) {
+        List<Text> l = r.getText();
+        Map<String, String> map = null;
+        for (int i = 0, n = l.size(); i < n; i++) {
+            Object o = l.get(i);
+            if (o instanceof Text) {
+                Text t = (Text) o;
+                String id = locale == null ? r.getToken().toLowerCase()
+                        : "%1_%2".replace("%1", locale.getLanguage())
+                        .replace("%2", locale.getCountry()).toLowerCase();
+                map = cacheXml.get(id);
+                if (map == null) {
+                    map = new Hashtable<String, String>();
+                }
+                map.put(t.getName(), StringUtils.strip(t.getContent().toString().trim()));
+                cacheXml.put(id, map);
+            } else {
+                if (o instanceof Reference) {
+                    Reference ref = (Reference) o;
+                    // TODO
+                }
+            }
+        }
+    }
+
 }
