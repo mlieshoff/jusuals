@@ -20,13 +20,13 @@
 package org.mili.core.properties;
 
 
-import static org.junit.Assert.*;
-
 import java.io.*;
 import java.util.*;
 
 import org.junit.*;
 import org.mili.test.*;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Michael Lieshoff
@@ -46,7 +46,7 @@ public class PropUtilTest {
 
     @Test(expected=IllegalArgumentException.class)
     public void shouldFailReadPropertiesBecauseNullFile() {
-        PropUtil.readProperties(null);
+        PropUtil.readProperties((InputStream) null);
     }
 
     @Test(expected=IllegalArgumentException.class)

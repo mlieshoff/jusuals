@@ -12,14 +12,16 @@
         </xsd:appinfo>
     </xsd:annotation>
 
-    <xsd:complexType name="resources">
-        <xsd:sequence>
-            <xsd:element name="text" minOccurs="0" maxOccurs="unbounded" type="Text"/>
-            <xsd:element name="reference" minOccurs="0" maxOccurs="unbounded" type="Reference"/>
-        </xsd:sequence>
-        <xsd:attribute name="name" type="xsd:string" use="required"/>
-        <xsd:attribute name="token" type="xsd:string" use="required"/>
-    </xsd:complexType>
+    <xsd:element name="resources">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="text" minOccurs="0" maxOccurs="unbounded" type="Text"/>
+                <xsd:element name="reference" minOccurs="0" maxOccurs="unbounded" type="Reference"/>
+            </xsd:sequence>
+            <xsd:attribute name="name" type="xsd:string" use="required"/>
+            <xsd:attribute name="token" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
 
     <xsd:complexType name="Text" mixed="true">
         <xsd:attribute name="name" type="xsd:string" use="required"/>

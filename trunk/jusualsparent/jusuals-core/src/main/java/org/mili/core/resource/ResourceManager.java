@@ -163,6 +163,6 @@ public interface ResourceManager {
      * @param locale the locale
      * @return the resource bundles for basename and locale
      */
-    ResourceBundle getResourceBundlesForBasenameAndLocale(String basename, Locale locale);
+    Map<String, String> getResourceBundlesForBasenameAndLocale(String basename, Locale locale);
 
 }

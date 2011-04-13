@@ -167,7 +167,7 @@ public class ResourceHelper implements ResourceManager {
     }
 
     @Override
-    public ResourceBundle getResourceBundlesForBasenameAndLocale(String basename, Locale locale) {
+    public Map<String, String> getResourceBundlesForBasenameAndLocale(String basename, Locale locale) {
         return ResourceUtil.getResourceBundlesForBasenameAndLocale(basename, locale);
     }
 

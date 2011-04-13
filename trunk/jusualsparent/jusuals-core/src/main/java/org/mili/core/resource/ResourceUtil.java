@@ -30,6 +30,7 @@ import javax.xml.bind.*;
 import org.apache.commons.lang.*;
 import org.mili.core.io.*;
 import org.mili.core.logging.*;
+import org.mili.core.properties.*;
 import org.mili.core.resource.generated.*;
 import org.mili.core.xml.*;
 
@@ -44,6 +45,7 @@ import org.mili.core.xml.*;
 public class ResourceUtil {
     private final static DefaultLogger log = DefaultLogger.getLogger(ResourceUtil.class);
     private final static String ID = ResourceUtil.class.getName() + ".";
+    private final static String MISSING_RESOURCE = "!%0!";
     public final static String NAMESPACE = "org.mili.core.resource.generated";
     /** the constant for property PROP_LOGMISSINGRESOURCE. */
     public final static String PROP_LOGMISSINGRESOURCE = ID + "LogMissingResource";
@@ -51,14 +53,8 @@ public class ResourceUtil {
     public final static String PROP_THROWEXCEPTIONONMISSINGRESOURCE =
             ID + "ThrowExceptionOnMissingResource";
     /* map base -> locale -> resourcebundle */
-    private static Map<String, Map<Locale, ResourceBundle>> cache = new Hashtable<String,
-            Map<Locale, ResourceBundle>>();
-    /* dev map base -> locale -> resourcebundle */
-    private static Map<String, Map<Locale, Map<String, String>>> devcache =
-            new Hashtable<String, Map<Locale, Map<String, String>>>();
-
-    private static Map<String, Map<String, String>> cacheXml = new Hashtable<String,
-            Map<String, String>>();
+    private static Map<String, Map<Locale, Map<String, String>>> cache = new Hashtable<String,
+            Map<Locale, Map<String, String>>>();
 
     /**
      * List all basenames.
@@ -86,7 +82,7 @@ public class ResourceUtil {
      * @param locale the locale
      * @return the resource bundles for basename and locale
      */
-    public static ResourceBundle getResourceBundlesForBasenameAndLocale(String basename,
+    public static Map<String, String> getResourceBundlesForBasenameAndLocale(String basename,
             Locale locale) {
         return cache.get(basename).get(locale);
     }
@@ -113,106 +109,75 @@ public class ResourceUtil {
         Validate.notNull(locale);
         Validate.notEmpty(baseName);
         Validate.notNull(cl);
-        int i = baseName.lastIndexOf("/");
-        if (i <= 0) {
-            i = baseName.lastIndexOf("\\");
-        }
-        String bn = baseName;
-        if (i > 0) {
-            bn = baseName.substring(i + 1);
-        }
-        ResourceBundle b = ResourceBundle.getBundle(baseName, locale, cl);
-        Map<Locale, ResourceBundle> m = cache.get(bn);
-        if (m == null) {
-            m = new java.util.Hashtable<Locale, ResourceBundle>();
-        }
-        m.put(locale, b);
-        cache.put(bn, m);
-        if (locale.equals(Locale.GERMAN) || locale.equals(Locale.GERMANY)) {
-            Map<String, String> mss = new Hashtable<String, String>();
-            Map<Locale, Map<String, String>> m0 = devcache.get(bn);
-            if (m0 == null) {
-                m0 = new java.util.Hashtable<Locale, Map<String, String>>();
-            }
-            // load dev
-            if (cl instanceof URLClassLoader) {
-                URLClassLoader ucl = (URLClassLoader) cl;
-                URL url = ucl.getURLs()[0];
-                InputStream is = null;
-                try {
-                    is = FileUtil.getInputStream(url.getPath() + "/" + baseName
-                            + "_dev.properties");
-                    Properties p = new Properties();
+        URL url = getUrlFromUrlClassLoader(cl);
+        String realBaseName = getRealBaseName(baseName);
+        ResourceBundle bundle = ResourceBundle.getBundle(baseName, locale, cl);
+        copyResourceBundleInResMap(bundle, realBaseName, locale);
+        loadDevResources(locale, url, realBaseName, baseName);
+    }
+
+    private static void loadDevResources(Locale locale, URL url, String realBaseName,
+            String baseName) {
+        if ((locale.equals(Locale.GERMAN) || locale.equals(Locale.GERMANY)) && url != null) {
+            InputStream is = null;
+            try {
+                is = FileUtil.getInputStream(url.getPath() + "/" + baseName
+                        + "_dev.properties");
+                copyPropertiesInResMap(PropUtil.readProperties(is), realBaseName, locale);
+            } catch (Exception e) {
+                // eat it
+            } finally {
+                if (is != null) {
                     try {
-                        p.load(is);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    for (Iterator<Entry<Object, Object>> iterator = p.entrySet().iterator();
-                            iterator.hasNext();) {
-                        Entry<Object, Object> e = iterator.next();
-                        mss.put(e.getKey().toString(), e.getValue().toString());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    // eat it
-                } finally {
-                    if (is != null) {
-                        try {
-                            is.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            // eat it
-                        }
+                        is.close();
+                    } catch (IOException e) { // eat it!
                     }
                 }
-            } else {
-                System.out.println("not supportd: " + locale);
             }
-            m0.put(locale, mss);
-            devcache.put(bn, m0);
         }
-        return;
     }
 
-    // TODO
-    public static synchronized void loadFromXml(String filename, Locale locale)
+    /**
+     * Loads resources from xml.
+     *
+     * @param locale the locale
+     * @param basename the basename
+     * @param cl the classloader
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws JAXBException the jAXB exception
+     */
+    public static synchronized void loadFromXml(Locale locale, String baseName, ClassLoader cl)
             throws IOException, JAXBException {
-        loadFromXml(filename, locale, ResourceUtil.class.getClassLoader());
+        URL url = getUrlFromUrlClassLoader(cl);
+        String filename = createFilename(url, baseName, locale, ".xml");
+        loadFromXml(filename, locale, baseName, cl);
+        filename = createFilename(url, baseName, locale, "_dev.xml");
+        if (new File(filename).exists()) {
+            loadFromXml(filename, locale, baseName, cl);
+        }
     }
 
-    // TODO
-    public static synchronized void loadFromXml(String filename, Locale locale,
-            ClassLoader cl) throws IOException, JAXBException {
-        // make filename
-        StringBuilder fn = new StringBuilder();
-        fn.append(filename);
-        if (locale != null) {
-            fn.append("_");
-            fn.append(locale.getLanguage());
-            fn.append("_");
-            fn.append(locale.getCountry());
-            fn.append(".xml");
-        }
-        InputStream is = FileUtil.getInputStream(fn.toString(),
-                FileAccessOrder.FilesystemThenClassloader, cl);
+    private static synchronized void loadFromXml(String filename, Locale locale,
+            String basename, ClassLoader cl) throws IOException, JAXBException {
+        InputStream is = FileUtil.getInputStream(filename, FileAccessOrder
+                .FilesystemThenClassloader, cl);
         Resources r = (Resources) XmlAccess.read(is, NAMESPACE);
         // check references
         for (int j = 0, m = r.getReference().size(); j < m; j++) {
             Reference ref = r.getReference().get(j);
             // TODO fixing win/linux ok?
-            int l = fn.toString().lastIndexOf("\\");
-            l = l <= 0 ? fn.toString().lastIndexOf("/") : l;
+            int l = filename.toString().lastIndexOf("\\");
+            l = l <= 0 ? filename.toString().lastIndexOf("/") : l;
             String base = "";
             if (l >= 0) {
-                base = fn.substring(0, l).concat(String.valueOf(File.separatorChar));
+                base = filename.substring(0, l).concat(String.valueOf(File.separatorChar));
             }
-            fn = new StringBuilder();
+            StringBuilder fn  = new StringBuilder();
             fn.append(base);
             fn.append(ref.getFilename());
-            loadFromXml(fn.toString(), locale);
+            loadFromXml(locale, fn.toString(), cl);
         }
-        cacheText(r, locale);
+        cacheText(r, locale, basename);
         is.close();
     }
 
@@ -267,28 +232,17 @@ public class ResourceUtil {
         Validate.notNull(locale);
         Validate.notEmpty(baseName);
         Validate.notEmpty(key);
-        Map<Locale, ResourceBundle> m = cache.get(baseName);
-        Map<Locale, Map<String, String>> m0 = devcache.get(baseName);
-        Map<String, String> m1 = cacheXml.get(baseName.toLowerCase());
+        Map<Locale, Map<String, String>> m = cache.get(baseName);
         if (m != null) {
-            ResourceBundle rb = m.get(locale);
-            String devres = null;
-            if (m0 != null) {
-                Map<String, String> mm0 = m0.get(locale);
-                if (mm0 != null) {
-                    devres = mm0.get(key);
-                }
-            }
+            Map<String, String> rb = m.get(locale);
             if (rb != null) {
                 try {
-                    String res = rb.getString(key);
+                    String res = rb.get(key);
+                    if (res == null) {
+                        throw new MissingResourceException("missing resource!", null, key);
+                    }
                     return res;
                 } catch (MissingResourceException e) {
-                    // get from xml
-
-                    if (devres != null) {
-                        return devres;
-                    }
                     if (Boolean.getBoolean(PROP_LOGMISSINGRESOURCE)) {
                         MissingResourceLogger.INSTANCE.log(locale, key);
                     }
@@ -298,41 +252,27 @@ public class ResourceUtil {
                     } else {
                         log.warn("Missing resource for locale ! ", getInfo(locale, baseName,
                                 key));
-                        return "!".concat(key.substring(key.lastIndexOf(".")).concat("!"));
+                        return createMissingResource(key);
                     }
                 }
             }
             throw new IllegalStateException("no resource-bundle for locale defined ! "
                     + getInfo(locale, baseName, key));
-        } else {
-            // get from xml
         }
         throw new IllegalStateException("no locales for base-name defined ! "
                 + getInfo(locale, baseName, key));
     }
 
-
-    public static String getFromXml(Locale locale, String key) {
-        String base = "%1_%2".replace("%1", locale.getLanguage()).replace("%2", locale
-                .getCountry()).toLowerCase();
-        Map<String, String> map = cacheXml.get(base.toLowerCase());
-        if (map == null || key == null) {
-            log.warn("No ressource bundle for " + base + " !");
-            return "";
-        }
-        String s = map.get(key);
-        if (s == null) {
-            log.warn("No ressource for " + base + " and " + key + " !");
-            s = "!" + key.toUpperCase() + "!";
-        }
-        return s;
+    /**
+     * Clears the resources.
+     */
+    public synchronized static void clear() {
+        cache.clear();
     }
 
-
-    static void clear() {
-        cache.clear();
-        devcache.clear();
-        cacheXml.clear();
+    private static String createMissingResource(String key) {
+        int i = key.lastIndexOf(".");
+        return MISSING_RESOURCE.replace("%0", i > 0 ? key.substring(i) : key);
     }
 
     private static String getInfo(Locale l, String baseName, String key) {
@@ -344,29 +284,85 @@ public class ResourceUtil {
                 .replace("%4", key);
     }
 
-    private static void cacheText(Resources r, Locale locale) {
+    private static void cacheText(Resources r, Locale locale, String baseName) {
         List<Text> l = r.getText();
-        Map<String, String> map = null;
+        Map<String, String> resMap = getResourceMap(baseName, locale);
         for (int i = 0, n = l.size(); i < n; i++) {
             Object o = l.get(i);
             if (o instanceof Text) {
                 Text t = (Text) o;
-                String id = locale == null ? r.getToken().toLowerCase()
-                        : "%1_%2".replace("%1", locale.getLanguage())
-                        .replace("%2", locale.getCountry()).toLowerCase();
-                map = cacheXml.get(id);
-                if (map == null) {
-                    map = new Hashtable<String, String>();
-                }
-                map.put(t.getName(), StringUtils.strip(t.getContent().toString().trim()));
-                cacheXml.put(id, map);
-            } else {
-                if (o instanceof Reference) {
-                    Reference ref = (Reference) o;
-                    // TODO
-                }
+                resMap.put(t.getName(), StringUtils.strip(t.getContent().toString().trim()));
             }
         }
+    }
+
+    private static URL getUrlFromUrlClassLoader(ClassLoader cl) {
+        if (cl instanceof URLClassLoader) {
+            URLClassLoader urlCL = (URLClassLoader) cl;
+            return urlCL.getURLs()[0];
+        }
+        return null;
+    }
+
+    private static String getRealBaseName(String baseName) {
+        int i = baseName.lastIndexOf("/");
+        if (i <= 0) {
+            i = baseName.lastIndexOf("\\");
+        }
+        String bn = baseName;
+        if (i > 0) {
+            bn = baseName.substring(i + 1);
+        }
+        return bn;
+    }
+
+    private static Map<Locale, Map<String, String>> getLocaleMap(String baseName) {
+        Map<Locale, Map<String, String>> localeMap = cache.get(baseName);
+        if (localeMap == null) {
+            localeMap = new Hashtable<Locale, Map<String, String>>();
+            cache.put(baseName, localeMap);
+        }
+        return localeMap;
+    }
+
+    private static Map<String, String> getResourceMap(String baseName, Locale locale) {
+        Map<Locale, Map<String, String>> localeMap = getLocaleMap(baseName);
+        Map<String, String> resMap = localeMap.get(locale);
+        if (resMap == null) {
+            resMap = new Hashtable<String, String>();
+            localeMap.put(locale, resMap);
+        }
+        return resMap;
+    }
+
+    private static void copyResourceBundleInResMap(ResourceBundle bundle, String baseName,
+            Locale locale) {
+        Map<String, String> resMap = getResourceMap(baseName, locale);
+        for(String key : bundle.keySet()) {
+            resMap.put(key, bundle.getString(key));
+        }
+    }
+
+    private static void copyPropertiesInResMap(Properties p, String baseName, Locale locale) {
+        Map<String, String> resMap = getResourceMap(baseName, locale);
+        for (Iterator<Entry<Object, Object>> iterator = p.entrySet().iterator();
+                iterator.hasNext();) {
+            Entry<Object, Object> e = iterator.next();
+            resMap.put(e.getKey().toString(), e.getValue().toString());
+        }
+    }
+
+    private static String createFilename(URL url, String baseName, Locale locale,
+            String extension) {
+        StringBuilder filename = new StringBuilder();
+        filename.append(url.getPath());
+        filename.append(baseName);
+        if (locale != null) {
+            filename.append("_");
+            filename.append(locale.getLanguage());
+            filename.append(extension);
+        }
+        return filename.toString();
     }
 
 }

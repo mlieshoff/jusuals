@@ -51,11 +51,9 @@ public class PropUtil {
         Validate.notNull(f);
         Validate.isTrue(f.exists());
         InputStream is = null;
-        Properties p = new Properties();
         try {
             is = new FileInputStream(f);
-            p.load(is);
-            return p;
+            return readProperties(is);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         } finally {
@@ -66,6 +64,33 @@ public class PropUtil {
                     throw new IllegalStateException(e);
                 }
             }
+        }
+    }
+
+    /**
+     * <p>This method reads a {@link Properties} file from a specified {@link InputStream} and
+     * throws <code>IllegalArgumentException</code>, if parameter is null or file not available.
+     * </p>
+     *
+     * <p>This method is used to read a {@link Properties} from a specified {@link InputStream}
+     * object.</p>
+     *
+     * <pre>
+     * Util.readProperties(new FileInputStream(new File("example.properties")));
+     * </pre>
+     *
+     * @param f {@link InputStream} file contains the {@link Properties}.
+     * @return readed {@link Properties}.
+     */
+    public static Properties readProperties(InputStream is) {
+        Validate.notNull(is);
+        try {
+            Validate.isTrue(is.available() > 0);
+            Properties p = new Properties();
+            p.load(is);
+            return p;
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
         }
     }
 

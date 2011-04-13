@@ -39,6 +39,7 @@ public class ResourceUtilTest {
     private File file1 = null;
     private File file3 = null;
     private File dir2 = null;
+    private File dir2xml = null;
     private File file2 = null;
     private File file4 = null;
     private File file5 = null;
@@ -53,6 +54,7 @@ public class ResourceUtilTest {
         this.file1 = new File(this.dir1, "test_de.properties");
         this.file3 = new File(this.dir1, "local_de.properties");
         this.dir2 = new File(this.dir, "dir2");
+        this.dir2xml = new File(this.dir, "dir2/xml");
         this.file2 = new File(this.dir2, "local_de.properties");
         this.file4 = new File(this.dir2, "test_en.properties");
         this.file5 = new File(this.dir2, "test_de.properties");
@@ -320,6 +322,63 @@ public class ResourceUtilTest {
         URLClassLoader classLoader = new URLClassLoader(new URL[] {url});
         ResourceUtil.load(Locale.GERMANY, "test", classLoader);
         assertEquals("test", ResourceUtil.listBasenames().get(0));
+    }
+
+    @Test
+    public void shouldLoadPerXml() throws Exception {
+        URL url = this.dir2.toURI().toURL();
+        URLClassLoader classLoader = new URLClassLoader(new URL[] {url});
+        StringBuilder s = new StringBuilder();
+        s.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        s.append("<resources name=\"name\" token=\"token\">");
+        s.append("    <text name=\"name\">");
+        s.append("    text");
+        s.append("    </text>");
+        s.append("</resources>");
+        File f = new File(this.dir2xml, "test_de.xml");
+        FileUtils.writeStringToFile(f, s.toString());
+        ResourceUtil.load(Locale.GERMANY, "test", classLoader);
+        url = this.dir2xml.toURI().toURL();
+        classLoader = new URLClassLoader(new URL[] {url});
+        ResourceUtil.loadFromXml(Locale.GERMANY, "test", classLoader);
+        assertEquals("hallo", ResourceUtil.getString(Locale.GERMANY, "test", this, "p0"));
+        assertEquals("welt", ResourceUtil.getString(Locale.GERMANY, "test", this, "p1"));
+        assertEquals("text", ResourceUtil.getString(Locale.GERMANY, "test", "name"));
+    }
+
+    @Test
+    public void shouldLoadPerDevXml() throws Exception {
+        URL url = this.dir2.toURI().toURL();
+        URLClassLoader classLoader = new URLClassLoader(new URL[] {url});
+        // normal
+        StringBuilder s = new StringBuilder();
+        s.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        s.append("<resources name=\"name\" token=\"token\">");
+        s.append("    <text name=\"name\">");
+        s.append("    text");
+        s.append("    </text>");
+        s.append("</resources>");
+        File f = new File(this.dir2xml, "test_de.xml");
+        FileUtils.writeStringToFile(f, s.toString());
+        // dev
+        s = new StringBuilder();
+        s.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        s.append("<resources name=\"devname\" token=\"devtoken\">");
+        s.append("    <text name=\"devname\">");
+        s.append("    devtext");
+        s.append("    </text>");
+        s.append("</resources>");
+        f = new File(this.dir2xml, "test_de_dev.xml");
+        FileUtils.writeStringToFile(f, s.toString());
+
+        ResourceUtil.load(Locale.GERMANY, "test", classLoader);
+        url = this.dir2xml.toURI().toURL();
+        classLoader = new URLClassLoader(new URL[] {url});
+        ResourceUtil.loadFromXml(Locale.GERMANY, "test", classLoader);
+        assertEquals("hallo", ResourceUtil.getString(Locale.GERMANY, "test", this, "p0"));
+        assertEquals("welt", ResourceUtil.getString(Locale.GERMANY, "test", this, "p1"));
+        assertEquals("text", ResourceUtil.getString(Locale.GERMANY, "test", "name"));
+        assertEquals("devtext", ResourceUtil.getString(Locale.GERMANY, "test", "devname"));
     }
 
 }
