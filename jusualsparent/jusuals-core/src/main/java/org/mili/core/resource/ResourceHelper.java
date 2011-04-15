@@ -181,6 +181,4 @@ public class ResourceHelper implements ResourceManager {
         return ResourceUtil.listLocalesForBasename(basename);
     }
 
-
-
 }
