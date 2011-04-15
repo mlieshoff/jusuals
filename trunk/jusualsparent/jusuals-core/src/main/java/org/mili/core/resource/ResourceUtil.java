@@ -151,33 +151,24 @@ public class ResourceUtil {
         URL url = getUrlFromUrlClassLoader(cl);
         String filename = createFilename(url, baseName, locale, ".xml");
         loadFromXml(filename, locale, baseName, cl);
-        filename = createFilename(url, baseName, locale, "_dev.xml");
+        filename = createFilename(url, baseName, null, "_dev.xml");
         if (new File(filename).exists()) {
             loadFromXml(filename, locale, baseName, cl);
         }
     }
 
     private static synchronized void loadFromXml(String filename, Locale locale,
-            String basename, ClassLoader cl) throws IOException, JAXBException {
+            String baseName, ClassLoader cl) throws IOException,
+            JAXBException {
         InputStream is = FileUtil.getInputStream(filename, FileAccessOrder
                 .FilesystemThenClassloader, cl);
         Resources r = (Resources) XmlAccess.read(is, NAMESPACE);
         // check references
-        for (int j = 0, m = r.getReference().size(); j < m; j++) {
-            Reference ref = r.getReference().get(j);
-            // TODO fixing win/linux ok?
-            int l = filename.toString().lastIndexOf("\\");
-            l = l <= 0 ? filename.toString().lastIndexOf("/") : l;
-            String base = "";
-            if (l >= 0) {
-                base = filename.substring(0, l).concat(String.valueOf(File.separatorChar));
-            }
-            StringBuilder fn  = new StringBuilder();
-            fn.append(base);
-            fn.append(ref.getFilename());
-            loadFromXml(locale, fn.toString(), cl);
+        for (int i = 0, m = r.getReference().size(); i < m; i++) {
+            Reference ref = r.getReference().get(i);
+//            loadFromXml(fn, locale, ref.getNamespace(), cl);
         }
-        cacheText(r, locale, basename);
+        cacheText(r, locale, baseName);
         is.close();
     }
 
@@ -286,11 +277,13 @@ public class ResourceUtil {
 
     private static void cacheText(Resources r, Locale locale, String baseName) {
         List<Text> l = r.getText();
+        System.out.println("baseName: " + baseName);
         Map<String, String> resMap = getResourceMap(baseName, locale);
         for (int i = 0, n = l.size(); i < n; i++) {
             Object o = l.get(i);
             if (o instanceof Text) {
                 Text t = (Text) o;
+                System.out.println(t.getName());
                 resMap.put(t.getName(), StringUtils.strip(t.getContent().toString().trim()));
             }
         }
@@ -360,8 +353,8 @@ public class ResourceUtil {
         if (locale != null) {
             filename.append("_");
             filename.append(locale.getLanguage());
-            filename.append(extension);
         }
+        filename.append(extension);
         return filename.toString();
     }
 
