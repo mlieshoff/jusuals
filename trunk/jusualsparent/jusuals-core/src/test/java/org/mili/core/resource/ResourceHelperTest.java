@@ -35,127 +35,127 @@ public class ResourceHelperTest {
     @Test
     public void testResourceHelperClassOfQLocaleString() {
         try {
-            ResourceHelper rh = new ResourceHelper(null, Locale.GERMANY, "aaa");
+            new ResourceHelper(null, Locale.GERMANY, "aaa");
             fail();
         } catch (IllegalArgumentException e) {
         }
         try {
-            ResourceHelper rh = new ResourceHelper(String.class, null, "aaa");
+            new ResourceHelper(String.class, null, "aaa");
             fail();
         } catch (IllegalArgumentException e) {
         }
         try {
-            ResourceHelper rh = new ResourceHelper(String.class, Locale.GERMANY, "");
+            new ResourceHelper(String.class, Locale.GERMANY, "");
             fail();
         } catch (IllegalArgumentException e) {
         }
         try {
-            ResourceHelper rh = new ResourceHelper(String.class, Locale.GERMANY, null);
+            new ResourceHelper(String.class, Locale.GERMANY, null);
             fail();
         } catch (IllegalArgumentException e) {
         }
-        ResourceHelper rh = new ResourceHelper(String.class, Locale.GERMANY, "aaa");
+        new ResourceHelper(String.class, Locale.GERMANY, "aaa");
     }
 
     @Test
     public void testResourceHelperObjectLocaleString() {
         try {
             Object o = null;
-            ResourceHelper rh = new ResourceHelper(o, Locale.GERMANY, "aaa");
+            new ResourceHelper(o, Locale.GERMANY, "aaa");
             fail();
         } catch (NullPointerException e) {
         }
         try {
-            ResourceHelper rh = new ResourceHelper(new Object(), null, "aaa");
+            new ResourceHelper(new Object(), null, "aaa");
             fail();
         } catch (IllegalArgumentException e) {
         }
         try {
-            ResourceHelper rh = new ResourceHelper(new Object(), Locale.GERMANY, "");
+            new ResourceHelper(new Object(), Locale.GERMANY, "");
             fail();
         } catch (IllegalArgumentException e) {
         }
         try {
-            ResourceHelper rh = new ResourceHelper(new Object(), Locale.GERMANY, null);
+            new ResourceHelper(new Object(), Locale.GERMANY, null);
             fail();
         } catch (IllegalArgumentException e) {
         }
-        ResourceHelper rh = new ResourceHelper(new Object(), Locale.GERMANY, "aaa");
+        new ResourceHelper(new Object(), Locale.GERMANY, "aaa");
     }
 
     @Test
     public void testResourceHelperString() {
         try {
-            ResourceHelper rh = new ResourceHelper("");
+            new ResourceHelper("");
             fail();
         } catch (IllegalArgumentException e) {
         }
         try {
-            ResourceHelper rh = new ResourceHelper(null);
+            new ResourceHelper(null);
             fail();
         } catch (IllegalArgumentException e) {
         }
-        ResourceHelper rh = new ResourceHelper("aaa");
+        new ResourceHelper("aaa");
     }
 
     @Test
     public void testResourceHelperLocaleString() {
         try {
-            ResourceHelper rh = new ResourceHelper(Locale.GERMANY, "");
+            new ResourceHelper(Locale.GERMANY, "");
             fail();
         } catch (IllegalArgumentException e) {
         }
         try {
-            ResourceHelper rh = new ResourceHelper(Locale.GERMANY, null);
+            new ResourceHelper(Locale.GERMANY, null);
             fail();
         } catch (IllegalArgumentException e) {
         }
-        ResourceHelper rh = new ResourceHelper(Locale.GERMANY, "aaa");
+        new ResourceHelper(Locale.GERMANY, "aaa");
     }
 
     @Test
     public void testResourceHelperObjectString() {
         try {
-            ResourceHelper rh = new ResourceHelper(new Object(), "");
+            new ResourceHelper(new Object(), "");
             fail();
         } catch (IllegalArgumentException e) {
         }
         try {
-            ResourceHelper rh = new ResourceHelper(new Object(), null);
+            new ResourceHelper(new Object(), null);
             fail();
         } catch (IllegalArgumentException e) {
         }
-        ResourceHelper rh = new ResourceHelper(new Object(), "aaa");
+        new ResourceHelper(new Object(), "aaa");
     }
 
     @Test
     public void testResourceHelperClassOfQString() {
         try {
-            ResourceHelper rh = new ResourceHelper(Object.class, "");
+            new ResourceHelper(Object.class, "");
             fail();
         } catch (IllegalArgumentException e) {
         }
         try {
-            ResourceHelper rh = new ResourceHelper(Object.class, null);
+            new ResourceHelper(Object.class, null);
             fail();
         } catch (IllegalArgumentException e) {
         }
-        ResourceHelper rh = new ResourceHelper(Object.class, "aaa");
+        new ResourceHelper(Object.class, "aaa");
     }
 
     @Test
     public void testGetStringString() {
         try {
-            ResourceHelper rh = new ResourceHelper(Object.class, "");
+            new ResourceHelper(Object.class, "");
             fail();
         } catch (IllegalArgumentException e) {
         }
         try {
-            ResourceHelper rh = new ResourceHelper(Object.class, null);
+            new ResourceHelper(Object.class, null);
             fail();
         } catch (IllegalArgumentException e) {
         }
-        ResourceHelper rh = new ResourceHelper(Object.class, "aaa");
+        new ResourceHelper(Object.class, "aaa");
     }
 
     @Test
