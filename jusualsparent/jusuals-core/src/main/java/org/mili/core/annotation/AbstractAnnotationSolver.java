@@ -28,18 +28,20 @@ import java.util.*;
  * @param <X> the generic type
  * @author Michael Lieshoff
  */
-public abstract class AbstractAnnotationSolver<X> implements AnnotationSolver {
+public abstract class AbstractAnnotationSolver<X> implements AnnotationSolver<X> {
     private Map<Class<?>, List<AnnotationHandler>> handler = new HashMap<Class<?>, List<AnnotationHandler>>();
 
     @Override
     public void solve(Class<?> cls) {
-        Annotation[] annotations = this.getAnnotations(cls);
-        for(Annotation annotation : annotations) {
+        WrappedAnnotation[] was = this.getAnnotations(cls);
+        for(WrappedAnnotation wa : was) {
+            Annotation annotation = wa.getAnnotation();
+            Object source = wa.getSource();
             List<AnnotationHandler> list = this.handler.get(annotation.annotationType());
             if (list != null) {
                 for (int i = 0, n = list.size(); i < n; i++) {
                     AnnotationHandler ah = list.get(i);
-                    ah.handle(annotation);
+                    ah.handle(annotation, source);
                 }
             }
         }

@@ -62,15 +62,15 @@ public class ClassAnnotationSolverTest {
     @Test
     public void shouldSolveTestClassAnnotation() {
         final List<Boolean> l = new ArrayList<Boolean>();
-        this.solver.addAnnotationHandler(TestClassAnnotation1.class, new AnnotationHandler() {
+        this.solver.addAnnotationHandler(TestClassAnnotation1.class, new AnnotationHandler<Class<?>>() {
             @Override
-            public void handle(Annotation annotation) {
+            public void handle(Annotation annotation, Class<?> source) {
                 l.add(true);
             }
         });
-        this.solver.addAnnotationHandler(TestClassAnnotation2.class, new AnnotationHandler() {
+        this.solver.addAnnotationHandler(TestClassAnnotation2.class, new AnnotationHandler<Class<?>>() {
             @Override
-            public void handle(Annotation annotation) {
+            public void handle(Annotation annotation, Class<?> source) {
                 l.add(true);
             }
         });
@@ -85,15 +85,15 @@ public class ClassAnnotationSolverTest {
     @Test
     public void shouldSolveTestClassAnnotations() {
         final List<Boolean> l = new ArrayList<Boolean>();
-        this.solver.addAnnotationHandler(TestClassAnnotation1.class, new AnnotationHandler() {
+        this.solver.addAnnotationHandler(TestClassAnnotation1.class, new AnnotationHandler<Class<?>>() {
             @Override
-            public void handle(Annotation annotation) {
+            public void handle(Annotation annotation, Class<?> source) {
                 l.add(true);
             }
         });
-        this.solver.addAnnotationHandler(TestClassAnnotation2.class, new AnnotationHandler() {
+        this.solver.addAnnotationHandler(TestClassAnnotation2.class, new AnnotationHandler<Class<?>>() {
             @Override
-            public void handle(Annotation annotation) {
+            public void handle(Annotation annotation, Class<?> source) {
                 l.add(true);
             }
         });

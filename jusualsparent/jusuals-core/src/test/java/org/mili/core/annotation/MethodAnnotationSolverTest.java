@@ -20,6 +20,7 @@
 package org.mili.core.annotation;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.junit.*;
@@ -62,15 +63,15 @@ public class MethodAnnotationSolverTest {
     @Test
     public void shouldSolveTestMethodAnnotation() {
         final List<Boolean> l = new ArrayList<Boolean>();
-        this.solver.addAnnotationHandler(TestMethodAnnotation1.class, new AnnotationHandler() {
+        this.solver.addAnnotationHandler(TestMethodAnnotation1.class, new AnnotationHandler<Method>() {
             @Override
-            public void handle(Annotation annotation) {
+            public void handle(Annotation annotation, Method method) {
                 l.add(true);
             }
         });
-        this.solver.addAnnotationHandler(TestMethodAnnotation2.class, new AnnotationHandler() {
+        this.solver.addAnnotationHandler(TestMethodAnnotation2.class, new AnnotationHandler<Method>() {
             @Override
-            public void handle(Annotation annotation) {
+            public void handle(Annotation annotation, Method method) {
                 l.add(true);
             }
         });
@@ -85,15 +86,15 @@ public class MethodAnnotationSolverTest {
     @Test
     public void shouldSolveTestMethodAnnotations() {
         final List<Boolean> l = new ArrayList<Boolean>();
-        this.solver.addAnnotationHandler(TestMethodAnnotation1.class, new AnnotationHandler() {
+        this.solver.addAnnotationHandler(TestMethodAnnotation1.class, new AnnotationHandler<Method>() {
             @Override
-            public void handle(Annotation annotation) {
+            public void handle(Annotation annotation, Method method) {
                 l.add(true);
             }
         });
-        this.solver.addAnnotationHandler(TestMethodAnnotation2.class, new AnnotationHandler() {
+        this.solver.addAnnotationHandler(TestMethodAnnotation2.class, new AnnotationHandler<Method>() {
             @Override
-            public void handle(Annotation annotation) {
+            public void handle(Annotation annotation, Method method) {
                 l.add(true);
             }
         });

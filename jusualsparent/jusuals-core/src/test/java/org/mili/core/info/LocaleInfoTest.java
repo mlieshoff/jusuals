@@ -1,5 +1,5 @@
 /*
- * AnnotationSolver.java
+ * LocaleInfoTest.java
  *
  * 03.05.2011
  *
@@ -17,36 +17,31 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.mili.core.annotation;
+package org.mili.core.info;
 
+import java.util.*;
+
+import org.junit.*;
 
 /**
- * This interface defines an annotation solver.
- *
  * @author Michael Lieshoff
  */
-public interface AnnotationSolver<T> {
-    /**
-     * Gets the annotations.
-     *
-     * @param cls the cls
-     * @return the annotations
-     */
-    WrappedAnnotation<T>[] getAnnotations(Class<?> cls);
+public class LocaleInfoTest {
 
     /**
-     * Solve.
-     *
-     * @param cls the cls
+     * Fail because null output stream.
      */
-    void solve(Class<?> cls);
+    @Test(expected=IllegalArgumentException.class)
+    public void failBecauseNullOutputStream() {
+        LocaleInfo.show(Locale.getDefault(), null);
+    }
 
     /**
-     * Adds the annotation handler.
-     *
-     * @param forAnnotation the for annotation
-     * @param ah the ah
+     * Fail because null locale.
      */
-    void addAnnotationHandler(Class<?> forAnnotation, AnnotationHandler ah);
+    @Test(expected=IllegalArgumentException.class)
+    public void failBecauseNullLocale() {
+        LocaleInfo.show(null, System.out);
+    }
 
 }
