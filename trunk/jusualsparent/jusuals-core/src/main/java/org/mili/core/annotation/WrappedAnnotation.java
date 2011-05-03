@@ -1,5 +1,5 @@
 /*
- * AnnotationHandler.java
+ * WrappedAnnotation.java
  *
  * 03.05.2011
  *
@@ -21,17 +21,44 @@ package org.mili.core.annotation;
 
 import java.lang.annotation.*;
 
+import org.apache.commons.lang.*;
 
 /**
- * This interface defines an annotation handler.
- *
  * @author Michael Lieshoff
  */
-public interface AnnotationHandler<T> {
+public class WrappedAnnotation<T> {
+    private T source = null;
+    private Annotation annotation = null;
+
     /**
-     * Handle.
+     * Instantiates a new wrapped annotation.
      *
      * @param annotation the annotation
+     * @param source the source
      */
-    void handle(Annotation annotation, T source);
+    public WrappedAnnotation(Annotation annotation, T source) {
+        Validate.notNull(annotation);
+        Validate.notNull(source);
+        this.annotation = annotation;
+        this.source = source;
+    }
+
+    /**
+     * Gets the source.
+     *
+     * @return the source
+     */
+    public T getSource() {
+        return this.source;
+    }
+
+    /**
+     * Gets the annotation.
+     *
+     * @return the annotation
+     */
+    public Annotation getAnnotation() {
+        return this.annotation;
+    }
+
 }

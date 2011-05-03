@@ -1,5 +1,5 @@
 /*
- * AnnotationSolver.java
+ * Prepare.java
  *
  * 03.05.2011
  *
@@ -17,36 +17,14 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.mili.core.annotation;
+package org.mili.core.benchmarking;
 
+import java.lang.annotation.*;
 
 /**
- * This interface defines an annotation solver.
- *
  * @author Michael Lieshoff
  */
-public interface AnnotationSolver<T> {
-    /**
-     * Gets the annotations.
-     *
-     * @param cls the cls
-     * @return the annotations
-     */
-    WrappedAnnotation<T>[] getAnnotations(Class<?> cls);
-
-    /**
-     * Solve.
-     *
-     * @param cls the cls
-     */
-    void solve(Class<?> cls);
-
-    /**
-     * Adds the annotation handler.
-     *
-     * @param forAnnotation the for annotation
-     * @param ah the ah
-     */
-    void addAnnotationHandler(Class<?> forAnnotation, AnnotationHandler ah);
-
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface Prepare {
 }

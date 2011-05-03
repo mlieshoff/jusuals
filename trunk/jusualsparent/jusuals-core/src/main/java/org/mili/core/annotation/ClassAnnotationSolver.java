@@ -20,6 +20,8 @@
 package org.mili.core.annotation;
 
 import java.lang.annotation.*;
+import java.util.*;
+
 
 /**
  * This interface defines a class annotation solver.
@@ -28,7 +30,11 @@ import java.lang.annotation.*;
  */
 public class ClassAnnotationSolver extends AbstractAnnotationSolver<Class<?>> {
     @Override
-    public Annotation[] getAnnotations(Class<?> cls) {
-        return cls.getAnnotations();
+    public WrappedAnnotation<Class<?>>[] getAnnotations(Class<?> cls) {
+        List<WrappedAnnotation<Class<?>>> l = new ArrayList<WrappedAnnotation<Class<?>>>();
+        for(Annotation annotation : cls.getAnnotations()) {
+            l.add(new WrappedAnnotation<Class<?>>(annotation, cls));
+        }
+        return l.toArray(new WrappedAnnotation[]{});
     }
 }

@@ -30,11 +30,11 @@ import java.util.*;
  */
 public class MethodAnnotationSolver extends AbstractAnnotationSolver<Method>{
     @Override
-    public Annotation[] getAnnotations(Class<?> cls) {
+    public WrappedAnnotation[] getAnnotations(Class<?> cls) {
         List<Annotation> annotations = new ArrayList<Annotation>();
         for(Method method : cls.getDeclaredMethods()) {
             annotations.addAll(Arrays.asList(method.getAnnotations()));
         }
-        return annotations.toArray(new Annotation[]{});
+        return annotations.toArray(new WrappedAnnotation<?>[]{});
     }
 }
