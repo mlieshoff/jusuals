@@ -20,34 +20,35 @@
 package org.mili.core.benchmarking;
 
 /**
- * Diese Schnittstelle beschreibt einen Benchmark.
+ * This interface defines a benchmark.
  *
  * @author Michael Lieshoff
- * @version 1.0
  */
 public interface Bench {
 
     /**
-     * @return der Name.
+     * Gets the name.
+     *
+     * @return the name
      */
     String getName();
 
     /**
-     * setzt den Benchmark und alle Resourcen, die er benutzt in den Urzustand zur&uuml;ck.
+     * Reset.
      */
     void reset();
 
     /**
-     * Bereitet den Benchmark zur Ausf&uuml;hrung vor.
+     * Prepare.
      *
-     * @param lm Parameter anhand dessen der Benchmark vorbereitet wird.
+     * @param rounds the rounds
      */
-    void prepare(long lm);
+    void prepare(long rounds);
 
     /**
-     * F&uuml;hrt den Benchmark aus.
+     * Execute.
      *
-     * @param lm Parameter anhand dessen der Benchmark ausgef&uuml;hrt wird.
+     * @param rounds the rounds
      */
-    void execute(long lm);
+    void execute(long rounds);
 }

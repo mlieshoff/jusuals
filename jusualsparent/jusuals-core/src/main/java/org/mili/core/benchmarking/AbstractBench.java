@@ -20,10 +20,9 @@
 package org.mili.core.benchmarking;
 
 /**
- * Diese Klasse stellt einen abstrakten Benchmark dar.
+ * This class defines an abstract benchmark.
  *
  * @author Michael Lieshoff
- * @version 1.0
  */
 public abstract class AbstractBench implements Bench {
 

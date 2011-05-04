@@ -1,7 +1,7 @@
 /*
- * Prepare.java
+ * Execute.java
  *
- * 03.05.2011
+ * 04.05.2011
  *
  * Copyright 2011 Michael Lieshoff
  *
@@ -17,14 +17,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.mili.core.benchmarking;
+package org.mili.core.benchmarking.experimental;
 
 import java.lang.annotation.*;
 
 /**
+ * This annotation defines an execute tag.
+ *
  * @author Michael Lieshoff
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Prepare {
+public @interface Execute {
 }
