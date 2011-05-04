@@ -31,10 +31,20 @@ import java.util.*;
 public class MethodAnnotationSolver extends AbstractAnnotationSolver<Method>{
     @Override
     public WrappedAnnotation[] getAnnotations(Class<?> cls) {
-        List<Annotation> annotations = new ArrayList<Annotation>();
+        List<WrappedAnnotation> annotations = new ArrayList<WrappedAnnotation>();
+        this.addAnnotations(cls, annotations);
+        return annotations.toArray(new WrappedAnnotation[]{});
+    }
+
+    private void addAnnotations(Class<?> cls, List<WrappedAnnotation> annotations) {
         for(Method method : cls.getDeclaredMethods()) {
-            annotations.addAll(Arrays.asList(method.getAnnotations()));
+            this.addMethodAnnotations(method, annotations);
         }
-        return annotations.toArray(new WrappedAnnotation<?>[]{});
+    }
+
+    private void addMethodAnnotations(Method source, List<WrappedAnnotation> annotations) {
+        for(Annotation annotation : source.getAnnotations()) {
+            annotations.add(new WrappedAnnotation<Method>(annotation, source));
+        }
     }
 }

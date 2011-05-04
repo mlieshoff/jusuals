@@ -63,13 +63,15 @@ public class MethodAnnotationSolverTest {
     @Test
     public void shouldSolveTestMethodAnnotation() {
         final List<Boolean> l = new ArrayList<Boolean>();
-        this.solver.addAnnotationHandler(TestMethodAnnotation1.class, new AnnotationHandler<Method>() {
+        this.solver.addAnnotationHandler(TestMethodAnnotation1.class,
+                new AnnotationHandler<Method>() {
             @Override
             public void handle(Annotation annotation, Method method) {
                 l.add(true);
             }
         });
-        this.solver.addAnnotationHandler(TestMethodAnnotation2.class, new AnnotationHandler<Method>() {
+        this.solver.addAnnotationHandler(TestMethodAnnotation2.class,
+                new AnnotationHandler<Method>() {
             @Override
             public void handle(Annotation annotation, Method method) {
                 l.add(true);
@@ -86,13 +88,15 @@ public class MethodAnnotationSolverTest {
     @Test
     public void shouldSolveTestMethodAnnotations() {
         final List<Boolean> l = new ArrayList<Boolean>();
-        this.solver.addAnnotationHandler(TestMethodAnnotation1.class, new AnnotationHandler<Method>() {
+        this.solver.addAnnotationHandler(TestMethodAnnotation1.class,
+                new AnnotationHandler<Method>() {
             @Override
             public void handle(Annotation annotation, Method method) {
                 l.add(true);
             }
         });
-        this.solver.addAnnotationHandler(TestMethodAnnotation2.class, new AnnotationHandler<Method>() {
+        this.solver.addAnnotationHandler(TestMethodAnnotation2.class,
+                new AnnotationHandler<Method>() {
             @Override
             public void handle(Annotation annotation, Method method) {
                 l.add(true);

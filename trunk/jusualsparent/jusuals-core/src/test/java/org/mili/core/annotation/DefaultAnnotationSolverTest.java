@@ -1,7 +1,7 @@
 /*
- * ClassAnnotationSolverTest.java
+ * DefaultAnnotationSolverTest.java
  *
- * 03.05.2011
+ * 04.05.2011
  *
  * Copyright 2011 Michael Lieshoff
  *
@@ -20,6 +20,7 @@
 package org.mili.core.annotation;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.junit.*;
@@ -29,8 +30,8 @@ import static org.junit.Assert.*;
 /**
  * @author Michael Lieshoff
  */
-public class ClassAnnotationSolverTest {
-    private AnnotationSolver solver = new ClassAnnotationSolver();
+public class DefaultAnnotationSolverTest {
+    private AnnotationSolver solver = new DefaultAnnotationSolver();
 
     /**
      * Should find no annotations.
@@ -45,7 +46,7 @@ public class ClassAnnotationSolverTest {
      */
     @Test
     public void shouldFindOneAnnotation() {
-        assertEquals(1, this.solver.getAnnotations(Foo1.class).length);
+        assertEquals(2, this.solver.getAnnotations(Foo1.class).length);
     }
 
     /**
@@ -57,35 +58,34 @@ public class ClassAnnotationSolverTest {
     }
 
     /**
-     * Should solve test class annotation.
+     * Should solve test method annotation.
      */
     @Test
-    public void shouldSolveTestClassAnnotation() {
+    public void shouldSolveTestMethodAnnotation() {
         final List<Boolean> l = new ArrayList<Boolean>();
-        this.solver.addAnnotationHandler(TestClassAnnotation1.class,
-                new AnnotationHandler<Class<?>>() {
+        this.solver.addAnnotationHandler(TestMethodAnnotation1.class,
+                new AnnotationHandler<Method>() {
             @Override
-            public void handle(Annotation annotation, Class<?> source) {
+            public void handle(Annotation annotation, Method method) {
                 l.add(true);
             }
         });
-        this.solver.addAnnotationHandler(TestClassAnnotation2.class,
+        this.solver.addAnnotationHandler(TestClassAnnotation1.class,
                 new AnnotationHandler<Class<?>>() {
             @Override
-            public void handle(Annotation annotation, Class<?> source) {
+            public void handle(Annotation annotation, Class<?> cls) {
                 l.add(true);
             }
         });
         this.solver.solve(Foo1.class);
-        assertEquals(1, l.size());
-        assertTrue(l.get(0));
+        assertEquals(2, l.size());
     }
 
     /**
-     * Should solve test class annotations.
+     * Should solve test method annotations.
      */
     @Test
-    public void shouldSolveTestClassAnnotations() {
+    public void shouldSolveTestMethodAnnotations() {
         final List<Boolean> l = new ArrayList<Boolean>();
         this.solver.addAnnotationHandler(TestClassAnnotation1.class,
                 new AnnotationHandler<Class<?>>() {
@@ -101,10 +101,22 @@ public class ClassAnnotationSolverTest {
                 l.add(true);
             }
         });
+        this.solver.addAnnotationHandler(TestMethodAnnotation1.class,
+                new AnnotationHandler<Method>() {
+            @Override
+            public void handle(Annotation annotation, Method method) {
+                l.add(true);
+            }
+        });
+        this.solver.addAnnotationHandler(TestMethodAnnotation2.class,
+                new AnnotationHandler<Method>() {
+            @Override
+            public void handle(Annotation annotation, Method method) {
+                l.add(true);
+            }
+        });
         this.solver.solve(Foo2.class);
-        assertEquals(2, l.size());
-        assertTrue(l.get(0));
-        assertTrue(l.get(1));
+        assertEquals(4, l.size());
     }
 
     static class Foo {
@@ -114,6 +126,7 @@ public class ClassAnnotationSolverTest {
 
     @TestClassAnnotation1
     static class Foo1 {
+        @TestMethodAnnotation1
         void foo() {
         }
     }
@@ -121,6 +134,8 @@ public class ClassAnnotationSolverTest {
     @TestClassAnnotation1
     @TestClassAnnotation2
     static class Foo2 {
+        @TestMethodAnnotation1
+        @TestMethodAnnotation2
         void foo() {
         }
     }

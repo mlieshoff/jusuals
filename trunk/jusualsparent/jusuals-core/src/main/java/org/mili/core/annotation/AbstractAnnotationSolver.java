@@ -29,7 +29,8 @@ import java.util.*;
  * @author Michael Lieshoff
  */
 public abstract class AbstractAnnotationSolver<X> implements AnnotationSolver<X> {
-    private Map<Class<?>, List<AnnotationHandler>> handler = new HashMap<Class<?>, List<AnnotationHandler>>();
+    private Map<Class<?>, List<AnnotationHandler>> handler = new HashMap<Class<?>,
+            List<AnnotationHandler>>();
 
     @Override
     public void solve(Class<?> cls) {
