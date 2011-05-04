@@ -41,6 +41,7 @@ public class ResourceUtilTest {
     private File root = null;
     private final String ID = ResourceUtilTest.class.getName();
     private ObjectFactory factory = new ObjectFactory();
+    public static String salter = "";
 
     @Before
     public void setUp() throws Exception {
@@ -58,8 +59,10 @@ public class ResourceUtilTest {
     @After
     public void after() {
         ResourceUtil.clear();
+        System.clearProperty(ResourceUtil.PROP_MISSINGRESOURCEHANDLER);
         System.setProperty(ResourceUtil.PROP_THROWEXCEPTIONONMISSINGRESOURCE, "false");
         System.setProperty(ResourceUtil.PROP_LOGMISSINGRESOURCE, "false");
+        salter = "";
     }
 
     @Test
@@ -206,6 +209,16 @@ public class ResourceUtilTest {
         assertEquals("test", ResourceUtil.listBasenames().get(0));
     }
 
+    @Test
+    public void shouldHandle() throws Exception {
+        System.setProperty(ResourceUtil.PROP_MISSINGRESOURCEHANDLER,
+                "org.mili.core.resource.TestHandler");
+        this.createPropertiesForClassDe();
+        ResourceUtil.load(Locale.GERMANY, "test", this.createUrlClassLoader(this.root));
+        ResourceUtil.getString(Locale.GERMANY, "test", "abbas");
+        assertEquals("abbas", salter);
+    }
+
     private void createPropertiesForClassDe() throws IOException {
         Properties p = new Properties();
         p.setProperty(ID + ".p0", "hallo");
@@ -338,3 +351,11 @@ public class ResourceUtilTest {
     }
 
 }
+
+class TestHandler implements MissingResourceHandler {
+    @Override
+    public void handle(Locale locale, String baseName, String key) {
+        ResourceUtilTest.salter = key;
+    }
+}
+

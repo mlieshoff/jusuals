@@ -47,6 +47,8 @@ public class ResourceUtil {
     private final static String ID = ResourceUtil.class.getName() + ".";
     private final static String MISSING_RESOURCE = "!%0!";
     public final static String NAMESPACE = "org.mili.core.resource.generated";
+    /** the constant for property PROP_MISSINGRESOURCEHANDLER. */
+    public final static String PROP_MISSINGRESOURCEHANDLER = ID + "MissingResourceHandler";
     /** the constant for property PROP_LOGMISSINGRESOURCE. */
     public final static String PROP_LOGMISSINGRESOURCE = ID + "LogMissingResource";
     /** the constant for property PROP_THROWEXCEPTIONONMISSINGRESOURCE. */
@@ -55,6 +57,7 @@ public class ResourceUtil {
     /* map base -> locale -> resourcebundle */
     private static Map<String, Map<Locale, Map<String, String>>> cache = new Hashtable<String,
             Map<Locale, Map<String, String>>>();
+    private static MissingResourceHandler handler = null;
 
     /**
      * List all basenames.
@@ -234,6 +237,7 @@ public class ResourceUtil {
                     }
                     return res;
                 } catch (MissingResourceException e) {
+                    setUpMissingResourceHandler(locale, baseName, key);
                     if (Boolean.getBoolean(PROP_LOGMISSINGRESOURCE)) {
                         MissingResourceLogger.INSTANCE.log(locale, key);
                     }
@@ -356,6 +360,21 @@ public class ResourceUtil {
         }
         filename.append(extension);
         return filename.toString();
+    }
+
+    private static synchronized void setUpMissingResourceHandler(Locale locale, String baseName,
+            String key) {
+        String clsname = System.getProperty(PROP_MISSINGRESOURCEHANDLER);
+        if (!StringUtils.isEmpty(clsname) && handler == null) {
+            try {
+                handler = (MissingResourceHandler) Class.forName(clsname).newInstance();
+            } catch (Exception e) {
+                throw new IllegalStateException(e);
+            }
+        }
+        if (handler != null) {
+            handler.handle(locale, baseName, key);
+        }
     }
 
 }
