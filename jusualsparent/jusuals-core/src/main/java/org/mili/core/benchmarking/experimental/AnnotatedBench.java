@@ -22,6 +22,7 @@ package org.mili.core.benchmarking.experimental;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
+import org.apache.commons.lang.*;
 import org.mili.core.annotation.*;
 import org.mili.core.benchmarking.*;
 
@@ -44,6 +45,7 @@ public class AnnotatedBench implements Bench {
      */
     public AnnotatedBench(Class<?> cls) {
         super();
+        Validate.notNull(cls);
         this.cls = cls;
         this.reset();
         this.solver.addAnnotationHandler(Prepare.class, new AnnotationHandler<Method>() {
@@ -61,6 +63,16 @@ public class AnnotatedBench implements Bench {
             public void handle(Annotation annotation, Method method) {
                 try {
                     executeLoop((Execute) annotation, method);
+                } catch (Exception e) {
+                    throw new IllegalStateException(e);
+                }
+            }
+        });
+        this.solver.addAnnotationHandler(Reset.class, new AnnotationHandler<Method>() {
+            @Override
+            public void handle(Annotation annotation, Method method) {
+                try {
+                    reset((Reset) annotation, method);
                 } catch (Exception e) {
                     throw new IllegalStateException(e);
                 }
@@ -94,13 +106,18 @@ public class AnnotatedBench implements Bench {
         }
         this.executeCount = 0;
         this.prepareCount = 0;
+        this.solver.solve(this.cls);
+    }
+
+    private void reset(Reset reset, Method method) throws IllegalArgumentException,
+            IllegalAccessException, InvocationTargetException {
+        method.invoke(this.instance);
     }
 
     private void prepareLoop(Prepare prepare, Method method) throws IllegalArgumentException,
             IllegalAccessException, InvocationTargetException {
         for(long l = 0; l < this.prepareCount; l ++) {
-            method.invoke(this.instance, this.createParameters(l, prepare.values(),
-                    method.getParameterTypes()));
+            method.invoke(this.instance, this.createParameters(l, method.getParameterTypes()));
         }
     }
 
@@ -111,24 +128,35 @@ public class AnnotatedBench implements Bench {
         }
     }
 
-    private Object[] createParameters(long lap, ValueType[] valueTypes,
-            Class<?>[] parameterTypes) {
+    private Object[] createParameters(long lap, Class<?>[] parameterTypes) {
         Object[] parameters = new Object[parameterTypes.length];
         for(int i = 0; i < parameters.length; i ++) {
-            parameters[i] = this.createValue(lap, valueTypes[i], parameterTypes[i]);
+            parameters[i] = this.createValue(lap, parameterTypes[i]);
         }
         return parameters;
     }
 
-    private Object createValue(long lap, ValueType valueType, Class<?> cls) {
-        switch(valueType) {
-            case AUTO:
-                if (cls == String.class) {
-                    return String.valueOf(lap);
-                }
-                break;
+    private Object createValue(long lap, Class<?> cls) {
+        if (cls == byte.class) {
+            return Byte.valueOf((byte) lap);
+        } else if (cls == short.class) {
+            return Short.valueOf((short) lap);
+        } else if (cls == char.class) {
+            return (char) lap;
+        } else if (cls == int.class) {
+            return Integer.valueOf((int) lap);
+        } else if (cls == long.class) {
+            return lap;
+        } else if (cls == double.class) {
+            return (double) lap;
+        } else if (cls == float.class) {
+            return (float) lap;
+        } else if (cls == boolean.class) {
+            return lap % 2 != 0;
+        } else if (cls == String.class) {
+            return String.valueOf(lap);
         }
-        return null;
+        throw new IllegalStateException("parameter class not handled: " + cls);
     }
 
 }
