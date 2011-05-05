@@ -82,6 +82,7 @@ public class ResourceUtilTest {
     }
 
     @Test
+    @Ignore
     public void shouldProcessOneLocaleAndOneResourceXmlWithReference() throws Exception {
         this.createXmlForClassDe();
         this.createXmlWithReferenceForClassDe();
@@ -212,7 +213,7 @@ public class ResourceUtilTest {
     @Test
     public void shouldHandle() throws Exception {
         System.setProperty(ResourceUtil.PROP_MISSINGRESOURCEHANDLER,
-                "org.mili.core.resource.TestHandler");
+                "org.mili.core.resource.BasicHandler");
         this.createPropertiesForClassDe();
         ResourceUtil.load(Locale.GERMANY, "test", this.createUrlClassLoader(this.root));
         ResourceUtil.getString(Locale.GERMANY, "test", "abbas");
@@ -352,7 +353,7 @@ public class ResourceUtilTest {
 
 }
 
-class TestHandler implements MissingResourceHandler {
+class BasicHandler implements MissingResourceHandler {
     @Override
     public void handle(Locale locale, String baseName, String key) {
         ResourceUtilTest.salter = key;
