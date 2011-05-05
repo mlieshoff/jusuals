@@ -1,7 +1,7 @@
 /*
- * ValueType.java
+ * Prepare.java
  *
- * 04.05.2011
+ * 03.05.2011
  *
  * Copyright 2011 Michael Lieshoff
  *
@@ -19,12 +19,14 @@
  */
 package org.mili.core.benchmarking.experimental;
 
+import java.lang.annotation.*;
+
 /**
- * This enum defines a type for values.
+ * This interface defines a reset tag.
  *
  * @author Michael Lieshoff
  */
-public enum ValueType {
-    /** The AUTO. */
-    AUTO;
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface Reset {
 }
