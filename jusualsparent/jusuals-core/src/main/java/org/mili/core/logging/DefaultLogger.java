@@ -19,6 +19,9 @@
  */
 package org.mili.core.logging;
 
+import java.io.*;
+
+
 /**
  * This class defines a logger factory.
  *
@@ -26,8 +29,13 @@ package org.mili.core.logging;
  *
  */
 public class DefaultLogger implements Logger {
-
+    public final static String PROP_LOGTHROWABLES = DefaultLogger.class.getName()
+            + ".LogThrowables";
+    public final static String PROP_LOGTHROWABLESDIR = DefaultLogger.class.getName()
+            + ".LogThrowablesDir";
     private Logger root = null;
+    private ThrowableLogger throwableLogger = null;
+    private Class<?> cls = null;
 
     /**
      * Create a new logger from class clazz.
@@ -36,6 +44,7 @@ public class DefaultLogger implements Logger {
      */
     public DefaultLogger(Class<?> clazz) {
         this.root = create(clazz);
+        this.cls = clazz;
     }
 
     /**
@@ -95,6 +104,7 @@ public class DefaultLogger implements Logger {
 
     @Override
     public void debug(Throwable t, Object... o) {
+        this.logThrowableIfNeeded(t);
         root.debug(t, o);
     }
 
@@ -170,6 +180,7 @@ public class DefaultLogger implements Logger {
 
     @Override
     public void error(Throwable t, Object... o) {
+        this.logThrowableIfNeeded(t);
         root.error(t, o);
     }
 
@@ -185,6 +196,7 @@ public class DefaultLogger implements Logger {
 
     @Override
     public void fatal(Throwable t, Object... o) {
+        this.logThrowableIfNeeded(t);
         root.fatal(t, o);
     }
 
@@ -205,6 +217,7 @@ public class DefaultLogger implements Logger {
 
     @Override
     public void info(Throwable t, Object... o) {
+        this.logThrowableIfNeeded(t);
         root.info(t, o);
     }
 
@@ -220,6 +233,7 @@ public class DefaultLogger implements Logger {
 
     @Override
     public void warn(Throwable t, Object... o) {
+        this.logThrowableIfNeeded(t);
         root.warn(t, o);
     }
 
@@ -235,8 +249,30 @@ public class DefaultLogger implements Logger {
 
     @Override
     public void trace(Throwable t, Object... o) {
+        this.logThrowableIfNeeded(t);
         root.trace(t, o);
     }
 
-    
+    private void logThrowableIfNeeded(Throwable throwable) {
+        if (Boolean.getBoolean(PROP_LOGTHROWABLES)) {
+            if (this.throwableLogger == null) {
+                String name = null;
+                if (!System.getProperties().containsKey(PROP_LOGTHROWABLESDIR)) {
+                    name = System.getProperty("java.io.tmpdir");
+                } else {
+                    name = System.getProperty(PROP_LOGTHROWABLESDIR);
+                }
+                File dir = new File(name);
+                this.throwableLogger = new ThrowableLogger(this.cls, dir);
+                try {
+                    this.throwableLogger.log(throwable);
+                } catch (IOException e) {
+                    this.error(e, "can't write the throwable log[dir=", dir.getAbsolutePath(),
+                            "]!");
+                }
+            }
+        }
+    }
+
+
 }

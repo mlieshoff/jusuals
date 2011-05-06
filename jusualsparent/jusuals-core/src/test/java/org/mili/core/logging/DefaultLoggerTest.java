@@ -20,18 +20,18 @@
 
 package org.mili.core.logging;
 
-import static org.junit.Assert.*;
-
 import org.junit.*;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Michael Lieshoff
  */
 public class DefaultLoggerTest {
 
-	@Test
-	public void shouldNotNull() {
-		assertNotNull(DefaultLogger.getLogger(String.class));
-	}
+    @Test
+    public void shouldNotNull() {
+        assertNotNull(DefaultLogger.getLogger(String.class));
+    }
 
 }

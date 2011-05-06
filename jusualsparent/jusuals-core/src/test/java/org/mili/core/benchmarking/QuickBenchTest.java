@@ -47,7 +47,7 @@ public class QuickBenchTest {
         QuickBench.benchNxM(1, 1, new long[]{1}, new long[]{1}, new Bench[]{bench});
         assertEquals(4, AnnotatedBenchTest.countOfPrepares);
         assertEquals(2, AnnotatedBenchTest.countOfExecutes);
-        assertEquals(6, AnnotatedBenchTest.countOfResets);
+        assertEquals(7, AnnotatedBenchTest.countOfResets);
     }
 
 }
