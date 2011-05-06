@@ -69,8 +69,11 @@ public class ThrowableLogger {
     private void createFile(Throwable throwable) throws IOException {
         String name = cls.getName() + ".log";
         File file = new File(this.dayDir, name);
-        PrintStream ps = new PrintStream(file);
+        FileOutputStream fos = new FileOutputStream(file, true);
+        PrintStream ps = new PrintStream(fos);
         this.writeInfos(ps, throwable);
+        ps.close();
+        fos.close();
     }
 
     private void writeInfos(PrintStream ps, Throwable throwable) {

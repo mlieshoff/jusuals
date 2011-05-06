@@ -264,12 +264,11 @@ public class DefaultLogger implements Logger {
                 }
                 File dir = new File(name);
                 this.throwableLogger = new ThrowableLogger(this.cls, dir);
-                try {
-                    this.throwableLogger.log(throwable);
-                } catch (IOException e) {
-                    this.error(e, "can't write the throwable log[dir=", dir.getAbsolutePath(),
-                            "]!");
-                }
+            }
+            try {
+                this.throwableLogger.log(throwable);
+            } catch (IOException e) {
+                this.error(e);
             }
         }
     }
