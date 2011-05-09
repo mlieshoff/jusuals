@@ -268,7 +268,7 @@ public class DefaultLogger implements Logger {
             try {
                 this.throwableLogger.log(throwable);
             } catch (IOException e) {
-                this.error(e);
+                e.printStackTrace();
             }
         }
     }
