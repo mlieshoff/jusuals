@@ -165,4 +165,12 @@ public interface ResourceManager {
      */
     Map<String, String> getResourceBundlesForBasenameAndLocale(String basename, Locale locale);
 
+    /**
+     * Contains.
+     *
+     * @param key the key
+     * @return true, if successful
+     */
+    boolean contains(String key);
+
 }

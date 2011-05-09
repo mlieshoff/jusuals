@@ -265,6 +265,30 @@ public class ResourceUtil {
         cache.clear();
     }
 
+    /**
+     * Contains.
+     *
+     * @param locale the locale
+     * @param baseName the base name
+     * @param key the key
+     * @return true, if successful
+     */
+    public static boolean contains(Locale locale, String baseName, String key) {
+        Map<Locale, Map<String, String>> m = cache.get(baseName);
+        if (m != null) {
+            Map<String, String> rb = m.get(locale);
+            if (rb != null) {
+                return rb.containsKey(key);
+            } else {
+                throw new IllegalStateException("no resource-bundle for locale defined ! "
+                        + getInfo(locale, baseName, key));
+            }
+        } else {
+            throw new IllegalStateException("no locales for base-name defined ! "
+                    + getInfo(locale, baseName, key));
+        }
+    }
+
     private static String createMissingResource(String key) {
         int i = key.lastIndexOf(".");
         return MISSING_RESOURCE.replace("%0", i > 0 ? key.substring(i) : key);

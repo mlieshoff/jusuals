@@ -220,6 +220,14 @@ public class ResourceUtilTest {
         assertEquals("abbas", salter);
     }
 
+    @Test
+    public void shouldContains() throws Exception {
+        this.createPropertiesForClassDe();
+        ResourceUtil.load(Locale.GERMANY, "test", this.createUrlClassLoader(this.root));
+        assertTrue(ResourceUtil.contains(Locale.GERMANY, "test", ID + ".p0"));
+        assertFalse(ResourceUtil.contains(Locale.GERMANY, "test", "abc"));
+    }
+
     private void createPropertiesForClassDe() throws IOException {
         Properties p = new Properties();
         p.setProperty(ID + ".p0", "hallo");
