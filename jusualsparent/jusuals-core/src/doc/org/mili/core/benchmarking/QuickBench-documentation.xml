@@ -274,12 +274,6 @@
             ]]></text>
         </paragraph>
     </part>
-    <bibliography>
-        <bib-item bib-item-type="manual" id="jmibs-manual" author="Michael Lieshoff" year="2010" title="jMibs manual" note="Website" publisher="org.mili" url="http://code.google.com/p/jmibs/wiki/jMibs"/>
-    </bibliography>
-    <glossary>
-        <glossary-item name="jmibs" description="Java micro-benchmark system"/>
-    </glossary>
     <changelog>
         <change date="09.05.2011 10:11" version="1.0" who="mlieshoff" what="Erstellung."/>
     </changelog>
