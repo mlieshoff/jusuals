@@ -26,6 +26,7 @@ import java.io.*;
 
 import javax.xml.bind.*;
 
+import org.apache.commons.lang.*;
 import org.mili.core.io.*;
 import org.mili.core.logging.*;
 
@@ -48,6 +49,8 @@ public class XmlAccess {
      * @throws JAXBException if JAXB exceptions occurs.
      */
     public static Object read(File file, String namespace) throws IOException, JAXBException {
+        Validate.notNull(file);
+        Validate.notEmpty(namespace);
         return read(FileUtil.getInputStream(file.getAbsolutePath()), namespace);
     }
 
@@ -62,6 +65,8 @@ public class XmlAccess {
      */
     public static Object read(String filename, String namespace) throws IOException,
             JAXBException {
+        Validate.notEmpty(filename);
+        Validate.notEmpty(namespace);
         return read(FileUtil.getInputStream(filename), namespace);
     }
 
