@@ -20,13 +20,13 @@
 
 package org.mili.core.collection;
 
-import static org.junit.Assert.*;
-
 import java.util.*;
 
 import org.apache.commons.functor.*;
 import org.junit.*;
 import org.mili.core.collection.MapUtil.*;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Michael Lieshoff
@@ -43,12 +43,19 @@ public class MapUtilTest {
     }};
 
     @Test
+    public void testConstruct() {
+        new MapUtil();
+        DelimiterMode.valueOf(DelimiterMode.Normal.toString());
+    }
+
+    @Test
     public void testStandard() {
         String s = "abbas abba abb ab a";
         assertTrue(s.compareTo(MapUtil.mapToString(this.m)) == 0);
         assertEquals("", MapUtil.mapToString(null));
         assertEquals("", MapUtil.mapToString(new Hashtable()));
     }
+
     @Test
     public void testNoDelimiter() {
         String s = "abbasabbaabbaba";

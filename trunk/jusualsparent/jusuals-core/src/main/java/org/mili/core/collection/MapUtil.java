@@ -30,6 +30,7 @@ import org.apache.commons.lang.*;
  * @author Michael Lieshoff
  */
 public final class MapUtil {
+
     /** separation modes. */
     public enum DelimiterMode {
         /** normal like {a, b, c, d, e} etc. */
@@ -65,7 +66,7 @@ public final class MapUtil {
 
     /**
      * Transforms a map to a string representation. The delimiter separates the elements. In
-     * template %1 sequence is replaced as the key, %2 as the value. An empty or null map is
+     * template %1 sequence iso replaced as the key, %2 as the value. An empty or null map is
      * represented by empty string.
      *
      * @param m map.

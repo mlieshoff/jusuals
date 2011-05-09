@@ -19,16 +19,21 @@
  */
 package org.mili.core.collection;
 
-import static org.junit.Assert.*;
-
 import java.util.*;
 
 import org.junit.*;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Michael Lieshoff
  */
 public class ArrayUtilTest {
+
+    @Test
+    public void testConstruct() {
+        new ArrayUtil();
+    }
 
     @Test
     public void test() {
