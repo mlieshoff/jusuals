@@ -20,16 +20,21 @@
 
 package org.mili.core.collection;
 
-import static org.junit.Assert.*;
-
 import java.util.*;
 
 import org.junit.*;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Michael Lieshoff
  */
 public class CollectionUtilTest {
+
+    @Test
+    public void testConstruct() {
+        new CollectionUtil();
+    }
 
     @Test
     public void test() {
