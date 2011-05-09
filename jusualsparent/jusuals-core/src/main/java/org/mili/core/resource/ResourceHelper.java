@@ -181,4 +181,9 @@ public class ResourceHelper implements ResourceManager {
         return ResourceUtil.listLocalesForBasename(basename);
     }
 
+    @Override
+    public boolean contains(String key) {
+        return ResourceUtil.contains(this.locale, this.baseName, key);
+    }
+
 }
