@@ -1,0 +1,286 @@
+<?xml version='1.0' encoding='utf-8'?>
+<documentation name="QuickBench" filename-prefix="quickbench" creator="mlieshoff"
+        creation="09.05.2011 10:11" version="1.0" copyright="org.mili">
+    <written-language token="EN"/>
+    <author name="Michael Lieshoff" token="mlieshoff" email="michaellieshoff@gmx.de"/>
+    <part name="Introduction">
+        <paragraph name="What is QuickBench?">
+            <text ressource="What is QuickBench?_1"><![CDATA[
+            QuickBench is a lightweight simple and easy micro-benchmark system for Java. There
+            is no need of installation, all is containing in the library jusuals-core in packages
+            "org.mili.core.benchmarking". It's containing an short interface for benchmarks an
+            abstract class where some methods already defined and the QuickBench class
+            containing the whole system.
+            ]]></text>
+        </paragraph>
+        <paragraph name="Future of QuickBench">
+            <text ressource="Future of QuickBench_1"><![CDATA[
+            QuickBench is already extended by more functionality. Next plans would try to
+            integrate this system as part of jMibs, so be prepared for a little package
+            movement, but the functionalty and simpleness would be always the same.
+            ]]></text>
+        </paragraph>
+    </part>
+    <part name="Usage">
+        <paragraph name="Two kinds of benchmarks">
+            <text ressource="Two kinds of benchmarks_1"><![CDATA[
+            Two kinds of benchmarks are supported. The NxM benches and the N-Intervall
+            benches. NxM benches executes something n times with m objects. It's nice to use it
+            for traversal some data structures and so on. You can execute the get(index) method
+            n times on a list containing m objects.
+            ]]></text>
+            <text ressource="Two kinds of benchmarks_2"><![CDATA[
+            The N-Intervall benches is for working with functions, e.g. the Fibonacci numbers
+            or the faculty. We execute the fib(number) method n times for all the values exists
+            in the intervall.
+            ]]></text>
+        </paragraph>
+        <paragraph name="Lifecycle">
+            <text ressource="Lifecycle_1"><![CDATA[
+            If QuickBench is started with benchNxIntervall() or benchNxM() method, it will
+            warmup the benches first. Warmup will execute reset(), prepare() and execute()
+            methods of all defined benches a defined times with a minium count.
+            ]]></text>
+            <text ressource="Lifecycle_2"><![CDATA[
+            Since warmed up, every benches will be executed in their way depending of the type
+            NxM oder NxIntervall. Intervall benches will be resetted before each execution but
+            not prepared. NxM benches will be resetted and prepared before each execution.
+            ]]></text>
+        </paragraph>
+    </part>
+    <part name="Examples">
+        <paragraph name="NxM">
+            <text ressource="NxM_1"><![CDATA[
+            Simple start with writing a class with a main() method.
+            ]]></text>
+            <pre ressource="NxM_2"><![CDATA[
+            public class NxMTests {
+                public static void main(String[] args) {
+                    QuickBench.benchNxM(
+                            10,                                      // minimum millis to display nanos
+                            50000,                                   // warmup times
+                            new long[] { 10, 100, 1000 },            // n-iteration
+                            new long[] { 10000, 100000 },            // m-objects
+                            new Bench[] {                            // the benches
+                                new ListTraverseBench_HighSpeed(),   // list traversing with high-speed idiom
+                                new ListTraverseBench_ForEach()      // list traversing with built-in for-each
+                            });
+                }
+            }
+            ]]></pre>
+            <text ressource="NxM_3"><![CDATA[
+            Then write the two benchmarks.
+            ]]></text>
+            <pre ressource="NxM_4"><![CDATA[
+            public class ListTraverseBench_HighSpeed extends AbstractBench {
+                List<String> l = null;
+
+                @Override
+                public String getName() {
+                    return "Traverse: HighSpeed";
+                }
+
+                @Override
+                public void reset() {
+                    l = new ArrayList<String>();
+                }
+
+                @Override
+                public void prepare(long lm) {
+                    for (int i = 0; i < lm; i++) {
+                        l.add(String.valueOf(i));
+                    }
+                }
+
+                @Override
+                public void execute(long lm) {
+                    String s = null;
+                    for (int i = 0, n = l.size(); i < n; i++) {
+                        s = l.get(i);
+                    }
+                }
+            };
+            ]]></pre>
+            <pre ressource="NxM_5"><![CDATA[
+            public class ListTraverseBench_ForEach extends AbstractBench {
+                List<String> l = null;
+
+                public ListTraverseBench_ForEach() {
+                    super();
+                }
+
+                @Override
+                public String getName() {
+                    return "Traverse: ForEach";
+                }
+
+                @Override
+                public void reset() {
+                    l = new ArrayList<String>();
+                }
+
+                @Override
+                public void prepare(long lm) {
+                    for (int i = 0; i < lm; i++) {
+                        l.add(String.valueOf(i));
+                    }
+                }
+
+                @Override
+                public void execute(long lm) {
+                    for (String s : l) {
+                    }
+                }
+            };
+            ]]></pre>
+            <text ressource="NxM_6"><![CDATA[
+            Then execute the class NxMTests to start the QuickBench system. The summary will be
+            generated while the benches are executed. So you can view the results immediatly.
+            ]]></text>
+            <pre ressource="NxM_7"><![CDATA[
+            +---------------------------+----------+------------+----------+----------+-----------------+-----------------+
+            | Bench                     |   Rounds |    Objects |       ms | ms (avg) |              nt |        nt (avg) |
+            +---------------------------+----------+------------+----------+----------+-----------------+-----------------+
+            | Traverse: HighSpeed       |       10 |     10.000 |        2 |        0 |       1.035.210 |         103.521 |
+            | Traverse: HighSpeed       |      100 |     10.000 |        5 |        0 |       5.326.235 |          53.262 |
+            | Traverse: HighSpeed       |    1.000 |     10.000 |       56 |        0 |             ... |             ... |
+            | Traverse: HighSpeed       |       10 |    100.000 |       15 |        1 |             ... |             ... |
+            | Traverse: HighSpeed       |      100 |    100.000 |      142 |        1 |             ... |             ... |
+            | Traverse: HighSpeed       |    1.000 |    100.000 |    1.737 |        1 |             ... |             ... |
+            | Traverse: ForEach         |       10 |     10.000 |        1 |        0 |         604.127 |          60.412 |
+            | Traverse: ForEach         |      100 |     10.000 |        4 |        0 |       6.911.349 |          69.113 |
+            | Traverse: ForEach         |    1.000 |     10.000 |       64 |        0 |             ... |             ... |
+            | Traverse: ForEach         |       10 |    100.000 |       15 |        1 |             ... |             ... |
+            | Traverse: ForEach         |      100 |    100.000 |      212 |        2 |             ... |             ... |
+            | Traverse: ForEach         |    1.000 |    100.000 |    1.796 |        1 |             ... |             ... |
+            +---------------------------+----------+------------+----------+----------+-----------------+-----------------+
+            java version 1.6.0_22
+            OpenJDK Runtime Environment(build 1.6.0_22-b22)
+            OpenJDK Server VM(build 20.0-b11, mixed mode)
+            Linux(2.6.38-8-generic-pae) i386
+            Max memory: 858MB
+            ]]></pre>
+            <text ressource="NxM_8"><![CDATA[
+            The benches are executed 10, 100 and 1.000 times, depends on 10.000 and 100.000
+            objects in the array list. The ... display that 10 milliseconds are defined to skip
+            display of nanos. Ms displays the time in milli seconds token and ms(avg) the average
+            time. Nt is the nano time and nt(avg) the average nano time.
+            ]]></text>
+        </paragraph>
+        <paragraph name="NxIntervall">
+            <text ressource="NxIntervall_1"><![CDATA[
+            Now continue with writing a new class with a main() method.
+            ]]></text>
+            <pre ressource="NxIntervall_2"><![CDATA[
+            public class NxIntervallTests {
+                public static void main(String[] args) {
+                    QuickBench.benchNxIntervall(
+                            10,                                      // minimum millis to display nanos
+                            50000,                                   // warmup times
+                            new long[] { 10, 100, 1000},             // n-iterations
+                            1,                                       // intervall start
+                            25,                                      // intervall end
+                            new Bench[]{                             // the benches
+                                new FibBench_Recursive(),            // Fibonacci recursive
+                                new FibBench_NonRecursive()          // Fibonaccie non-recursive
+                            });
+                }
+            }
+            ]]></pre>
+            <text ressource="NxNxIntervall_3"><![CDATA[
+            Then write the two benchmarks.
+            ]]></text>
+            <pre ressource="NxNxIntervall_4"><![CDATA[
+            public class FibBench_Recursive extends AbstractBench {
+                private int fib(int a) {
+                    if (a == 1 || a == 2) {
+                        return 1;
+                    } else {
+                        return fib(a - 1) + fib(a - 2);
+                    }
+                }
+
+                @Override
+                public String getName() {
+                    return "Fibonacci: recursive";
+                }
+
+                @Override
+                public void prepare(long lm) {
+                    this.fib(1);
+                    this.fib(2);
+                    this.fib(3);
+                }
+
+                @Override
+                public void execute(long lm) {
+                    this.fib((int) lm);
+                }
+            };
+            ]]></pre>
+            <pre ressource="NxIntervall_5"><![CDATA[
+            public class FibBench_NonRecursive extends AbstractBench {
+                private long fib(int a) {
+                    long fib = 1;
+                    for (long fib1 = 1, fib2 = 1, i = 3; i <= a; i++) {
+                        fib = fib1 + fib2;
+                        fib1 = fib2;
+                        fib2 = fib;
+                    }
+                    return fib;
+                }
+
+                @Override
+                public String getName() {
+                    return "Fibonacci: non-recursive";
+                }
+
+                @Override
+                public void prepare(long lm) {
+                    this.fib(1);
+                    this.fib(2);
+                    this.fib(3);
+                }
+
+                @Override
+                public void execute(long lm) {
+                    this.fib((int) lm);
+                }
+            };
+            ]]></pre>
+            <text ressource="NxIntervall_6"><![CDATA[
+            Then execute the class NxIntervalTests like before.
+            ]]></text>
+            <pre ressource="NxIntervall_7"><![CDATA[
+            +---------------------------+----------+------------+------------+----------+----------+-----------------+-----------------+
+            | Bench                     |   Rounds |        min |        max |       ms | ms (avg) |              nt |        nt (avg) |
+            +---------------------------+----------+------------+------------+----------+----------+-----------------+-----------------+
+            | Fibonacci: recursive      |       10 |          1 |         25 |       10 |        1 |             ... |             ... |
+            | Fibonacci: recursive      |      100 |          1 |         25 |       89 |        0 |             ... |             ... |
+            | Fibonacci: recursive      |    1.000 |          1 |         25 |      803 |        0 |             ... |             ... |
+            | Fibonacci: non-recursive  |       10 |          1 |         25 |        0 |        0 |         122.255 |          12.225 |
+            | Fibonacci: non-recursive  |      100 |          1 |         25 |        2 |        0 |       1.077.814 |          10.778 |
+            | Fibonacci: non-recursive  |    1.000 |          1 |         25 |       45 |        0 |             ... |             ... |
+            +---------------------------+----------+------------+------------+----------+----------+-----------------+-----------------+
+            java version 1.6.0_22
+            OpenJDK Runtime Environment(build 1.6.0_22-b22)
+            OpenJDK Server VM(build 20.0-b11, mixed mode)
+            Linux(2.6.38-8-generic-pae) i386
+            Max memory: 858MB
+            ]]></pre>
+            <text ressource="NxIntervall_8"><![CDATA[
+            The benches are executed 10, 100 and 1.000 times, depends on intervall 1 to 25.
+            Other fields are like before.
+            ]]></text>
+        </paragraph>
+    </part>
+    <bibliography>
+        <bib-item bib-item-type="manual" id="jmibs-manual" author="Michael Lieshoff" year="2010" title="jMibs manual" note="Website" publisher="org.mili" url="http://code.google.com/p/jmibs/wiki/jMibs"/>
+    </bibliography>
+    <glossary>
+        <glossary-item name="jmibs" description="Java micro-benchmark system"/>
+    </glossary>
+    <changelog>
+        <change date="09.05.2011 10:11" version="1.0" who="mlieshoff" what="Erstellung."/>
+    </changelog>
+</documentation>
