@@ -20,11 +20,11 @@
 
 package org.mili.core.logging;
 
-import static org.junit.Assert.*;
-
 import org.apache.log4j.*;
 import org.apache.log4j.spi.*;
 import org.junit.*;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Michael Lieshoff

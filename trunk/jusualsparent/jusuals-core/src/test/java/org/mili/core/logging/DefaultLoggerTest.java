@@ -34,4 +34,12 @@ public class DefaultLoggerTest {
         assertNotNull(DefaultLogger.getLogger(String.class));
     }
 
+    @Test
+    public void shouldLogError() {
+        System.setProperty(DefaultLogger.PROP_LOGTHROWABLES, "true");
+        DefaultLogger.getLogger(String.class).error(new IllegalArgumentException("lala"));
+        System.clearProperty(DefaultLogger.PROP_LOGTHROWABLES);
+    }
+
+
 }
