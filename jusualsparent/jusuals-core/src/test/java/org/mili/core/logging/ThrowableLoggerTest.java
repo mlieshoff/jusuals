@@ -45,17 +45,17 @@ public class ThrowableLoggerTest {
     public void setUp() throws Exception {
         this.dir = TestUtils.getTmpFolder(ThrowableLoggerTest.class);
         this.dayDir = new File(this.dir, new SimpleDateFormat("yyyyMMdd").format(new Date()));
-        this.logger = new ThrowableLogger(ThrowableLoggerTest.class, this.dir);
+        this.logger = new DefaultThrowableLogger(ThrowableLoggerTest.class, this.dir);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failsToCreateBecauseDirIsNull() {
-        new ThrowableLogger(String.class, null);
+        new DefaultThrowableLogger(String.class, null);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failsToCreateBecauseClassIsNull() {
-        new ThrowableLogger(null, new File(""));
+        new DefaultThrowableLogger(null, new File(""));
     }
 
     @Test

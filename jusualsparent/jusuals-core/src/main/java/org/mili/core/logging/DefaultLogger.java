@@ -21,6 +21,9 @@ package org.mili.core.logging;
 
 import java.io.*;
 
+import org.apache.commons.lang.*;
+import org.mili.core.logging.log4j.*;
+
 
 /**
  * This class defines a logger factory.
@@ -43,6 +46,7 @@ public class DefaultLogger implements Logger {
      * @param clazz the class.
      */
     public DefaultLogger(Class<?> clazz) {
+        Validate.notNull(clazz);
         this.root = create(clazz);
         this.cls = clazz;
     }
@@ -263,7 +267,7 @@ public class DefaultLogger implements Logger {
                     name = System.getProperty(PROP_LOGTHROWABLESDIR);
                 }
                 File dir = new File(name);
-                this.throwableLogger = new ThrowableLogger(this.cls, dir);
+                this.throwableLogger = new DefaultThrowableLogger(this.cls, dir);
             }
             try {
                 this.throwableLogger.log(throwable);
@@ -273,5 +277,7 @@ public class DefaultLogger implements Logger {
         }
     }
 
-
+    void setThrowableLogger(ThrowableLogger throwableLogger) {
+        this.throwableLogger = throwableLogger;
+    }
 }
