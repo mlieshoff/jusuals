@@ -392,7 +392,6 @@ public class Log4jAdapter implements Logger {
 
     private void log(Object... o) {
         Level l = this.logger.getEffectiveLevel();
-        System.out.println(l);
         if (Level.DEBUG.isGreaterOrEqual(l)) {
             this.logger.debug(this.getO(o));
         } else if (Level.INFO.isGreaterOrEqual(l)) {
