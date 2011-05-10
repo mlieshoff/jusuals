@@ -24,7 +24,6 @@ import org.apache.log4j.*;
 import org.apache.log4j.spi.*;
 import org.junit.*;
 import org.mili.core.logging.Logger;
-import org.mili.core.logging.log4j.*;
 
 import static org.junit.Assert.*;
 
@@ -32,7 +31,6 @@ import static org.junit.Assert.*;
  * @author Michael Lieshoff
  */
 public class Log4jAdapterTest {
-
     private Logger logger = new Log4jAdapter(String.class);
     private org.apache.log4j.Logger baseLogger = (org.apache.log4j.Logger) this.logger
             .getLogger();
@@ -55,6 +53,7 @@ public class Log4jAdapterTest {
     public void testWarnThrowableObjectArray() {
         this.baseLogger.setLevel(Level.WARN);
         this.logger.warn(new NullPointerException(), "a");
+        assertEquals(Level.WARN, this.actLevel);
     }
 
     @Test

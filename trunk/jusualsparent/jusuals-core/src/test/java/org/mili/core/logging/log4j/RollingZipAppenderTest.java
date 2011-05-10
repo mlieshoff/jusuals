@@ -19,14 +19,15 @@
  */
 package org.mili.core.logging.log4j;
 
-import static org.junit.Assert.*;
-
 import java.io.*;
 import java.util.*;
 
 import org.apache.commons.io.*;
 import org.junit.*;
+import org.mili.core.logging.log4j.RollingZipAppender.*;
 import org.mili.test.*;
+
+import static org.junit.Assert.*;
 
 
 /**
@@ -47,6 +48,31 @@ public class RollingZipAppenderTest {
         this.appender.setFile(this.logFile.getAbsolutePath());
         this.appender.setMaxFileSize("1KB");
         this.appender.setMaxBackupIndex(5);
+    }
+
+    @Test
+    public void shouldThrowExceptionButContinuesToArchive() throws Exception {
+        this.appender.setArchiver(new Archiver() {
+            @Override
+            public void archiveFile(File file) throws IOException {
+                throw new IOException();
+            }
+        });
+        this.createLogFile();
+        this.appender.rollOver();
+    }
+
+    @Test
+    public void shouldThrowExceptionWhileCloseButContinuesToArchive() throws Exception {
+        this.appender.setCloser(new Closer() {
+            @Override
+            public void closeFile(String filename, boolean append, boolean bufferedIO,
+                    int bufferSize) throws IOException {
+                throw new IOException();
+            }
+        });
+        this.createLogFile();
+        this.appender.rollOver();
     }
 
     @Test
