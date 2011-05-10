@@ -22,10 +22,14 @@ package org.mili.core.manifest;
 import org.apache.commons.lang.*;
 
 /**
+ * This class helpswith acces to manifest information in manifest.
+ *
  * @author Michael Lieshoff
  *
  */
 public class VersionUtils {
+    private static ClassWrapper classWrapper = new DefaultClassWrapper();
+    private static PackageWrapper packageWrapper = new DefaultPackageWrapper();
 
     /**
      * Gets the implementation title.
@@ -34,9 +38,8 @@ public class VersionUtils {
      * @return the implementation title
      */
     public static String getImplementationTitle(Class<?> cls) {
-        Validate.notNull(cls);
-        Validate.notNull(cls.getPackage());
-        return cls.getPackage().getImplementationTitle();
+        checkClass(cls);
+        return packageWrapper.getImplementationTitle(classWrapper.getPackage(cls));
     }
 
     /**
@@ -46,9 +49,8 @@ public class VersionUtils {
      * @return the implementation vendor
      */
     public static String getImplementationVendor(Class<?> cls) {
-        Validate.notNull(cls);
-        Validate.notNull(cls.getPackage());
-        return cls.getPackage().getImplementationVendor();
+        checkClass(cls);
+        return packageWrapper.getImplementationVendor(classWrapper.getPackage(cls));
     }
 
     /**
@@ -58,9 +60,8 @@ public class VersionUtils {
      * @return the implementation version
      */
     public static String getImplementationVersion(Class<?> cls) {
-        Validate.notNull(cls);
-        Validate.notNull(cls.getPackage());
-        return cls.getPackage().getImplementationVersion();
+        checkClass(cls);
+        return packageWrapper.getImplementationVersion(classWrapper.getPackage(cls));
     }
 
     /**
@@ -70,9 +71,8 @@ public class VersionUtils {
      * @return the specification title
      */
     public static String getSpecificationTitle(Class<?> cls) {
-        Validate.notNull(cls);
-        Validate.notNull(cls.getPackage());
-        return cls.getPackage().getSpecificationTitle();
+        checkClass(cls);
+        return packageWrapper.getSpecificationTitle(classWrapper.getPackage(cls));
     }
 
     /**
@@ -82,9 +82,8 @@ public class VersionUtils {
      * @return the specification vendor
      */
     public static String getSpecificationVendor(Class<?> cls) {
-        Validate.notNull(cls);
-        Validate.notNull(cls.getPackage());
-        return cls.getPackage().getSpecificationVendor();
+        checkClass(cls);
+        return packageWrapper.getSpecificationVendor(classWrapper.getPackage(cls));
     }
 
     /**
@@ -94,9 +93,72 @@ public class VersionUtils {
      * @return the specification version
      */
     public static String getSpecificationVersion(Class<?> cls) {
-        Validate.notNull(cls);
-        Validate.notNull(cls.getPackage());
-        return cls.getPackage().getSpecificationVersion();
+        checkClass(cls);
+        return packageWrapper.getSpecificationVersion(classWrapper.getPackage(cls));
     }
 
+    private static void checkClass(Class<?> cls) {
+        Validate.notNull(cls);
+        Validate.notNull(classWrapper.getPackage(cls));
+    }
+
+    static void setClassWrapper(ClassWrapper newClassWrapper) {
+        classWrapper = newClassWrapper;
+    }
+
+    static void setPackageWrapper(PackageWrapper newPackageWrapper) {
+        packageWrapper = newPackageWrapper;
+    }
+
+    interface ClassWrapper {
+        Package getPackage(Class<?> cls);
+    }
+
+    static class DefaultClassWrapper implements ClassWrapper {
+        @Override
+        public Package getPackage(Class<?> cls) {
+            return cls.getPackage();
+        }
+    }
+
+    interface PackageWrapper {
+        String getImplementationTitle(Package pckge);
+        String getImplementationVendor(Package pckge);
+        String getImplementationVersion(Package pckge);
+        String getSpecificationTitle(Package pckge);
+        String getSpecificationVendor(Package pckge);
+        String getSpecificationVersion(Package pckge);
+    }
+
+    static class DefaultPackageWrapper implements PackageWrapper {
+        @Override
+        public String getImplementationTitle(Package pckge) {
+            return pckge.getImplementationTitle();
+        }
+
+        @Override
+        public String getImplementationVendor(Package pckge) {
+            return pckge.getImplementationVendor();
+        }
+
+        @Override
+        public String getImplementationVersion(Package pckge) {
+            return pckge.getImplementationVersion();
+        }
+
+        @Override
+        public String getSpecificationTitle(Package pckge) {
+            return pckge.getSpecificationTitle();
+        }
+
+        @Override
+        public String getSpecificationVendor(Package pckge) {
+            return pckge.getSpecificationVendor();
+        }
+
+        @Override
+        public String getSpecificationVersion(Package pckge) {
+            return pckge.getSpecificationVersion();
+        }
+    }
 }
