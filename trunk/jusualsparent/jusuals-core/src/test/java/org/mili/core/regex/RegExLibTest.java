@@ -30,6 +30,14 @@ import org.junit.*;
 public class RegExLibTest {
 
     @Test
+    public void shouldCreatesAllEnums() {
+        for(RegExLib regex : RegExLib.values()) {
+            assertEquals(regex, RegExLib.valueOf(regex.name()));
+            assertEquals(regex, RegExLib.valueOf(RegExLib.class, regex.toString()));
+        }
+    }
+
+    @Test
     public void testGetRegularExpression() {
         assertTrue(RegExLib.I18NRessourceFile_CountryLanguage.getRegularExpression().length()
                 > 0);
