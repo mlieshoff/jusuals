@@ -18,13 +18,14 @@
  *  limitations under the License.
  */
 
-package org.mili.core.logging;
+package org.mili.core.logging.log4j;
 
 
 import java.util.*;
 
 import org.apache.log4j.*;
 import org.mili.core.collection.*;
+import org.mili.core.logging.Logger;
 
 
 /**
