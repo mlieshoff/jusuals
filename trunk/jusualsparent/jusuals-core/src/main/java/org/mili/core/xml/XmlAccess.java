@@ -40,6 +40,12 @@ public class XmlAccess {
     private final static Logger log = DefaultLogger.getLogger(XmlAccess.class);
 
     /**
+     * Instantiates a new xml access.
+     */
+    public XmlAccess() {
+    }
+
+    /**
      * Unmarshalls a XML file to an object structure.
      *
      * @param file the file object contains XML data.
@@ -81,6 +87,8 @@ public class XmlAccess {
      */
     public static Object read(InputStream is, String namespace) throws IOException,
             JAXBException {
+        Validate.notNull(is);
+        Validate.notEmpty(namespace);
         JAXBContext context = JAXBContext.newInstance(namespace);
         Unmarshaller u = context.createUnmarshaller();
         return u.unmarshal(is);
@@ -99,7 +107,25 @@ public class XmlAccess {
      */
     public static boolean write(Object o, String filename, String namespace)
             throws PropertyException, JAXBException, IOException {
-        return write(o, filename, namespace, null);
+        Validate.notNull(filename);
+        Validate.notEmpty(filename);
+        return write(o, new File(filename), namespace);
+    }
+
+    /**
+     * Marshalls a object structure to a XML file.
+     *
+     * @param o an object.
+     * @param file XML file.
+     * @param namespace the namespace.
+     * @return <tt>true</tt> if object is written, <tt>false</tt> otherwise.
+     * @throws PropertyException if property exception occurs.
+     * @throws JAXBException if JAXB exception occurs.
+     * @throws IOException if IO exception occurs
+     */
+    public static boolean write(Object o, File file, String namespace) throws PropertyException,
+            JAXBException, IOException {
+        return write(o, file, namespace, null);
     }
 
     /**
@@ -116,15 +142,32 @@ public class XmlAccess {
      */
     public static boolean write(Object o, String filename, String namespace, String[] cdes)
             throws PropertyException, JAXBException, IOException {
+        Validate.notEmpty(filename);
+        Validate.notEmpty(namespace);
+        return write(o, new File(filename), namespace, cdes);
+    }
+
+    /**
+     * Marshalls a object structure to a XML file.
+     *
+     * @param o an object.
+     * @param file XML file.
+     * @param namespace the namespace.
+     * @param cdes CData elements, like "^text" etc.
+     * @return <tt>true</tt> if object is written, <tt>false</tt> otherwise.
+     * @throws PropertyException if property exception occurs.
+     * @throws JAXBException if JAXB exception occurs.
+     * @throws IOException if IO exception occurs
+     */
+    public static boolean write(Object o, File file, String namespace, String[] cdes)
+            throws PropertyException, JAXBException, IOException {
+        Validate.notNull(o);
+        Validate.notNull(file);
+        Validate.notEmpty(namespace);
         JAXBContext context = JAXBContext.newInstance(namespace);
         Marshaller m = context.createMarshaller();
-        if (o == null) {
-            log.error("There is no writing object defined !");
-            return false;
-        }
-        File f = new File(filename);
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        XMLSerializer serializer = getXMLSerializer(new FileOutputStream(f), cdes);
+        XMLSerializer serializer = getXMLSerializer(new FileOutputStream(file), cdes);
         m.marshal(o, serializer.asContentHandler());
         return true;
     }
