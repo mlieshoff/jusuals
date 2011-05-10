@@ -33,6 +33,8 @@ import org.mili.core.logging.Logger;
 public class RollingZipAppender extends RollingFileAppender {
     private static final Logger LOG = DefaultLogger.create(RollingFileAppender.class);
     private static final String archivedLogFilePattern = "{0}.{1}.zip";
+    private Archiver archiver = new ZipArchiver();
+    private Closer closer = new FileCloser();
 
     @Override
     public void rollOver() {
@@ -83,7 +85,7 @@ public class RollingZipAppender extends RollingFileAppender {
 
     private void archiveLogFile(File target) {
         try {
-            archiveFile(target);
+            this.archiver.archiveFile(target);
             target.delete();
         } catch (IOException e) {
             LOG.error("Failed to zip file [" + target.getPath() + "].");
@@ -92,26 +94,54 @@ public class RollingZipAppender extends RollingFileAppender {
 
     private void closeLogFile() {
         try {
-            this.setFile(this.fileName, false, this.bufferedIO, this.bufferSize);
+            this.closer.closeFile(this.fileName, false, this.bufferedIO, this.bufferSize);
         } catch (IOException e) {
             LOG.error("setFile(" + fileName + ", false) call failed.", e);
         }
     }
 
-    private void archiveFile(File logFile) throws IOException {
-        FileOutputStream fos = new FileOutputStream(logFile.getPath() + ".zip");
-        ZipOutputStream zos = new ZipOutputStream(fos);
-        FileInputStream fis = new FileInputStream(logFile);
-        BufferedInputStream bis = new BufferedInputStream(fis);
-        ZipEntry entry = new ZipEntry(logFile.getCanonicalFile().getName());
-        zos.putNextEntry(entry);
-        byte[] barray = new byte[1024];
-        int bytes;
-        while ((bytes = bis.read(barray, 0, 1024)) > -1) {
-            zos.write(barray, 0, bytes);
+    void setArchiver(Archiver archiver) {
+        this.archiver = archiver;
+    }
+
+    void setCloser(Closer closer) {
+        this.closer = closer;
+    }
+
+    interface Closer {
+        void closeFile(String filename, boolean append, boolean bufferedIO, int bufferSize)
+                throws IOException;
+    }
+
+    class FileCloser implements Closer {
+        @Override
+        public void closeFile(String filename, boolean append, boolean bufferedIO,
+                int bufferSize) throws IOException {
+            setFile(filename, false, bufferedIO, bufferSize);
         }
-        zos.flush();
-        zos.close();
-        fos.close();
+    }
+
+    interface Archiver {
+        void archiveFile(File file) throws IOException;
+    }
+
+    class ZipArchiver implements Archiver {
+        @Override
+        public void archiveFile(File file) throws IOException {
+            FileOutputStream fos = new FileOutputStream(file.getPath() + ".zip");
+            ZipOutputStream zos = new ZipOutputStream(fos);
+            FileInputStream fis = new FileInputStream(file);
+            BufferedInputStream bis = new BufferedInputStream(fis);
+            ZipEntry entry = new ZipEntry(file.getCanonicalFile().getName());
+            zos.putNextEntry(entry);
+            byte[] barray = new byte[1024];
+            int bytes;
+            while ((bytes = bis.read(barray, 0, 1024)) > -1) {
+                zos.write(barray, 0, bytes);
+            }
+            zos.flush();
+            zos.close();
+            fos.close();
+        }
     }
 }

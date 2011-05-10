@@ -159,7 +159,7 @@ public class Log4jAdapter implements Logger {
             this.logger.trace(this.getO(o));
         }
     }
-    
+
     @Override
     public void fatal(Throwable t, Object... o) {
         Level l = this.logger.getEffectiveLevel();
@@ -392,16 +392,17 @@ public class Log4jAdapter implements Logger {
 
     private void log(Object... o) {
         Level l = this.logger.getEffectiveLevel();
-        if (Level.FATAL.isGreaterOrEqual(l)) {
-            this.logger.fatal(this.getO(o));
-        } else if (Level.ERROR.isGreaterOrEqual(l)) {
-            this.logger.error(this.getO(o));
+        System.out.println(l);
+        if (Level.DEBUG.isGreaterOrEqual(l)) {
+            this.logger.debug(this.getO(o));
         } else if (Level.INFO.isGreaterOrEqual(l)) {
             this.logger.info(this.getO(o));
         } else if (Level.WARN.isGreaterOrEqual(l)) {
             this.logger.warn(this.getO(o));
-        } else if (Level.DEBUG.isGreaterOrEqual(l)) {
-            this.logger.debug(this.getO(o));
+        } else if (Level.ERROR.isGreaterOrEqual(l)) {
+            this.logger.error(this.getO(o));
+        } else if (Level.FATAL.isGreaterOrEqual(l)) {
+            this.logger.fatal(this.getO(o));
         }
     }
 
