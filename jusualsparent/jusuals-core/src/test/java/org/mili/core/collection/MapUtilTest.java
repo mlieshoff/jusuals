@@ -25,6 +25,7 @@ import java.util.*;
 import org.apache.commons.functor.*;
 import org.junit.*;
 import org.mili.core.collection.MapUtil.*;
+import org.mili.core.regex.*;
 
 import static org.junit.Assert.*;
 
