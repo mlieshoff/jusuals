@@ -17,9 +17,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.mili.core.benchmarking;
+package org.mili.core.benchmarking.experimental;
 
 import org.junit.*;
+import org.mili.core.benchmarking.*;
 import org.mili.core.benchmarking.experimental.*;
 
 import static org.junit.Assert.*;

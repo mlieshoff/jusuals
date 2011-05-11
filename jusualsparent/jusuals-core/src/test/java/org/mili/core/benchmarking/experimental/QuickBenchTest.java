@@ -1,5 +1,5 @@
 /*
- * Simple.java
+ * QuickBenchTest.java
  *
  * 05.05.2011
  *
@@ -17,51 +17,38 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.mili.core.benchmarking;
+package org.mili.core.benchmarking.experimental;
 
+import org.junit.*;
+import org.mili.core.benchmarking.*;
 import org.mili.core.benchmarking.experimental.*;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Michael Lieshoff
  */
-public class Simple {
+public class QuickBenchTest {
 
     /**
-     * Instantiates a new simple.
-     */
-    public Simple() {
-        super();
-    }
-
-    /**
-     * Adds the.
+     * Sets the up.
      *
-     * @param s the s
-     * @param i the i
+     * @throws Exception the exception
      */
-    @Prepare
-    public void add(String s, int i) {
-        AnnotatedBenchTest.countOfPrepares ++;
+    @Before
+    public void setUp() throws Exception {
     }
 
     /**
-     * Gets the.
-     *
-     * @param i the i
-     * @return the string
+     * Should run sequence bench.
      */
-    @Execute
-    public String get(int i) {
-        AnnotatedBenchTest.countOfExecutes ++;
-        return null;
-    }
-
-    /**
-     * Clear.
-     */
-    @Reset
-    public void clear() {
-        AnnotatedBenchTest.countOfResets ++;
+    @Test
+    public void shouldRunSequenceBench() {
+        Bench bench = new AnnotatedBench(Simple.class);
+        QuickBench.benchNxM(1, 1, new long[]{1}, new long[]{1}, new Bench[]{bench});
+        assertEquals(4, AnnotatedBenchTest.countOfPrepares);
+        assertEquals(2, AnnotatedBenchTest.countOfExecutes);
+        assertEquals(6, AnnotatedBenchTest.countOfResets);
     }
 
 }
