@@ -32,164 +32,178 @@ import org.mili.test.*;
  * @author Michael Lieshoff
  */
 public class DumpUtil implements DumpUtilInterface {
-
     private final static String SQL_SELECT_ALL = "select * from %1";
 
     /**
-     * Gibt eine lesbare Darstellung der Tabellendaten wieder.
-     *
-     * @param c Connection.
-     * @param tablename Tabellenname.
-     * @return lesbare Darstellung.
-     * @throws SQLException falls Fehler entstehen.
+     * Instantiates a new dump util.
      */
-    public static String tableToString(Connection c, String tablename) throws SQLException {
-        return tableToString(c, tablename, null);
+    public DumpUtil() {
     }
 
     /**
-     * Gibt eine lesbare Darstellung der Tabellendaten wieder.
+     * Table to string.
      *
-     * @param c Connection.
-     * @param tablename Tabellenname.
-     * @param columns Spalten.
-     * @return lesbare Darstellung.
-     * @throws SQLException falls Fehler entstehen.
+     * @param connection the connection
+     * @param tablename the tablename
+     * @return the string
+     * @throws SQLException the sQL exception
      */
-    public static String tableToString(Connection c, String tablename, String[] columns)
+    public static String tableToString(Connection connection, String tablename)
             throws SQLException {
-        return tableToString(c, tablename, null, columns);
+        return tableToString(connection, tablename, null);
     }
 
     /**
-     * Gibt eine lesbare Darstellung der Tabellendaten wieder.
+     * Table to string.
      *
-     * @param c Connection.
-     * @param tablename Tabellenname.
-     * @param where SQL-Where.
-     * @param columns Spalten.
-     * @return lesbare Darstellung.
-     * @throws SQLException falls Fehler entstehen.
+     * @param connection the connection
+     * @param tablename the tablename
+     * @param columns the columns
+     * @return the string
+     * @throws SQLException the sQL exception
      */
-    public static String tableToString(Connection c, String tablename, String where,
+    public static String tableToString(Connection connection, String tablename,
             String[] columns) throws SQLException {
-        List<List<Object>> l = dumpTable(c, tablename, where, columns);
+        return tableToString(connection, tablename, null, columns);
+    }
+
+    /**
+     * Table to string.
+     *
+     * @param connection the connection
+     * @param tablename the tablename
+     * @param where the where
+     * @param columns the columns
+     * @return the string
+     * @throws SQLException the sQL exception
+     */
+    public static String tableToString(Connection connection, String tablename, String where,
+            String[] columns) throws SQLException {
+        List<List<Object>> l = dumpTable(connection, tablename, where, columns);
         return CollectionUtil.collectionOfCollectionToString(l, "%1", "%1", "%1", "%1", "\n",
                 ", ");
     }
 
     /**
-     * Gibt eine lesbare Darstellung der Tabellendaten in Form einer {@link TextTable} wieder.
+     * Table to text table.
      *
-     * @param c {@link Connection}
-     * @param tablename Tabellenname.
-     * @param where SQL-Where.
-     * @param columns Spalten.
-     * @return {@link TextTable}
-     * @throws SQLException falls Fehler entstehen.
+     * @param connection the connection
+     * @param tablename the tablename
+     * @param where the where
+     * @param columns the columns
+     * @return the table
+     * @throws SQLException the sQL exception
      */
-    public static Table tableToTextTable(Connection c, String tablename, String where,
+    public static Table tableToTextTable(Connection connection, String tablename, String where,
             String... columns) throws SQLException {
-        List<List<Object>> l = dumpTable(c, tablename, where, columns);
+        List<List<Object>> l = dumpTable(connection, tablename, where, columns);
         return tableToTextTable(l);
     }
 
-    public static Table tableToTextTable(List<List<Object>> l) throws SQLException {
-        if (l.size() == 0) {
+    /**
+     * Table to text table.
+     *
+     * @param list the list
+     * @return the table
+     * @throws SQLException the sQL exception
+     */
+    public static Table tableToTextTable(List<List<Object>> list) throws SQLException {
+        if (list.size() < 3) {
             return null;
         }
         Table t = new TextTable();
         // cols
-        List<Object> l0 = l.get(1);
+        List<Object> l0 = list.get(1);
         for (int i = 0, n = l0.size(); i < n; i++) {
             String s = l0.get(i).toString();
             t = t.addCol(s);
         }
         // data
-        for (int i = 2, n = l.size(); i < n; i++) {
-            l0 = l.get(i);
+        for (int i = 2, n = list.size(); i < n; i++) {
+            l0 = list.get(i);
             t.addRow(l0.toArray());
         }
         return t;
     }
 
     /**
-     * Shows table at console.
+     * Show table.
      *
      * @param connection the connection
      * @param tablename the tablename
      * @param where the where
      * @param columns the columns
      */
-    public static void showTable(Connection c, String tablename, String where,
+    public static void showTable(Connection connection, String tablename, String where,
             String... columns) {
         Table t = null;
         try {
-            t = DumpUtil.tableToTextTable(c, tablename, where, columns);
+            t = DumpUtil.tableToTextTable(connection, tablename, where, columns);
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (!c.isClosed()) {
-                    c.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         System.out.println(String.valueOf(t));
     }
 
     /**
-     * Dumpt eine Tabelle.
+     * Dump table.
      *
-     * @param c Connection.
-     * @param tablename Tabellenname.
-     * @return Dump.
-     * @throws SQLException bei Fehlern.
+     * @param connection the connection
+     * @param tablename the tablename
+     * @return the list
+     * @throws SQLException the sQL exception
      */
-    public static List<List<Object>> dumpTable(Connection c, String tablename)
+    public static List<List<Object>> dumpTable(Connection connection, String tablename)
             throws SQLException {
-        return dumpTable(c, tablename, null);
+        return dumpTable(connection, tablename, null);
     }
 
     /**
-     * Dumpt eine Tabelle.
+     * Dump table.
      *
-     * @param c Connection.
-     * @param tablename Tabellenname.
-     * @param columns Spalten.
-     * @return Dump.
-     * @throws SQLException bei Fehlern.
+     * @param connection the connection
+     * @param tablename the tablename
+     * @param columns the columns
+     * @return the list
+     * @throws SQLException the sQL exception
      */
-    public static List<List<Object>> dumpTable(Connection c, String tablename, String[] columns)
-            throws SQLException {
-        return dumpTable(c, tablename, null, columns);
-    }
-
-    /**
-     * Dumpt eine Tabelle.
-     *
-     * @param c Connection.
-     * @param tablename Tabellenname.
-     * @param where SQL-Where.
-     * @param columns Spalten.
-     * @return Dump.
-     * @throws SQLException bei Fehlern.
-     */
-    public static List<List<Object>> dumpTable(Connection c, String tablename, String where,
+    public static List<List<Object>> dumpTable(Connection connection, String tablename,
             String[] columns) throws SQLException {
+        return dumpTable(connection, tablename, null, columns);
+    }
+
+    /**
+     * Dump table.
+     *
+     * @param connection the connection
+     * @param tablename the tablename
+     * @param where the where
+     * @param columns the columns
+     * @return the list
+     * @throws SQLException the sQL exception
+     */
+    public static List<List<Object>> dumpTable(Connection connection, String tablename,
+            String where, String[] columns) throws SQLException {
         String q = SQL_SELECT_ALL.replace("%1", tablename);
         if (where != null && where.length() > 0) {
             q += " where " + where;
         }
-        Statement s = c.createStatement();
+        Statement s = connection.createStatement();
         ResultSet rs = s.executeQuery(q);
         s.close();
         return dumpResultSet(rs, tablename, columns);
     }
 
-    public static List<List<Object>> dumpResultSet(ResultSet rs, String tablename,
+    /**
+     * Dump result set.
+     *
+     * @param resultSet the result set
+     * @param tablename the tablename
+     * @param columns the columns
+     * @return the list
+     * @throws SQLException the sQL exception
+     */
+    public static List<List<Object>> dumpResultSet(ResultSet resultSet, String tablename,
             String[] columns) throws SQLException {
         List<List<Object>> l = new ArrayList<List<Object>>();
         List<Object> t = new ArrayList<Object>();
@@ -201,7 +215,7 @@ public class DumpUtil implements DumpUtilInterface {
                 cs.put(columns[i].toLowerCase(), true);
             }
         }
-        ResultSetMetaData rsmd = rs.getMetaData();
+        ResultSetMetaData rsmd = resultSet.getMetaData();
         List<Object> h = new ArrayList<Object>();
         for (int i = 0, n = rsmd.getColumnCount(); i < n; i++) {
             int z = i + 1;
@@ -219,11 +233,11 @@ public class DumpUtil implements DumpUtilInterface {
             }
         }
         l.add(h);
-        while (rs.next()) {
+        while (resultSet.next()) {
             List<Object> d = new ArrayList<Object>();
             for (int i = 0, n = rsmd.getColumnCount(); i < n; i++) {
                 int z = i + 1;
-                Object o = rs.getObject(z);
+                Object o = resultSet.getObject(z);
                 String name = rsmd.getColumnName(z);
                 boolean add = false;
                 if (cs.size() > 0) {
@@ -239,7 +253,7 @@ public class DumpUtil implements DumpUtilInterface {
             }
             l.add(d);
         }
-        rs.close();
+        resultSet.close();
         return l;
     }
 

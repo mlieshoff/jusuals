@@ -226,36 +226,27 @@ public class ResourceUtil {
         Validate.notNull(locale);
         Validate.notEmpty(baseName);
         Validate.notEmpty(key);
-        Map<Locale, Map<String, String>> m = cache.get(baseName);
-        if (m != null) {
-            Map<String, String> rb = m.get(locale);
-            if (rb != null) {
-                try {
-                    String res = rb.get(key);
-                    if (res == null) {
-                        throw new MissingResourceException("missing resource!", null, key);
-                    }
-                    return res;
-                } catch (MissingResourceException e) {
-                    setUpMissingResourceHandler(locale, baseName, key);
-                    if (Boolean.getBoolean(PROP_LOGMISSINGRESOURCE)) {
-                        MissingResourceLogger.INSTANCE.log(locale, key);
-                    }
-                    if (Boolean.getBoolean(PROP_THROWEXCEPTIONONMISSINGRESOURCE)) {
-                        throw new MissingResourceException("Missing resource for locale ! "
-                                + getInfo(locale, baseName, key), e.getClassName(), key);
-                    } else {
-                        log.warn("Missing resource for locale ! ", getInfo(locale, baseName,
-                                key));
-                        return createMissingResource(key);
-                    }
-                }
+        Map<String, String> bundle = getBundle(locale, baseName, key);
+        try {
+            String res = bundle.get(key);
+            if (res == null) {
+                throw new MissingResourceException("missing resource!", null, key);
             }
-            throw new IllegalStateException("no resource-bundle for locale defined ! "
-                    + getInfo(locale, baseName, key));
+            return res;
+        } catch (MissingResourceException e) {
+            setUpMissingResourceHandler(locale, baseName, key);
+            if (Boolean.getBoolean(PROP_LOGMISSINGRESOURCE)) {
+                MissingResourceLogger.INSTANCE.log(locale, key);
+            }
+            if (Boolean.getBoolean(PROP_THROWEXCEPTIONONMISSINGRESOURCE)) {
+                throw new MissingResourceException("Missing resource for locale ! "
+                        + getInfo(locale, baseName, key), e.getClassName(), key);
+            } else {
+                log.warn("Missing resource for locale ! ", getInfo(locale, baseName,
+                        key));
+                return createMissingResource(key);
+            }
         }
-        throw new IllegalStateException("no locales for base-name defined ! "
-                + getInfo(locale, baseName, key));
     }
 
     /**
@@ -274,11 +265,16 @@ public class ResourceUtil {
      * @return true, if successful
      */
     public static boolean contains(Locale locale, String baseName, String key) {
-        Map<Locale, Map<String, String>> m = cache.get(baseName);
-        if (m != null) {
-            Map<String, String> rb = m.get(locale);
-            if (rb != null) {
-                return rb.containsKey(key);
+        Map<String, String> bundle = getBundle(locale, baseName, key);
+        return bundle.containsKey(key);
+    }
+
+    private static Map<String, String> getBundle(Locale locale, String baseName, String key) {
+        Map<Locale, Map<String, String>> localeBundles = cache.get(baseName);
+        if (localeBundles != null) {
+            Map<String, String> bundle = localeBundles.get(locale);
+            if (bundle != null) {
+                return bundle;
             } else {
                 throw new IllegalStateException("no resource-bundle for locale defined ! "
                         + getInfo(locale, baseName, key));

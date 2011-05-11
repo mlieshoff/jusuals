@@ -24,6 +24,8 @@ import java.io.*;
 import java.util.*;
 
 import org.junit.*;
+import org.mili.core.io.*;
+import org.mili.core.properties.PropUtil.*;
 import org.mili.test.*;
 
 import static org.junit.Assert.*;
@@ -32,8 +34,13 @@ import static org.junit.Assert.*;
  * @author Michael Lieshoff
  */
 public class PropUtilTest {
-
     private File file = new File(TestUtils.TMP_FOLDER, "abbas.properties");
+    private FileInputStream defectOnAvailableFileInputStream = null;
+    private FileInputStream zeroAvailableFileInputStream = null;
+    private FileInputStream defectOnCloseFileInputStream = null;
+    private Wrapper defectOnCreateFileInputStreamWrapper = null;
+    private Wrapper nullFileInputStreamWrapper = null;
+    private Wrapper wrapperToGetDefectOnCloseInputStream = null;
 
     @Before
     public void setUp() throws Exception {
@@ -42,6 +49,19 @@ public class PropUtilTest {
         OutputStream os = new FileOutputStream(this.file);
         p.store(os, "test props.");
         os.close();
+        this.defectOnAvailableFileInputStream = new DefectOnAvailableFileInputStream(this.file);
+        this.zeroAvailableFileInputStream = new ZeroAvailableFileInputStream(this.file);
+        this.defectOnCloseFileInputStream = new DefectOnCloseFileInputStream(this.file);
+        this.defectOnCreateFileInputStreamWrapper = new DefectWrapper();
+        this.nullFileInputStreamWrapper = new NullWrapper();
+        this.wrapperToGetDefectOnCloseInputStream =
+                new WrapperToGetDefectOnCloseFileInputStream();
+        PropUtil.setWrapper(new PropUtil.DefaultWrapper());
+    }
+
+    @Test
+    public void shouldCreates() {
+        new PropUtil();
     }
 
     @Test(expected=IllegalArgumentException.class)
@@ -54,9 +74,146 @@ public class PropUtilTest {
         PropUtil.readProperties(new File("bundy"));
     }
 
+    @Test(expected=IllegalStateException.class)
+    public void shouldFailReadPropertiesBecauseStreamNotAvailable() throws Exception {
+        PropUtil.readProperties(this.defectOnAvailableFileInputStream);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void shouldFailReadPropertiesBecauseStreamZeroAvailable() throws Exception {
+        PropUtil.readProperties(this.zeroAvailableFileInputStream);
+    }
+
+    @Test(expected=IllegalStateException.class)
+    public void shouldFailReadPropertiesFileBecauseStreamNotAvailable() throws Exception {
+        PropUtil.setWrapper(this.defectOnCreateFileInputStreamWrapper);
+        PropUtil.readProperties(this.file);
+    }
+
+    @Test(expected=IllegalStateException.class)
+    public void shouldFailReadPropertiesFileBecauseExceptionWhileClose() throws Exception {
+        PropUtil.setWrapper(this.wrapperToGetDefectOnCloseInputStream);
+        PropUtil.readProperties(this.file);
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void shouldFailReadPropertiesFileBecauseNullInputStream() throws Exception {
+        PropUtil.setWrapper(this.nullFileInputStreamWrapper);
+        PropUtil.readProperties(this.file);
+    }
+
     @Test
-    public void shouldReadProperties() {
+    public void shouldReadPropertiesFile() {
         Properties p = PropUtil.readProperties(this.file);
         assertEquals("4711", p.get("a"));
     }
+
+    @Test
+    public void shouldReadProperties() throws Exception {
+        Properties p = PropUtil.readProperties(FileUtil.getInputStream(this.file
+                .getAbsolutePath()));
+        assertEquals("4711", p.get("a"));
+    }
+
+    class DefectOnAvailableFileInputStream extends FileInputStream {
+
+        public DefectOnAvailableFileInputStream(File file) throws FileNotFoundException {
+            super(file);
+        }
+
+        public DefectOnAvailableFileInputStream(FileDescriptor fdObj) {
+            super(fdObj);
+        }
+
+        public DefectOnAvailableFileInputStream(String name) throws FileNotFoundException {
+            super(name);
+        }
+
+        @Override
+        public int available() throws IOException {
+            throw new IOException();
+        }
+
+        @Override
+        public int read() throws IOException {
+            return 0;
+        }
+    }
+
+    class ZeroAvailableFileInputStream extends FileInputStream {
+
+        public ZeroAvailableFileInputStream(File file) throws FileNotFoundException {
+            super(file);
+        }
+
+        public ZeroAvailableFileInputStream(FileDescriptor fdObj) {
+            super(fdObj);
+        }
+
+        public ZeroAvailableFileInputStream(String name) throws FileNotFoundException {
+            super(name);
+        }
+
+        @Override
+        public int available() throws IOException {
+            return 0;
+        }
+
+        @Override
+        public int read() throws IOException {
+            return 0;
+        }
+    }
+
+    class DefectOnCloseFileInputStream extends FileInputStream {
+
+        public DefectOnCloseFileInputStream(File file) throws FileNotFoundException {
+            super(file);
+        }
+
+        public DefectOnCloseFileInputStream(FileDescriptor fdObj) {
+            super(fdObj);
+        }
+
+        public DefectOnCloseFileInputStream(String name) throws FileNotFoundException {
+            super(name);
+        }
+
+        @Override
+        public void close() throws IOException {
+            throw new IOException();
+        }
+
+        @Override
+        public int available() throws IOException {
+            return 1;
+        }
+
+        @Override
+        public int read() throws IOException {
+            return 0;
+        }
+    }
+
+    class DefectWrapper implements Wrapper {
+        @Override
+        public FileInputStream createFileInputStream(File file) throws IOException {
+            throw new IOException();
+        }
+    }
+
+    class NullWrapper implements Wrapper {
+        @Override
+        public FileInputStream createFileInputStream(File file) throws IOException {
+            throw null;
+        }
+    }
+
+    class WrapperToGetDefectOnCloseFileInputStream implements Wrapper {
+        @Override
+        public FileInputStream createFileInputStream(File file) throws IOException {
+            return defectOnCloseFileInputStream;
+        }
+    }
+
 }

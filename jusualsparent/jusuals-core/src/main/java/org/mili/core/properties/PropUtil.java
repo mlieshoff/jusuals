@@ -31,6 +31,13 @@ import org.apache.commons.lang.*;
  *
  */
 public class PropUtil {
+    private static Wrapper wrapper = new DefaultWrapper();
+
+    /**
+     * Instantiates a new prop util.
+     */
+    public PropUtil() {
+    }
 
     /**
      * <p>This method reads a {@link Properties} file from a specified {@link File} and throws
@@ -52,7 +59,7 @@ public class PropUtil {
         Validate.isTrue(f.exists());
         InputStream is = null;
         try {
-            is = new FileInputStream(f);
+            is = wrapper.createFileInputStream(f);
             return readProperties(is);
         } catch (IOException e) {
             throw new IllegalStateException(e);
@@ -94,4 +101,18 @@ public class PropUtil {
         }
     }
 
+    static void setWrapper(Wrapper newWrapper) {
+        wrapper = newWrapper;
+    }
+
+    interface Wrapper {
+        FileInputStream createFileInputStream(File file) throws IOException ;
+    }
+
+    static class DefaultWrapper implements Wrapper {
+        @Override
+        public FileInputStream createFileInputStream(File file) throws IOException {
+            return new FileInputStream(file);
+        }
+    }
 }
