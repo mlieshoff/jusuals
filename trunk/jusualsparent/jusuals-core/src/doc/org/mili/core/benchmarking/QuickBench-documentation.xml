@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <documentation name="QuickBench" filename-prefix="quickbench" creator="mlieshoff"
-        creation="09.05.2011 10:11" version="1.0" copyright="org.mili">
+        creation="09.05.2011 20:20" version="1.0" copyright="org.mili">
     <written-language token="EN"/>
     <author name="Michael Lieshoff" token="mlieshoff" email="michaellieshoff@gmx.de"/>
     <part name="Introduction">
@@ -275,6 +275,6 @@
         </paragraph>
     </part>
     <changelog>
-        <change date="09.05.2011 10:11" version="1.0" who="mlieshoff" what="Erstellung."/>
+        <change date="09.05.2011 20:20" version="1.0" who="mlieshoff" what="Creation."/>
     </changelog>
 </documentation>
