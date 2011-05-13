@@ -1,7 +1,7 @@
 /*
- * Simple.java
+ * SimpleClass.java
  *
- * 05.05.2011
+ * 13.05.2011
  *
  * Copyright 2011 Michael Lieshoff
  *
@@ -17,50 +17,21 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.mili.core.benchmarking.experimental;
-
+package org.mili.core.service;
 
 /**
  * @author Michael Lieshoff
  */
 public class Simple {
 
-    /**
-     * Instantiates a new simple.
-     */
-    public Simple() {
-        super();
+    @ServiceMethod
+    public void foo() {
+        AnnotatedServiceTest.countOfServiceMethod ++;
     }
 
-    /**
-     * Adds the.
-     *
-     * @param s the s
-     * @param i the i
-     */
-    @Prepare
-    public void add(String s, int i) {
-        AnnotatedBenchTest.countOfPrepares ++;
-    }
-
-    /**
-     * Gets the.
-     *
-     * @param i the i
-     * @return the string
-     */
-    @Execute
-    public String get(int i) {
-        AnnotatedBenchTest.countOfExecutes ++;
-        return null;
-    }
-
-    /**
-     * Clear.
-     */
-    @Reset
-    public void clear() {
-        AnnotatedBenchTest.countOfResets ++;
+    @ServiceStopMethod
+    public void bla() {
+        AnnotatedServiceTest.countOfServiceStopMethod ++;
     }
 
 }
