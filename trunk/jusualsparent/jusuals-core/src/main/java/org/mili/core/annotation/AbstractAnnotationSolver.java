@@ -57,4 +57,5 @@ public abstract class AbstractAnnotationSolver<X> implements AnnotationSolver<X>
         }
         list.add(ah);
     }
+
 }
