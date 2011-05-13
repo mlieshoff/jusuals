@@ -34,6 +34,7 @@ public class AnnotatedService {
     private Class<?> cls = null;
     private Object instance = null;
     private AnnotationSolver solver = new MethodAnnotationSolver();
+    private Wrapper wrapper = new DefaultWrapper();
 
     /**
      * Instantiates a new annotated service.
@@ -57,9 +58,13 @@ public class AnnotatedService {
         this.solver.solve(this.cls);
     }
 
+    void setWrapper(Wrapper wrapper) {
+        this.wrapper = wrapper;
+    }
+
     private void createInstance() {
         try {
-            this.instance = this.cls.newInstance();
+            this.instance = this.wrapper.newInstance(this.cls);
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
@@ -73,22 +78,36 @@ public class AnnotatedService {
         this.solver.solve(this.cls);
     }
 
-    private void invokeMethod(Method method) throws IllegalAccessException,
-            InvocationTargetException {
-        method.invoke(this.instance);
-    }
-
     private AnnotationHandler<Method> createMethodAnnotationHandler() {
         return new AnnotationHandler<Method>() {
             @Override
             public void handle(Annotation annotation, Method method) {
                 try {
-                    invokeMethod(method);
+                    wrapper.invokeMethod(instance, method);
                 } catch (Exception e) {
                     throw new IllegalStateException(e);
                 }
             }
         };
+    }
+
+    interface Wrapper {
+        <T> T newInstance(Class<T> cls) throws InstantiationException, IllegalAccessException;
+        void invokeMethod(Object object, Method method) throws IllegalAccessException,
+                InvocationTargetException;
+    }
+
+    class DefaultWrapper implements Wrapper {
+        @Override
+        public void invokeMethod(Object object, Method method) throws IllegalAccessException,
+                InvocationTargetException {
+            method.invoke(object);
+        }
+        @Override
+        public <T> T newInstance(Class<T> cls) throws InstantiationException,
+                IllegalAccessException {
+            return cls.newInstance();
+        }
     }
 
 }

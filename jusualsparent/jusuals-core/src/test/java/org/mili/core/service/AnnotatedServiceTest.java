@@ -19,6 +19,8 @@
  */
 package org.mili.core.service;
 
+import java.lang.reflect.*;
+
 import org.junit.*;
 
 import static org.junit.Assert.*;
@@ -29,6 +31,7 @@ import static org.junit.Assert.*;
 public class AnnotatedServiceTest {
     static long countOfServiceMethod = 0;
     static long countOfServiceStopMethod = 0;
+    private AnnotatedService service = null;
 
     /**
      * Sets the up.
@@ -37,6 +40,7 @@ public class AnnotatedServiceTest {
     public void setUp() {
         countOfServiceMethod = 0;
         countOfServiceStopMethod = 0;
+        this.service = new AnnotatedService(Simple.class);
     }
 
     /**
@@ -48,12 +52,50 @@ public class AnnotatedServiceTest {
     }
 
     /**
+     * Fails construct because throw exception while new instance.
+     */
+    @Test(expected=IllegalStateException.class)
+    public void failsConstructBecauseExceptionInNewInstance() {
+        this.service.setWrapper(new AnnotatedService.Wrapper() {
+            @Override
+            public <T> T newInstance(Class<T> cls) throws InstantiationException,
+                    IllegalAccessException {
+                throw new InstantiationException();
+            }
+            @Override
+            public void invokeMethod(Object object, Method method) throws IllegalAccessException,
+                    InvocationTargetException {
+            }
+        });
+        this.service.service();
+    }
+
+    /**
+     * Fails construct because throw exception while invocation.
+     */
+    @Test(expected=IllegalStateException.class)
+    public void failsConstructBecauseExceptionInInvocation() {
+        this.service.setWrapper(new AnnotatedService.Wrapper() {
+            @Override
+            public <T> T newInstance(Class<T> cls) throws InstantiationException,
+                    IllegalAccessException {
+                return cls.newInstance();
+            }
+            @Override
+            public void invokeMethod(Object object, Method method)
+                    throws IllegalAccessException, InvocationTargetException {
+                throw new IllegalAccessException();
+            }
+        });
+        this.service.service();
+    }
+
+    /**
      * Should service.
      */
     @Test
     public void shouldService() {
-        AnnotatedService service = new AnnotatedService(Simple.class);
-        service.service();
+        this.service.service();
         assertEquals(1, countOfServiceMethod);
     }
 
@@ -62,8 +104,7 @@ public class AnnotatedServiceTest {
      */
     @Test
     public void shouldStop() {
-        AnnotatedService service = new AnnotatedService(Simple.class);
-        service.stop();
+        this.service.stop();
         assertEquals(1, countOfServiceStopMethod);
     }
 
