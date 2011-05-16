@@ -154,9 +154,8 @@ public class DumpUtilTest {
         new DumpUtil().printTable(this.connection, "empty", "");
     }
 
-    @Test(expected=SQLException.class)
-    @Ignore
-    public void failShowTableBecauseException() throws Exception {
+    @Test
+    public void shouldConsoleOutputShowTableBecauseException() throws Exception {
         DumpUtil.showTable(this.connection, "a", "aaaa=1", new String[] { "a", "b", "c" });
     }
 }

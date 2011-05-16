@@ -40,6 +40,11 @@ public class FileUtilTest {
         FileUtils.writeStringToFile(file, "hallo welt!");
     }
 
+    @Test
+    public void shouldConstruct() {
+        new FileUtil();
+    }
+
     @Test(expected=FileNotFoundException.class)
     public void shouldFailBecauseFileNotFound() throws Exception {
         FileUtil.getInputStream("a.b.c");
