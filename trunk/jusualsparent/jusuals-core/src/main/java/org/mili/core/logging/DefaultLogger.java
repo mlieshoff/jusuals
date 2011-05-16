@@ -280,4 +280,9 @@ public class DefaultLogger implements Logger {
     void setThrowableLogger(ThrowableLogger throwableLogger) {
         this.throwableLogger = throwableLogger;
     }
+
+    void setRoot(Logger logger) {
+        this.root = logger;
+    }
+
 }

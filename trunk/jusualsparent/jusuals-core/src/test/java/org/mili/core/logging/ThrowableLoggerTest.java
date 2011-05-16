@@ -23,6 +23,7 @@ import java.io.*;
 import java.text.*;
 import java.util.*;
 
+import org.apache.commons.io.*;
 import org.junit.*;
 import org.mili.test.*;
 
@@ -44,6 +45,7 @@ public class ThrowableLoggerTest {
     @Before
     public void setUp() throws Exception {
         this.dir = TestUtils.getTmpFolder(ThrowableLoggerTest.class);
+        FileUtils.deleteDirectory(this.dir);
         this.dayDir = new File(this.dir, new SimpleDateFormat("yyyyMMdd").format(new Date()));
         this.logger = new DefaultThrowableLogger(ThrowableLoggerTest.class, this.dir);
     }

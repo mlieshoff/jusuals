@@ -35,6 +35,12 @@ public final class FileUtil {
     private static Logger log = DefaultLogger.getLogger(FileUtil.class);
 
     /**
+     * Instantiates a new file util.
+     */
+    public FileUtil() {
+    }
+
+    /**
      * Creates an input stream from a filename. The order of search the file is as first the
      * filesystem then the classloader.
      *
