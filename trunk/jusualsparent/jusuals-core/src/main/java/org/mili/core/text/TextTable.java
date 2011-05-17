@@ -205,11 +205,7 @@ public class TextTable implements Table {
         if (width > 0) {
             s.append(width);
         }
-        if (conversion != null) {
-            s.append(conversion.getToken());
-        } else {
-            s.append(this.getConversionForType(object).getToken());
-        }
+        s.append(conversion.getToken());
         if (dtconversion != null) {
             s.append(dtconversion.getToken());
         }
@@ -223,6 +219,7 @@ public class TextTable implements Table {
      * @return the conversion for type
      */
     protected Conversion getConversionForType(Object object) {
+        System.out.println(object.getClass());
         if (object instanceof Byte) {
             return Conversions.DECIMAL;
         } else if (object instanceof Short) {
@@ -244,34 +241,6 @@ public class TextTable implements Table {
         } else {
             return Conversions.STRING;
         }
-    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        Table t = new TextTable();
-        t = t.addCol("char")
-                .addCol("byte")
-                .addCol("short")
-                .addCol("int")
-                .addCol("long")
-                .addCol("float")
-                .addCol("double")
-                .addCol("boolean")
-                .addCol("string")
-                .addCol("object")
-                .addCol("null")
-                .addCol("PTimestamp")
-                .addCol("Date")
-                ;
-        t.addRow('a', (byte) 1, (short) 1, 1, 1L, 1.0F, 1.0, true, "ab", new Object(), null,
-                new Date(), new Date());
-        t.addRow('a', (byte) 1, (short) 1, 10, 1L, 1.0F, 1.0, true, "abbas", new Object(), null,
-                new Date(), new Date());
-        t.addRow('a', (byte) 1, (short) 1, 100, 1L, 1.0F, 1.0, true, "sdhjsdhjdsghsdghds",
-                new Object(), null, new Date(), new Date());
-        System.out.println(t);
     }
 
 }
