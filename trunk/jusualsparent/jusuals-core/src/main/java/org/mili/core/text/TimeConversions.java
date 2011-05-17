@@ -26,19 +26,19 @@ package org.mili.core.text;
  *
  */
 public enum TimeConversions implements TimeConversion {
-    HOUR_OF_DAY_LEADING_24("H"),
-    HOUR_OF_DAY_LEADING_12("I"),
-    HOUR_OF_DAY_24("k"),
-    HOUR_OF_DAY_12("l"),
-    TWO_DIGIT_MINUTE("M"),
-    TWO_DIGIT_SECOND("S"),
-    THREE_DIGIT_MILLISECOND("L"),
-    TWO_DIGIT_NANOSECOND("N"),
-    MORING_AFTERNOON_MARKER("p"),
-    RFC822_TIME_ZONE_OFFSET("z"),
-    TIME_ZONE_ABBREVATION("Z"),
-    BEGINNING_SECONDS("s"),
-    BEGINNING_MILLISECONDS("Q");
+    HOUR_OF_DAY_LEADING_24("tH"),
+    HOUR_OF_DAY_LEADING_12("tI"),
+    HOUR_OF_DAY_24("tk"),
+    HOUR_OF_DAY_12("tl"),
+    TWO_DIGIT_MINUTE("tM"),
+    TWO_DIGIT_SECOND("tS"),
+    THREE_DIGIT_MILLISECOND("tL"),
+    TWO_DIGIT_NANOSECOND("tN"),
+    MORING_AFTERNOON_MARKER("tp"),
+    RFC822_TIME_ZONE_OFFSET("tz"),
+    TIME_ZONE_ABBREVATION("tZ"),
+    BEGINNING_SECONDS("ts"),
+    BEGINNING_MILLISECONDS("tQ");
 
     String token = "";
 
