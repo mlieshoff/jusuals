@@ -109,7 +109,7 @@ public class TextTableTest {
         this.table.addCol("boolean");
         this.table.addCol("string", Flags.LEFT);
         this.table.addCol("foo");
-        this.table.addCol("date", null, DateTimeConversions.TIME_HOUR_CLOCK_24);
+        this.table.addCol("date", null, DateConversions.FULL_DAY_OF_THE_WEEK_NAME);
         this.table.addRow((byte) 1, (short) 1, 1, 'c', 1L, 1.0F, 1.0, Boolean.TRUE, "abbas",
                 new Foo(), date);
         System.out.println(this.table.toString());
