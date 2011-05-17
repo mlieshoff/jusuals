@@ -242,8 +242,8 @@ public class ResourceUtil {
                 throw new MissingResourceException("Missing resource for locale ! "
                         + getInfo(locale, baseName, key), e.getClassName(), key);
             } else {
-                log.warn("Missing resource for locale ! ", getInfo(locale, baseName,
-                        key));
+//                log.warn("Missing resource for locale ! ", getInfo(locale, baseName,
+//                        key));
                 return createMissingResource(key);
             }
         }
@@ -387,12 +387,14 @@ public class ResourceUtil {
         String clsname = System.getProperty(PROP_MISSINGRESOURCEHANDLER);
         if (!StringUtils.isEmpty(clsname) && handler == null) {
             try {
+                log.debug("create missing resource handler[", clsname, "]");
                 handler = (MissingResourceHandler) Class.forName(clsname).newInstance();
             } catch (Exception e) {
                 throw new IllegalStateException(e);
             }
         }
         if (handler != null) {
+            log.debug("call missing resource handler to handle[", baseName, ", ", key, "]");
             handler.handle(locale, baseName, key);
         }
     }
