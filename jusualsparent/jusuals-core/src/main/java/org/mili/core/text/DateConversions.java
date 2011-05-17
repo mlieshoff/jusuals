@@ -26,18 +26,18 @@ package org.mili.core.text;
  *
  */
 public enum DateConversions implements DateConversion {
-    FULL_MONTH_NAME("B"),
-    ABBREVATED_MONTH_NAME("b"),
-    ABBREVATED_MONTH_NAME_H("h"),
-    FULL_DAY_OF_THE_WEEK_NAME("A"),
-    SHORT_DAY_OF_THE_WEEK_NAME("a"),
-    FOUR_DIGIT_YEAR("C"),
-    LEADING_ZEROS_YEAR("Y"),
-    LAST_TWO_DIGITS_YEAR("y"),
-    THREE_DIGIT_DAY_OF_THE_YEAR("j"),
-    TWO_DIGIT_MONTH("m"),
-    TWO_DIGIT_DAY_OF_MONTH("d"),
-    DAY_OF_MONTH("e");
+    FULL_MONTH_NAME("tB"),
+    ABBREVATED_MONTH_NAME("tb"),
+    ABBREVATED_MONTH_NAME_H("th"),
+    FULL_DAY_OF_THE_WEEK_NAME("tA"),
+    SHORT_DAY_OF_THE_WEEK_NAME("ta"),
+    FOUR_DIGIT_YEAR("tC"),
+    LEADING_ZEROS_YEAR("tY"),
+    LAST_TWO_DIGITS_YEAR("ty"),
+    THREE_DIGIT_DAY_OF_THE_YEAR("tj"),
+    TWO_DIGIT_MONTH("tm"),
+    TWO_DIGIT_DAY_OF_MONTH("td"),
+    DAY_OF_MONTH("te");
 
     String token = "";
 
