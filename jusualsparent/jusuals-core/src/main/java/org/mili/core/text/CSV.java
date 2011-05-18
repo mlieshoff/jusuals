@@ -19,7 +19,6 @@
  */
 package org.mili.core.text;
 
-import java.util.*;
 
 /**
  * This class is a CSV extension of class {@link TextTable}.
@@ -72,34 +71,6 @@ public class CSV extends TextTable {
             s.append(this.lineSeperator);
         }
         return s.toString();
-    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        Table t = new CSV(";", "\"");
-        t = t.addCol("char")
-                .addCol("byte")
-                .addCol("short")
-                .addCol("int")
-                .addCol("long")
-                .addCol("float")
-                .addCol("double")
-                .addCol("boolean")
-                .addCol("string")
-                .addCol("object")
-                .addCol("null")
-                .addCol("PTimestamp")
-                .addCol("Date")
-                ;
-        t.addRow('a', (byte) 1, (short) 1, 1, 1L, 1.0F, 1.0, true, "ab", new Object(), null,
-                new Date(), new Date());
-        t.addRow('a', (byte) 1, (short) 1, 10, 1L, 1.0F, 1.0, true, "abbas", new Object(), null,
-                new Date(), new Date());
-        t.addRow('a', (byte) 1, (short) 1, 100, 1L, 1.0F, 1.0, true, "sdhjsdhjdsghsdghds",
-                new Object(), null, new Date(), new Date());
-        System.out.println(t);
     }
 
 }

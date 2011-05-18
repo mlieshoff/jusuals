@@ -26,12 +26,12 @@ package org.mili.core.text;
  *
  */
 public enum DateTimeConversions implements DateTimeConversion {
-    TIME_HOUR_CLOCK_24("tR"),
-    LONG_TIME_HOUR_CLOCK_24("tT"),
-    TIME_HOUR_CLOCK_12("tr"),
-    LONG_DATE("tD"),
-    ISO8601_DATE("tF"),
-    FULL_DATE("tc");
+    TIME_HOUR_CLOCK_24("R"),
+    LONG_TIME_HOUR_CLOCK_24("T"),
+    TIME_HOUR_CLOCK_12("r"),
+    LONG_DATE("D"),
+    ISO8601_DATE("F"),
+    FULL_DATE("c");
 
     String token = "";
 

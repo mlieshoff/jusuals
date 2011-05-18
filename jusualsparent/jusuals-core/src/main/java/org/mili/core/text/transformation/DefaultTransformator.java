@@ -53,13 +53,13 @@ public class DefaultTransformator implements Transformator {
     public Object transform(Table from, AvailableTransformations to, Object... params) {
         switch (to) {
         case CSV:
-            return CsvTranformator.create().transform(from, params);
+            return CsvTransformator.create().transform(from, params);
         case EXCEL:
             return ExcelTransformator.create().transform(from, params);
         case TABLE:
-            return TableTranformator.create().transform(from, params);
+            return TableTransformator.create().transform(from, params);
         case XML:
-            return XMLTranformator.create().transform(from, params);
+            return XMLTransformator.create().transform(from, params);
         default:
             throw new UnsupportedOperationException("transform not supported: "
                     + from.getClass().getName() + " -> " + to);

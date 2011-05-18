@@ -19,8 +19,6 @@
  */
 package org.mili.core.text;
 
-import java.util.*;
-
 import org.junit.*;
 
 import static org.junit.Assert.*;
@@ -31,7 +29,6 @@ import static org.junit.Assert.*;
  */
 public class TextTableTest {
     private TextTable table = null;
-    private static Date date = new Date();
 
     /**
      * Sets the up.
@@ -99,34 +96,9 @@ public class TextTableTest {
 
     @Test
     public void shouldGetString() {
-        this.table.addCol("byte");
-        this.table.addCol("short");
-        this.table.addCol("integer");
-        this.table.addCol("char");
-        this.table.addCol("long");
-        this.table.addCol("float");
-        this.table.addCol("double");
-        this.table.addCol("boolean");
-        this.table.addCol("string", Flags.LEFT);
-        this.table.addCol("foo");
-        this.table.addCol("date", null, DateConversions.FULL_DAY_OF_THE_WEEK_NAME);
-        this.table.addRow((byte) 1, (short) 1, 1, 'c', 1L, 1.0F, 1.0, Boolean.TRUE, "abbas",
-                new Foo(), date);
-        System.out.println(this.table.toString());
-        StringBuilder s = new StringBuilder();
-        s.append("+-----+------+");
-        s.append("|   1 |   11 |");
-        s.append("+-----+------+");
-        s.append("| 111 | 1111 |");
-        s.append("+-----+------+");
-        //assertEquals(s.toString(), this.table.toString().replaceAll("[\r\n]", ""));
-        System.out.format("%td", new Date());
+        this.table = MockFactory.createTextTable();
+        assertEquals(MockFactory.getTextString(), this.table.toString().replaceAll("[\r\n]",
+                ""));
     }
 
-    class Foo {
-        @Override
-        public String toString() {
-            return "Foo";
-        }
-    }
 }

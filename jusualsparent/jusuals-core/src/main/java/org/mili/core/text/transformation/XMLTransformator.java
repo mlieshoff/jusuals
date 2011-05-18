@@ -1,5 +1,5 @@
 /*
- * TableTranformator.java
+ * XMLTranformator.java
  *
  * 15.10.2010
  *
@@ -17,28 +17,44 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 package org.mili.core.text.transformation;
 
 import org.mili.core.text.*;
 
 /**
- * This transformator is a copy transformator.
+ * This class is  XML transformator.
  *
  * @author Michael Lieshoff
  *
  */
-public class TableTranformator {
+public class XMLTransformator {
 
-    protected TableTranformator() {
+    /**
+     * Instantiates a new xML tranformator.
+     */
+    protected XMLTransformator() {
         super();
     }
 
-    public static TableTranformator create() {
-        return new TableTranformator();
+    /**
+     * Creates the transformator.
+     *
+     * @return the xML tranformator
+     */
+    public static XMLTransformator create() {
+        return new XMLTransformator();
     }
 
-    public Table transform(Table from, Object... params) {
-        return (Table) DefaultTransformator.copy(from, new TextTable());
+    /**
+     * Transforms.
+     *
+     * @param from from table.
+     * @param params the params
+     * @return transformed XML table.
+     */
+    public XML transform(Table from, Object... params) {
+        return (XML) DefaultTransformator.copy(from, new XML());
     }
 
 }
