@@ -20,8 +20,6 @@
 
 package org.mili.core.text.transformation;
 
-import java.util.*;
-
 import org.mili.core.text.*;
 
 
@@ -85,37 +83,6 @@ public class DefaultTransformator implements Transformator {
             to.addRow(r.getValues());
         }
         return to;
-    }
-
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        Table t = new TextTable();
-        t = t.addCol("char")
-                .addCol("byte")
-                .addCol("short")
-                .addCol("int")
-                .addCol("long")
-                .addCol("float")
-                .addCol("double")
-                .addCol("boolean")
-                .addCol("string")
-                .addCol("object")
-                .addCol("null")
-                .addCol("PTimestamp")
-                .addCol("Date")
-                ;
-        t.addRow('a', (byte) 1, (short) 1, 1, 1L, 1.0F, 1.0, true, "ab", new Object(), null,
-                new Date(), new Date());
-        t.addRow('a', (byte) 1, (short) 1, 10, 1L, 1.0F, 1.0, true, "abbas", new Object(), null,
-                new Date(), new Date());
-        t.addRow('a', (byte) 1, (short) 1, 100, 1L, 1.0F, 1.0, true, "sdhjsdhjdsghsdghds",
-                new Object(), null, new Date(), new Date());
-        System.out.println(DefaultTransformator.create().transform(t, AvailableTransformations.CSV));
-        System.out.println(DefaultTransformator.create().transform(t, AvailableTransformations.XML));
-        System.out.println(DefaultTransformator.create().transform(t, AvailableTransformations.EXCEL));
     }
 
 }
