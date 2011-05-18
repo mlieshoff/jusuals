@@ -21,6 +21,10 @@ package org.mili.core.text;
 
 import java.util.*;
 
+import org.apache.poi.hssf.usermodel.*;
+
+import static org.junit.Assert.*;
+
 
 /**
  * @author Michael Lieshoff
@@ -136,6 +140,57 @@ public class MockFactory {
         s.append("|    1 |     1 |       1 |    c |    1 | 1,000000 | 1,000000 |    true | abbas  | Foo | 60907590000000               |");
         s.append("+------+-------+---------+------+------+----------+----------+---------+--------+-----+------------------------------+");
         return s.toString();
+    }
+
+    /**
+     * Assert workbook.
+     *
+     * @param workbook the workbook
+     */
+    public static void assertWorkbook(HSSFWorkbook workbook) {
+        HSSFSheet sheet = workbook.getSheetAt(0);
+        HSSFRow row = sheet.getRow(0);
+        assertEquals("unknown", workbook.getSheetName(0));
+        assertEquals(1, sheet.getLastRowNum());
+        assertEquals(10, row.getLastCellNum());
+        assertEquals("byte", row.getCell((short) 0).getStringCellValue());
+        assertEquals("short", row.getCell((short) 1).getStringCellValue());
+        assertEquals("integer", row.getCell((short) 2).getStringCellValue());
+        assertEquals("char", row.getCell((short) 3).getStringCellValue());
+        assertEquals("long", row.getCell((short) 4).getStringCellValue());
+        assertEquals("float", row.getCell((short) 5).getStringCellValue());
+        assertEquals("double", row.getCell((short) 6).getStringCellValue());
+        assertEquals("boolean", row.getCell((short) 7).getStringCellValue());
+        assertEquals("string", row.getCell((short) 8).getStringCellValue());
+        assertEquals("foo", row.getCell((short) 9).getStringCellValue());
+        assertEquals("date", row.getCell((short) 10).getStringCellValue());
+        row = sheet.getRow(1);
+//        assertEquals("1", row.getCell((short) 0).getStringCellValue());
+//        assertEquals("1", row.getCell((short) 1).getStringCellValue());
+//        assertEquals("1", row.getCell((short) 2).getStringCellValue());
+        assertEquals("c", row.getCell((short) 3).getStringCellValue());
+//        assertEquals("1", row.getCell((short) 4).getStringCellValue());
+        assertEquals(1.0, row.getCell((short) 5).getNumericCellValue(), 0.0);
+//        assertEquals(1.0, row.getCell((short) 6).getNumericCellValue(), 0.0);
+        assertEquals("true", row.getCell((short) 7).getStringCellValue());
+        assertEquals("abbas", row.getCell((short) 8).getStringCellValue());
+        assertEquals("Foo", row.getCell((short) 9).getStringCellValue());
+        assertEquals("Thu Feb 01 00:00:00 CET 3900", row.getCell((short) 10)
+                .getStringCellValue());
+    }
+
+    /**
+     * Assert empty workbook.
+     *
+     * @param workbook the workbook
+     */
+    public static void assertEmptyWorkbook(HSSFWorkbook workbook) {
+        HSSFSheet sheet = workbook.getSheetAt(0);
+        HSSFRow row = sheet.getRow(0);
+        assertEquals("unknown", workbook.getSheetName(0));
+        assertEquals(0, sheet.getLastRowNum());
+        assertEquals(0, row.getLastCellNum());
+        assertEquals("Keine Daten vorhanden !", row.getCell((short) 0).getStringCellValue());
     }
 
     static class Foo {
