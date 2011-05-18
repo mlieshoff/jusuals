@@ -310,7 +310,6 @@ public class TemplateStore {
                     }
                     if (keyend1 < 0) {
                         log.error("Cant find key end index[" + key1 + "].");
-
                     }
                     String content1 = elem.substring(keyend1 + CLOSE.length() + 1, contentend1);
                     temp2.put(mainname + "_" + key1, new StoreData(content1, modified));
@@ -418,15 +417,6 @@ public class TemplateStore {
         m += System.currentTimeMillis();
         log.debug("Replacement(no ressources) tooks[" + m + "] ms.");
         return s;
-    }
-
-
-    public static void main(String[] args) {
-        TemplateStore t = new TemplateStore();
-        t.read("./unittests/conf/test.htmlt", "HTML");
-        System.out.println(Arrays.asList(t.listTemplates()));
-        System.out.println(replace(t.get("HTML_A"), new String[][]{{"${B}", t.get("HTML_B")},
-            {"${name}", "abbas"}}));
     }
 
     /* class to represent stored data. */
