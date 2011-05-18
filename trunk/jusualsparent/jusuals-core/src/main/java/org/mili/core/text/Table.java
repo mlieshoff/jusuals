@@ -37,6 +37,15 @@ public interface Table {
     Table addCol(String name);
 
     /**
+     * Adds the col.
+     *
+     * @param name the name
+     * @param flags the flags
+     * @return the table
+     */
+    Table addCol(String name, Flag... flags);
+
+    /**
      * Adds the row.
      *
      * @param values the values
@@ -83,5 +92,5 @@ public interface Table {
      * @return the i table
      */
     Table addCol(String name, Conversion conversion, DTConversion dateTimeConversion,
-            Flag[] flags);
+            Flag... flags);
 }

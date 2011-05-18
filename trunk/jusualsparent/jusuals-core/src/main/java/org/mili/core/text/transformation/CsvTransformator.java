@@ -1,5 +1,5 @@
 /*
- * XMLTranformator.java
+ * CsvTransformator.java
  *
  * 15.10.2010
  *
@@ -22,40 +22,42 @@ package org.mili.core.text.transformation;
 
 import org.mili.core.text.*;
 
-// TODO: Auto-generated Javadoc
 /**
- * This class is  XML transformator.
+ * This class defins a transformator for CSV.
  *
  * @author Michael Lieshoff
  *
  */
-public class XMLTranformator {
+public class CsvTransformator {
 
     /**
-     * Instantiates a new xML tranformator.
+     * Instantiates a new csv tranformator.
      */
-    protected XMLTranformator() {
+    protected CsvTransformator() {
         super();
     }
 
     /**
-     * Creates the.
+     * Creates the transformator.
      *
-     * @return the xML tranformator
+     * @return the csv tranformator
      */
-    public static XMLTranformator create() {
-        return new XMLTranformator();
+    public static CsvTransformator create() {
+        return new CsvTransformator();
     }
 
     /**
-     * Transforms.
-     *
-     * @param from from table.
-     * @param params the params
-     * @return transformed XML table.
-     */
-    public XML transform(Table from, Object... params) {
-        return (XML) DefaultTransformator.copy(from, new XML());
+      * Transforms.
+      *
+      * @param from from table
+      * @param params the parameter for separation and encapsulation.
+      * @return CSV
+      */
+     public CSV transform(Table from, Object... params) {
+        String sep = params != null && params.length > 0 ? String.valueOf(params[0]) : ";";
+        String enc = params != null && params.length > 1 ? String.valueOf(params[1]) : "\"";
+        CSV to = new CSV(sep, enc);
+        return (CSV) DefaultTransformator.copy(from, to);
     }
 
 }

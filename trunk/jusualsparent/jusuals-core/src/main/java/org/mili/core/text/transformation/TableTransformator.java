@@ -1,5 +1,5 @@
 /*
- * CsvTranformator.java
+ * TableTranformator.java
  *
  * 15.10.2010
  *
@@ -17,39 +17,28 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package org.mili.core.text.transformation;
 
 import org.mili.core.text.*;
 
 /**
- * This class defins a transformator for CSV.
+ * This transformator is a copy transformator.
  *
  * @author Michael Lieshoff
  *
  */
-public class CsvTranformator {
+public class TableTransformator {
 
-    protected CsvTranformator() {
+    protected TableTransformator() {
         super();
     }
 
-    public static CsvTranformator create() {
-        return new CsvTranformator();
+    public static TableTransformator create() {
+        return new TableTransformator();
     }
 
-    /**
-      * Transforms.
-      *
-      * @param from from table
-      * @param params the parameter for separation and encapsulation.
-      * @return CSV
-      */
-     public CSV transform(Table from, Object... params) {
-        String sep = params != null && params.length > 0 ? String.valueOf(params[0]) : ";";
-        String enc = params != null && params.length > 1 ? String.valueOf(params[1]) : "\"";
-        CSV to = new CSV(sep, enc);
-        return (CSV) DefaultTransformator.copy(from, to);
+    public Table transform(Table from, Object... params) {
+        return (Table) DefaultTransformator.copy(from, new TextTable());
     }
 
 }

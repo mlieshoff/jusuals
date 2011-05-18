@@ -43,13 +43,7 @@ public class TextTable implements Table {
         return this;
     }
 
-    /**
-     * Adds the col.
-     *
-     * @param name the name
-     * @param flags the flags
-     * @return the i table
-     */
+    @Override
     public Table addCol(String name, Flag... flags) {
         this.cols.add(new DefaultCol(name, null, flags));
         return this;
