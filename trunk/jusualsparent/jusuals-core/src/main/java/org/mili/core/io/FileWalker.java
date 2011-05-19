@@ -36,5 +36,5 @@ public interface FileWalker {
      *
      * @param f the function
      */
-    void walk(UnaryFunction<File, Void> f);
+    void walk(UnaryProcedure<File> f);
 }

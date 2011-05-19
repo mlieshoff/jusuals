@@ -26,7 +26,6 @@ import java.util.regex.*;
 import org.apache.commons.functor.*;
 import org.mili.core.regex.*;
 
-// TODO: Auto-generated Javadoc
 /**
  * This class is a implentation of an {@link UnaryFunction} and is used to detect file versions
  * in a filename.

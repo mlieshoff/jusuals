@@ -34,6 +34,11 @@ public class DefaultChangeSupport implements ChangeSupport {
     private PropertyChangeSupport pcs = null;
     private VetoableChangeSupport vcs = null;
 
+    /**
+     * Instantiates a new default change support.
+     *
+     * @param source the source
+     */
     protected DefaultChangeSupport(Object source) {
         super();
         this.source = source;
@@ -41,6 +46,12 @@ public class DefaultChangeSupport implements ChangeSupport {
         this.pcs = new PropertyChangeSupport(source);
     }
 
+    /**
+     * Creates a change support.
+     *
+     * @param source the source
+     * @return the default change support
+     */
     public static DefaultChangeSupport create(Object source) {
         return new DefaultChangeSupport(source);
     }
@@ -93,7 +104,6 @@ public class DefaultChangeSupport implements ChangeSupport {
     @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         this.pcs.removePropertyChangeListener(listener);
-
     }
 
     @Override

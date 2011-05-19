@@ -27,15 +27,12 @@ import org.apache.commons.functor.*;
 import org.apache.commons.io.*;
 import org.apache.commons.lang.*;
 
-// TODO: Auto-generated Javadoc
 /**
  * This class is a default implementation of interface {@link core.io.FileWalker}.
  *
  * @author Michael Lieshoff
  */
 public class DefaultFileWalker implements FileWalker {
-
-    /** The root. */
     private File root = null;
 
     /**
@@ -60,13 +57,13 @@ public class DefaultFileWalker implements FileWalker {
     }
 
     @Override
-    public void walk(UnaryFunction<File, Void> f) {
+    public void walk(UnaryProcedure<File> f) {
         Validate.notNull(f, "walk function");
         Iterator<?> fs = FileUtils.iterateFiles(this.root, new String[]{"jar"}, true);
         while (fs.hasNext()) {
             File f0 = (File) fs.next();
             if (f0.isFile()) {
-                f.evaluate(f0);
+                f.run(f0);
             }
         }
     }
