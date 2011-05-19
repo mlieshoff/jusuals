@@ -20,8 +20,6 @@
 
 package org.mili.core.graphics;
 
-import static org.junit.Assert.*;
-
 import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
@@ -31,6 +29,8 @@ import javax.imageio.*;
 import org.apache.commons.io.*;
 import org.junit.*;
 
+import static org.junit.Assert.*;
+
 /**
  * @author Michael Lieshoff
  */
@@ -38,7 +38,7 @@ public class GraphicsUtilTest {
     private File dir = new File("./tmp/GraphicsUtilTest");
 
     @Before
-    public void init() throws Exception {
+    public void setUp() throws Exception {
         FileUtils.deleteDirectory(this.dir);
         this.dir.mkdirs();
         // original image
@@ -63,6 +63,11 @@ public class GraphicsUtilTest {
         g.dispose();
         ImageIO.write(outImg, "jpeg", new File(this.dir, "block.jpg"));
 }
+
+    @Test
+    public void shouldConstruct() {
+        new GraphicsUtil();
+    }
 
     @Test
     public void test_Image_readImage_File() {

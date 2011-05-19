@@ -22,6 +22,7 @@ package org.mili.core.io;
 
 import java.io.*;
 
+import org.apache.commons.functor.*;
 import org.apache.commons.lang.*;
 
 /**
@@ -30,6 +31,28 @@ import org.apache.commons.lang.*;
  * @author Michael Lieshoff
  */
 public class DirectoryCleaner {
+    private final static long ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
+    BinaryPredicate<Long, Integer> isExpiring = new BinaryPredicate<Long, Integer>() {
+        @Override
+        public boolean test(Long time, Integer days) {
+            Validate.isTrue(days >= 0, "days cannot be negative!");
+            Validate.isTrue(time >= 0, "time cannot be negative!");
+            long ms0 = 0;
+            if (days > 0) {
+                ms0 = ONE_DAY_IN_MS * days;
+            } else {
+                return true;
+            }
+            long ms = System.currentTimeMillis() - ms0 - ONE_DAY_IN_MS;
+            return ms > time;
+        }
+    };
+    UnaryPredicate<File> deleter = new UnaryPredicate<File>() {
+        @Override
+        public boolean test(File file) {
+            return file.delete();
+        }
+    };
 
     /**
      * Instantiates a new directory cleaner.
@@ -53,7 +76,7 @@ public class DirectoryCleaner {
      * @param f the file
      */
     void delete(File f) {
-        if (!f.delete()) {
+        if (!this.deleter.test(f)) {
             f.deleteOnExit();
         }
     }
@@ -66,31 +89,20 @@ public class DirectoryCleaner {
      * @return true, if is file expired
      */
     boolean isFileExpired(long t, int days) {
-        assert days >= 0 : "days must be positive";
-        assert t >= 0 : "time must be positive";
-        long ms0 = 24 * 60 * 60 * 1000;
-        if (days > 0) {
-            ms0 = ms0 * days;
-        }
-        long ms = System.currentTimeMillis() - ms0;
-        return ms > t;
+        return this.isExpiring.test(t, days);
     }
 
     /**
      * Checks if is file expired.
      *
-     * @param f the ffile
+     * @param f the file
      * @param days the days for expiring
      * @return true, if is file expired
      */
     public boolean isFileExpired(File f, int days) {
         Validate.notNull(f, "file");
-        Validate.isTrue(days >= 0, "days cannot be negative!");
         Validate.isTrue(f.isFile(), "file is not a file: " + f.getAbsolutePath());
-        if (this.isFileExpired(f.lastModified(), days)) {
-            return true;
-        }
-        return false;
+        return this.isFileExpired(f.lastModified(), days);
     }
 
     /**

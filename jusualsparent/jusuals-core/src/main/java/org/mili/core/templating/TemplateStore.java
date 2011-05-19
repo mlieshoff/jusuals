@@ -48,7 +48,6 @@ import org.apache.log4j.*;
  * overrides the default values.
  *
  * @author Michael Lieshoff
- *
  */
 public class TemplateStore {
     private static final Logger log = Logger.getLogger(TemplateStore.class);
@@ -435,22 +434,21 @@ public class TemplateStore {
             this.modified = modified;
         }
 
-        public void setData(Object data) {
+        void setData(Object data) {
             this.data = data;
         }
 
-        public Object getData() {
+        Object getData() {
             return data;
         }
 
-        public void setModified(long modified) {
+        void setModified(long modified) {
             this.modified = modified;
         }
 
-        public long getModified() {
+        long getModified() {
             return modified;
         }
-
     }
 
 }

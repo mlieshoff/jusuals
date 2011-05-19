@@ -21,7 +21,6 @@ package org.mili.core.templating;
 
 import java.util.*;
 
-import org.apache.log4j.*;
 import org.junit.*;
 import org.mili.core.properties.*;
 
@@ -37,7 +36,6 @@ public class TemplateStoreTest {
 
     @BeforeClass
     public static void beforeClass() throws Exception {
-        BasicConfigurator.configure();
         MockFactory.prepare();
     }
 
@@ -185,6 +183,23 @@ public class TemplateStoreTest {
         Properties defaultProp = PropUtil.readProperties(FILE_DEFAULT_COMPONENT_SHEET);
         Properties compProp = PropUtil.readProperties(FILE_COMPONENT_SHEET);
         String template = "${one-more}";
-        assertEquals("b", this.store.replaceWithComponentSheets(template, defaultProp, compProp));
+        assertEquals("b", TemplateStore.replaceWithComponentSheets(template, defaultProp,
+                compProp));
     }
+
+    @Test
+    public void shouldNotReplace() {
+        assertEquals("", TemplateStore.replace(null, new String[][]{{}}));
+    }
+
+    @Test
+    public void shouldReplace() {
+        assertEquals("sabba", TemplateStore.replace("abbas", new String[][]{{"ab", "sa"}, {"bas", "bba"}}));
+    }
+
+    @Test
+    public void failToReplace() {
+        TemplateStore.replace("abbas", new String[][]{{"ab"}});
+    }
+
 }
