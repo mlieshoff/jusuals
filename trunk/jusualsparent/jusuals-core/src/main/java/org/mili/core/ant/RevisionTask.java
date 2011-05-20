@@ -27,6 +27,7 @@ import org.apache.tools.ant.*;
 public class RevisionTask extends Task {
     private String filename = "";
     private String property = "";
+    private String revisionPrefix = "";
     private Revision impl = new RevisionImpl();
 
     /**
@@ -41,17 +42,20 @@ public class RevisionTask extends Task {
      *
      * @param filename the filename
      * @param property the property
+     * @param revisionPrefix the revision prefix
      */
-    public RevisionTask(String filename, String property) {
+    public RevisionTask(String filename, String property, String revisionPrefix) {
         super();
         this.filename = filename;
         this.property = property;
+        this.revisionPrefix = revisionPrefix;
     }
 
     @Override
     public void execute() throws BuildException {
         try {
-            this.getProject().setProperty(this.property, this.impl.start(this.filename));
+            this.getProject().setProperty(this.property, this.impl.start(this.filename,
+                    this.revisionPrefix));
         } catch (Exception e) {
             throw new BuildException(e);
         }
@@ -83,6 +87,20 @@ public class RevisionTask extends Task {
      */
     public void setProperty(String property) {
         this.property = property;
+    }
+
+    /**
+     * @return the revisionPrefix
+     */
+    public String getRevisionPrefix() {
+        return this.revisionPrefix;
+    }
+
+    /**
+     * @param revisionPrefix the revisionPrefix to set
+     */
+    public void setRevisionPrefix(String revisionPrefix) {
+        this.revisionPrefix = revisionPrefix;
     }
 
 }

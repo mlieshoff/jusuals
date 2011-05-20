@@ -30,7 +30,10 @@ public interface Revision {
      * Start.
      *
      * @param filenameWithoutRevision the filename without revision
+     * @param revisionPrefix the revision prefix
+     * @return the revision as string
+     * @throws Exception the exception
      */
-    String start(String filenameWithoutRevision) throws Exception;
+    String start(String filenameWithoutRevision, String revisionPrefix) throws Exception;
 
 }

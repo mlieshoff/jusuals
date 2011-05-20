@@ -32,10 +32,12 @@ import static org.junit.Assert.*;
  */
 public class RevisionImplTest {
     private final static File DIR = TestUtils.getTmpFolder(RevisionImplTest.class);
-    private final static File FILE1 = new File(DIR, "test.jar");
-    private final static File FILE2 = new File(DIR, "test-12.jar");
-    private final static File EXPECTED_FILE_1 = new File(DIR, "test-1.jar");
-    private final static File EXPECTED_FILE_2 = new File(DIR, "test-13.jar");
+    private final static File FILE1 = new File(DIR, "test-release-3.2.1.jar");
+    private final static File FILE2 = new File(DIR, "test-release-3.2.1-a12.jar");
+    private final static File FILE3 = new File(DIR, "test-release-3.2.1-a13.jar");
+    private final static String EXPECTED_1 = "a1";
+    private final static String EXPECTED_2 = "a13";
+    private final static String EXPECTED_3 = "a14";
     private RevisionImpl impl = new RevisionImpl();
 
     @Before
@@ -47,18 +49,23 @@ public class RevisionImplTest {
     }
 
     @Test
-    public void shouldSetPropertyFromUnrevisionedFile() throws Exception {
+    public void shouldStartFromUnrevisionedFile() throws Exception {
         FileUtils.writeStringToFile(FILE1, "data");
-        assertEquals(EXPECTED_FILE_1.getAbsolutePath(), this.impl.start(FILE1
-                .getAbsolutePath()));
+        assertEquals(EXPECTED_1, this.impl.start(FILE1.getAbsolutePath(), "a"));
     }
 
     @Test
-    public void shouldSetPropertyFromRevisionedFile() throws Exception {
+    public void shouldStartFromRevisionedFile() throws Exception {
         FileUtils.writeStringToFile(FILE2, "data");
-        this.impl.start(FILE1.getAbsolutePath());
-        assertEquals(EXPECTED_FILE_2.getAbsolutePath(), this.impl.start(FILE1
-                .getAbsolutePath()));
+        assertEquals(EXPECTED_2, this.impl.start(FILE1.getAbsolutePath(), "a"));
+    }
+
+    @Test
+    public void shouldStartTwiceFromRevisionedFile() throws Exception {
+        FileUtils.writeStringToFile(FILE2, "data");
+        assertEquals(EXPECTED_2, this.impl.start(FILE1.getAbsolutePath(), "a"));
+        FILE3.createNewFile();
+        assertEquals(EXPECTED_3, this.impl.start(FILE1.getAbsolutePath(), "a"));
     }
 
 }
