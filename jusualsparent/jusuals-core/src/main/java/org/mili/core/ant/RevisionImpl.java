@@ -31,15 +31,17 @@ import org.mili.core.io.*;
 public class RevisionImpl implements Revision {
 
     @Override
-    public String start(String filenameWithoutRevision) throws Exception {
+    public String start(String filenameWithoutRevision, String revisionPrefix)
+            throws Exception {
         File file = new File(filenameWithoutRevision);
-        File revFile = RevisionUtil.getLastRevisionOfFile(file);
+        File revFile = RevisionUtil.getLastRevisionOfFile(file, revisionPrefix);
         if (revFile == null) {
-            revFile = RevisionUtil.createNewRevisionFromFile(file, false);
+            revFile = RevisionUtil.createNewRevisionFromFile(file, false, revisionPrefix);
         } else {
-            revFile = RevisionUtil.createNextRevisionFromFile(file, false);
+            revFile = RevisionUtil.createNextRevisionFromFile(file, false, revisionPrefix);
         }
-        return revFile.getAbsolutePath();
+        return revisionPrefix + String.valueOf(RevisionUtil.extractRevisionNumber(revFile,
+                revisionPrefix));
     }
 
 }

@@ -47,17 +47,23 @@ public final class RevisionUtil {
      * @param filenameWithoutMinus the filename without minus
      * @param revisionNumber the revision number
      * @param usePattern the use pattern
+     * @param revisionPrefix the revision prefix
      * @return filename with revision
      */
     static String insertRevision(String filenameWithoutMinus, int revisionNumber,
-            boolean usePattern) {
+            boolean usePattern, String revisionPrefix) {
         Validate.notEmpty(filenameWithoutMinus, "s");
         Validate.isTrue(revisionNumber > 0, "revision cannot be <= 0 !");
+        Validate.notNull(revisionPrefix);
         String rev = String.valueOf(revisionNumber);
-        String revision = StringUtils.overlay(REV_PATTERN, rev,
-                REV_PATTERN.length() - rev.length(), REV_PATTERN.length());
-        return filenameWithoutMinus.replaceAll("^(.*)\\.(.*)$", "$1-".concat(usePattern
-                ? revision : rev).concat(".$2"));
+        if (usePattern) {
+            rev = StringUtils.overlay(REV_PATTERN, rev, REV_PATTERN.length() - rev.length(),
+                    REV_PATTERN.length());
+        }
+        if (revisionPrefix.length() > 0) {
+            rev = revisionPrefix + rev;
+        }
+        return filenameWithoutMinus.replaceAll("^(.*)\\.(.*)$", "$1-".concat(rev).concat(".$2"));
     }
 
     /**
@@ -88,13 +94,18 @@ public final class RevisionUtil {
      * Gets the file with highest revision.
      *
      * @param files the files
+     * @param revisionPrefix revision prefix
      * @return the file with highest revision
      */
-    static File getFileWithHighestRevision(File[] files) {
+    static File getFileWithHighestRevision(File[] files, String revisionPrefix) {
         Validate.notEmpty(files, "fa");
         File last = null;
         int revision = -1;
-        String reg = "(.*)[-](.*)[.](.*)$";
+        String prefix = "";
+        if (revisionPrefix.length() > 0) {
+            prefix = "[" + revisionPrefix + "]";
+        }
+        String reg = "(.*)[-]" + prefix + "(.*)[.](.*)$";
         Pattern p = Pattern.compile(reg);
         File f0 = null;
         Matcher m = null;
@@ -102,7 +113,8 @@ public final class RevisionUtil {
             f0 = files[i];
             m = p.matcher(f0.getName());
             if (m.matches()) {
-                int n = Integer.parseInt(m.group(2));
+                String r = m.group(2);
+                int n = Integer.parseInt(r);
                 if (n > revision) {
                     revision = n;
                     last = f0;
@@ -116,17 +128,44 @@ public final class RevisionUtil {
      * Extract revision number.
      *
      * @param filenameWithRevision the filename with revision
-     * @return the int
+     * @param revisionPrefix the revision prefix
+     * @return the revision number
      */
-    static int extractRevisionNumber(String filenameWithRevision) {
-        Validate.notEmpty(filenameWithRevision, "s");
-        String reg = "(.*)[-](.*)[.](.*)$";
+    static int extractRevisionNumber(String filenameWithRevision, String revisionPrefix) {
+        Validate.notEmpty(filenameWithRevision, "filenameWithRevision");
+        Validate.notNull(revisionPrefix, "revisionPrefix");
+        String prefix = "";
+        if (revisionPrefix.length() > 0) {
+            prefix = "[" + revisionPrefix + "]";
+        }
+        String reg = "(.*)[-]" + prefix + "(.*)[.](.*)$";
         Pattern p = Pattern.compile(reg);
         Matcher m = p.matcher(filenameWithRevision);
         if (m.matches()) {
             return Integer.parseInt(m.group(2));
         }
         return -1;
+    }
+
+    /**
+     * Extract revision number.
+     *
+     * @param file the file
+     * @return the revision number
+     */
+    public static int extractRevisionNumber(File file) {
+        return extractRevisionNumber(file.getAbsolutePath(), "");
+    }
+
+    /**
+     * Extract revision number.
+     *
+     * @param file the file
+     * @param revisionPrefix the revision prefix
+     * @return the revision number
+     */
+    public static int extractRevisionNumber(File file, String revisionPrefix) {
+        return extractRevisionNumber(file.getAbsolutePath(), revisionPrefix);
     }
 
     /**
@@ -147,8 +186,23 @@ public final class RevisionUtil {
      * @return the file
      */
     public static File createNewRevisionFromFile(File fileWithoutRevision, boolean usePattern) {
+        return createNewRevisionFromFile(fileWithoutRevision, usePattern, "");
+    }
+
+    /**
+     * Creates the new revision from file.
+     *
+     * @param fileWithoutRevision the file without revision
+     * @param usePattern the use pattern
+     * @param revisionPrefix the revision prefix
+     * @return the file
+     */
+    public static File createNewRevisionFromFile(File fileWithoutRevision, boolean usePattern,
+            String revisionPrefix) {
         Validate.notNull(fileWithoutRevision, "fileWithoutRevision");
-        File f = new File(insertRevision(fileWithoutRevision.getAbsolutePath(), 1, usePattern));
+        Validate.notNull(revisionPrefix, "revisionPrefix");
+        File f = new File(insertRevision(fileWithoutRevision.getAbsolutePath(), 1, usePattern,
+                revisionPrefix));
         return f;
     }
 
@@ -161,10 +215,24 @@ public final class RevisionUtil {
      */
     public static File getLastRevisionOfFile(File fileWithoutRevision)
             throws FileNotFoundException {
+        return getLastRevisionOfFile(fileWithoutRevision, "");
+    }
+
+    /**
+     * Gets the last revision of file.
+     *
+     * @param fileWithoutRevision the file without revision
+     * @param revisionPrefix the revision prefix
+     * @return the last revision of file
+     * @throws FileNotFoundException the file not found exception
+     */
+    public static File getLastRevisionOfFile(File fileWithoutRevision, String revisionPrefix)
+            throws FileNotFoundException {
         Validate.notNull(fileWithoutRevision, "fileWithoutRevision");
+        Validate.notNull(revisionPrefix, "revisionPrefix");
         File[] fa = listFilesWithRevision(fileWithoutRevision);
         if (fa != null && fa.length > 0) {
-            return getFileWithHighestRevision(fa);
+            return getFileWithHighestRevision(fa, revisionPrefix);
         }
         return null;
     }
@@ -184,19 +252,34 @@ public final class RevisionUtil {
     /**
      * Creates the next revision from file.
      *
-     * @param fileWithRevision the file with revision
+     * @param fileWithoutRevision the file without revision
      * @param usePattern the use pattern
      * @return the file
      * @throws FileNotFoundException the file not found exception
      */
-    public static File createNextRevisionFromFile(File fileWithRevision, boolean usePattern)
+    public static File createNextRevisionFromFile(File fileWithoutRevision, boolean usePattern)
             throws FileNotFoundException {
-        Validate.notNull(fileWithRevision, "fileWithRevision");
-        File last = getLastRevisionOfFile(fileWithRevision);
+        return createNextRevisionFromFile(fileWithoutRevision, usePattern, "");
+    }
+
+    /**
+     * Creates the next revision from file.
+     *
+     * @param fileWithoutRevision the file without revision
+     * @param usePattern the use pattern
+     * @param revisionPrefix the revision prefix
+     * @return the file
+     * @throws FileNotFoundException the file not found exception
+     */
+    public static File createNextRevisionFromFile(File fileWithoutRevision, boolean usePattern,
+            String revisionPrefix) throws FileNotFoundException {
+        Validate.notNull(fileWithoutRevision, "fileWithRevision");
+        Validate.notNull(revisionPrefix, "revisionPrefix");
+        File last = getLastRevisionOfFile(fileWithoutRevision, revisionPrefix);
         if (last != null) {
-            int r = extractRevisionNumber(last.getName()) + 1;
-            File f = new File(insertRevision(fileWithRevision.getAbsolutePath(), r,
-                    usePattern));
+            int r = extractRevisionNumber(last.getName(), revisionPrefix) + 1;
+            File f = new File(insertRevision(fileWithoutRevision.getAbsolutePath(), r,
+                    usePattern, revisionPrefix));
             return f;
         }
         return null;

@@ -31,6 +31,14 @@ import static org.junit.Assert.*;
  * @author Michael Lieshoff
  */
 public class RevisionUtilTest {
+    private final static File DIR = TestUtils.getTmpFolder(RevisionUtilTest.class);
+    private final static File FILE_WITH_MINUS = new File(DIR, "file-3.2.1-4711.txt");
+    private final static File FILE_WITH_MINUS_1 = new File(DIR, "file-3.2.1-4711-1.txt");
+    private final static File FILE_WITH_MINUS_2 = new File(DIR, "file-3.2.1-4711-2.txt");
+    private final static File FILE_WITH_PREFIX_1 = new File(DIR, "file-3.2.1-4711-a1.txt");
+    private final static File FILE_WITH_PREFIX_2 = new File(DIR, "file-3.2.1-4711-a2.txt");
+    private final static File FILE_WITH_PREFIX_3 = new File(DIR, "file-3.2.1-4711-a3.txt");
+    private final static File FILE_1 = new File(DIR, "file-3.2.1-4711.txt");
     File dir = null;
     File f0 = null;
     File f1 = null;
@@ -45,113 +53,112 @@ public class RevisionUtilTest {
         this.dir = TestUtils.getTmpFolder(RevisionUtilTest.class);
         this.f0 = new File(dir, "file_4711.txt");
         this.f1 = new File(dir, "file_0815.txt");
+        FileUtils.deleteDirectory(DIR);
         FileUtils.deleteDirectory(dir);
         dir.mkdirs();
+        DIR.mkdirs();
         FileUtils.writeStringToFile(f0, "hello world !");
         FileUtils.writeStringToFile(f1, "hello abbas !");
     }
 
-    /**
-     * Should construct.
-     *
-     * @throws Exception the exception
-     */
     @Test
     public void shouldConstruct() throws Exception {
         new RevisionUtil();
     }
 
-    /**
-     * Test_ file_create new revision from file_ file.
-     */
-    @Test
-    public void test_File_createNewRevisionFromFile_File() {
-        // negativ
-        try {
-            RevisionUtil.createNewRevisionFromFile(null);
-            fail();
-        } catch (IllegalArgumentException e) {
-            assertTrue(true);
-        }
-        // positiv
-        try {
-            File nf0 = RevisionUtil.createNewRevisionFromFile(f0);
-            nf0.createNewFile();
-            assertNotNull(nf0);
-            assertTrue(nf0.exists());
-
-            assertEquals("file_4711-00001.txt", nf0.getName());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            fail();
-        } catch (IOException e) {
-            e.printStackTrace();
-            fail();
-        }
-        return;
+    @Test(expected=IllegalArgumentException.class)
+    public void failCreateNewRevisionFromFile() {
+        RevisionUtil.createNewRevisionFromFile(null);
     }
 
-    /**
-     * Test_ file_get last revision of file_ file.
-     *
-     * @throws Exception the exception
-     */
     @Test
-    public void test_File_getLastRevisionOfFile_File() throws Exception {
-        // negativ
-        try {
-            RevisionUtil.getLastRevisionOfFile(null);
-            fail();
-        } catch (IllegalArgumentException e) {
-            assertTrue(true);
-        } catch (FileNotFoundException e) {
-            assertTrue(true);
-        }
+    public void shouldCreateNewRevisionFromFileWithMinus() {
+        File newRevFile = RevisionUtil.createNewRevisionFromFile(FILE_WITH_MINUS);
+        assertNotNull(newRevFile);
+        assertEquals("file-3.2.1-4711-00001.txt", newRevFile.getName());
+    }
+
+    @Test
+    public void shouldCreateNewRevisionFromFile() throws Exception {
+        File newRevFile = RevisionUtil.createNewRevisionFromFile(FILE_1);
+        assertNotNull(newRevFile);
+        assertEquals("file-3.2.1-4711-00001.txt", newRevFile.getName());
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void failGetLastRevisionOfFile() throws Exception {
+        RevisionUtil.getLastRevisionOfFile(null);
+    }
+
+    @Test
+    public void shouldGetLastRevisionOfFile() throws Exception {
         File d = new File(dir, "abbas/test.txt");
         d.mkdirs();
         d.createNewFile();
         assertNull(RevisionUtil.getLastRevisionOfFile(d));
-        // positiv
-        try {
-            // ein paar Revisionen erzeugen
-            new File(dir, "file_4711-00001.txt").createNewFile();
-            new File(dir, "file_4711-00002.txt").createNewFile();
-            new File(dir, "file_4711-00003.txt").createNewFile();
-            new File(dir, "file_4711-00004.txt").createNewFile();
-            new File(dir, "file_0815-00001.txt").createNewFile();
-            new File(dir, "file_0815-00002.txt").createNewFile();
-            new File(dir, "file_0815-00003.txt").createNewFile();
-            // und letzte holen
-            File nf0 = RevisionUtil.getLastRevisionOfFile(f0);
-            assertNotNull(nf0);
-            assertTrue(nf0.exists());
-            assertEquals("file_4711-00004.txt", nf0.getName());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            fail();
-        } catch (IOException e) {
-            e.printStackTrace();
-            fail();
-        }
-        return;
+        // ein paar Revisionen erzeugen
+        new File(dir, "file_4711-00001.txt").createNewFile();
+        new File(dir, "file_4711-00002.txt").createNewFile();
+        new File(dir, "file_4711-00003.txt").createNewFile();
+        new File(dir, "file_4711-00004.txt").createNewFile();
+        new File(dir, "file_0815-00001.txt").createNewFile();
+        new File(dir, "file_0815-00002.txt").createNewFile();
+        new File(dir, "file_0815-00003.txt").createNewFile();
+        // und letzte holen
+        File nf0 = RevisionUtil.getLastRevisionOfFile(f0);
+        assertNotNull(nf0);
+        assertTrue(nf0.exists());
+        assertEquals("file_4711-00004.txt", nf0.getName());
     }
 
-    /**
-     * Test_ file_create next revision from file_ file.
-     *
-     * @throws Exception the exception
-     */
+    @Test
+    public void shouldGetNullLastRevisionOfFileWithMinus() throws Exception {
+        assertNull(RevisionUtil.getLastRevisionOfFile(FILE_WITH_MINUS));
+    }
+
+    @Test
+    public void shouldGetLastRevisionOfFileWithMinus() throws Exception {
+        FILE_WITH_MINUS_1.createNewFile();
+        assertEquals(FILE_WITH_MINUS_1, RevisionUtil.getLastRevisionOfFile(FILE_WITH_MINUS));
+    }
+
+    @Test
+    public void shouldGetLastRevisionOfFileWithPrefix() throws Exception {
+        FILE_WITH_PREFIX_1.createNewFile();
+        assertEquals(FILE_WITH_PREFIX_1, RevisionUtil.getLastRevisionOfFile(FILE_1, "a"));
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void failCreateNextRevisionFromFile() throws Exception {
+        RevisionUtil.createNextRevisionFromFile(null);
+    }
+
+    @Test
+    public void shouldCreateNextRevisionFromFileWithMinusWithoutPattern() throws Exception {
+        FILE_WITH_MINUS_1.createNewFile();
+        assertEquals(FILE_WITH_MINUS_2.getName(), RevisionUtil.createNextRevisionFromFile(
+                FILE_WITH_MINUS, false).getName());
+    }
+
+    @Test
+    public void shouldCreateNextRevisionFromFileWithPrefix() throws Exception {
+        FILE_WITH_PREFIX_1.createNewFile();
+        assertEquals(FILE_WITH_PREFIX_2.getName(), RevisionUtil.createNextRevisionFromFile(
+                FILE_1, false, "a").getName());
+    }
+
+    @Test
+    public void shouldTwiceCreateNextRevisionFromFileWithPrefix() throws Exception {
+        FILE_WITH_PREFIX_1.createNewFile();
+        assertEquals(FILE_WITH_PREFIX_2.getName(), RevisionUtil.createNextRevisionFromFile(
+                FILE_1, false, "a").getName());
+        FILE_WITH_PREFIX_2.createNewFile();
+        assertEquals(FILE_WITH_PREFIX_3.getName(), RevisionUtil.createNextRevisionFromFile(
+                FILE_1, false, "a").getName());
+    }
+
     @Test
     public void test_File_createNextRevisionFromFile_File() throws Exception {
-        // negativ
-        try {
-            RevisionUtil.createNextRevisionFromFile(null);
-            fail();
-        } catch (IllegalArgumentException e) {
-            assertTrue(true);
-        } catch (FileNotFoundException e) {
-            assertTrue(true);
-        }
         File d = new File(dir, "abbas/test.txt");
         d.mkdirs();
         d.createNewFile();
@@ -183,17 +190,17 @@ public class RevisionUtilTest {
     public void test_String_insertRevision_String_int() {
         // positiv
         assertEquals("c:/a/b/c./y/abbas-00001.txt", RevisionUtil.insertRevision(
-                "c:/a/b/c./y/abbas.txt", 1, true));
+                "c:/a/b/c./y/abbas.txt", 1, true, ""));
         assertEquals("c:/a/b/c./y/abbas-1.txt", RevisionUtil.insertRevision(
-                "c:/a/b/c./y/abbas.txt", 1, false));
+                "c:/a/b/c./y/abbas.txt", 1, false, ""));
         // negativ
         try {
-            RevisionUtil.insertRevision("c:/a/b/c./y/abbas.txt", 0, true);
+            RevisionUtil.insertRevision("c:/a/b/c./y/abbas.txt", 0, true, "");
             fail("exception expected!");
         } catch(IllegalArgumentException e) {
         }
         try {
-            RevisionUtil.insertRevision("c:/a/b/c./y/abbas.txt", -1, true);
+            RevisionUtil.insertRevision("c:/a/b/c./y/abbas.txt", -1, true, "");
             fail("exception expected!");
         } catch(IllegalArgumentException e) {
         }
@@ -262,7 +269,7 @@ public class RevisionUtilTest {
         File[] fa;
         try {
             fa = RevisionUtil.listFilesWithRevision(f0);
-            File f = RevisionUtil.getFileWithHighestRevision(fa);
+            File f = RevisionUtil.getFileWithHighestRevision(fa, "");
             assertNotNull(f);
             assertEquals("file_4711-00004.txt", f.getName());
         } catch (FileNotFoundException e) {
@@ -277,9 +284,9 @@ public class RevisionUtilTest {
      */
     @Test
     public void test_int_getRevision_String() {
-        assertEquals(4, RevisionUtil.extractRevisionNumber("c:/a/b/c/abbas-00004.txt"));
+        assertEquals(4, RevisionUtil.extractRevisionNumber("c:/a/b/c/abbas-00004.txt", ""));
         // negativ
-        assertEquals(-1, RevisionUtil.extractRevisionNumber("blarabbas.txt"));
+        assertEquals(-1, RevisionUtil.extractRevisionNumber("blarabbas.txt", ""));
         return;
     }
 
