@@ -2,7 +2,7 @@
 <documentation name="AnnotatedService" filename-prefix="annotatedservice" creator="mlieshoff"
         creation="12.05.2011 20:11" version="1.0" copyright="org.mili">
     <written-language token="EN"/>
-    <author name="Michael Lieshoff" token="mlieshoff" email="michaellieshoff@gmx.de"/>
+    <author name="Michael Lieshoff" token="ML" email="michaellieshoff@gmx.de"/>
     <part name="Introduction">
         <paragraph name="What is an annotated service?">
             <text ressource="What is an annotated service?_1"><![CDATA[

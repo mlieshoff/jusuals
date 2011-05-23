@@ -90,8 +90,9 @@ public class MockFactory {
         table.addCol("foo");
         table.addCol("date", Conversions.DATE_TIME, TimeConversions.BEGINNING_MILLISECONDS,
                 Flags.LEFT);
+        table.addCol("null");
         table.addRow((byte) 1, (short) 1, 1, 'c', 1L, 1.0F, 1.0, Boolean.TRUE, "abbas",
-                new Foo(), DATE);
+                new Foo(), DATE, null);
         return table;
     }
 
@@ -102,8 +103,8 @@ public class MockFactory {
      */
     public static String getCsvString() {
         StringBuilder s = new StringBuilder();
-        s.append("\"byte\";\"short\";\"integer\";\"char\";\"long\";\"float\";\"double\";\"boolean\";\"string\";\"foo\";\"date\"");
-        s.append("\"1\";\"1\";\"1\";\"c\";\"1\";\"1.0\";\"1.0\";\"true\";\"abbas\";\"Foo\";\"Thu Feb 01 00:00:00 CET 3900\"");
+        s.append("\"byte\";\"short\";\"integer\";\"char\";\"long\";\"float\";\"double\";\"boolean\";\"string\";\"foo\";\"date\";\"null\"");
+        s.append("\"1\";\"1\";\"1\";\"c\";\"1\";\"1.0\";\"1.0\";\"true\";\"abbas\";\"Foo\";\"Thu Feb 01 00:00:00 CET 3900\";\"null\"");
         return s.toString();
     }
 
@@ -123,7 +124,7 @@ public class MockFactory {
      */
     public static String getXmlString() {
         StringBuilder s = new StringBuilder();
-        s.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><table><header><cell>byte</cell><cell>short</cell><cell>integer</cell><cell>char</cell><cell>long</cell><cell>float</cell><cell>double</cell><cell>boolean</cell><cell>string</cell><cell>foo</cell><cell>date</cell></header><row><cell>1</cell><cell>1</cell><cell>1</cell><cell>c</cell><cell>1</cell><cell>1.0</cell><cell>1.0</cell><cell>true</cell><cell>abbas</cell><cell>Foo</cell><cell>Thu Feb 01 00:00:00 CET 3900</cell></row></table>");
+        s.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><table><header><cell>byte</cell><cell>short</cell><cell>integer</cell><cell>char</cell><cell>long</cell><cell>float</cell><cell>double</cell><cell>boolean</cell><cell>string</cell><cell>foo</cell><cell>date</cell><cell>null</cell></header><row><cell>1</cell><cell>1</cell><cell>1</cell><cell>c</cell><cell>1</cell><cell>1.0</cell><cell>1.0</cell><cell>true</cell><cell>abbas</cell><cell>Foo</cell><cell>Thu Feb 01 00:00:00 CET 3900</cell><cell>null</cell></row></table>");
         return s.toString();
     }
 
@@ -134,11 +135,11 @@ public class MockFactory {
      */
     public static String getTextString() {
         StringBuilder s = new StringBuilder();
-        s.append("+------+-------+---------+------+------+----------+----------+---------+--------+-----+------------------------------+");
-        s.append("| byte | short | integer | char | long |    float |   double | boolean | string | foo |                         date |");
-        s.append("+------+-------+---------+------+------+----------+----------+---------+--------+-----+------------------------------+");
-        s.append("|    1 |     1 |       1 |    c |    1 | 1,000000 | 1,000000 |    true | abbas  | Foo | 60907590000000               |");
-        s.append("+------+-------+---------+------+------+----------+----------+---------+--------+-----+------------------------------+");
+        s.append("+------+-------+---------+------+------+----------+----------+---------+--------+-----+------------------------------+------+");
+        s.append("| byte | short | integer | char | long |    float |   double | boolean | string | foo |                         date | null |");
+        s.append("+------+-------+---------+------+------+----------+----------+---------+--------+-----+------------------------------+------+");
+        s.append("|    1 |     1 |       1 |    c |    1 | 1,000000 | 1,000000 |    true | abbas  | Foo | 60907590000000               | null |");
+        s.append("+------+-------+---------+------+------+----------+----------+---------+--------+-----+------------------------------+------+");
         return s.toString();
     }
 
@@ -152,7 +153,7 @@ public class MockFactory {
         HSSFRow row = sheet.getRow(0);
         assertEquals("unknown", workbook.getSheetName(0));
         assertEquals(1, sheet.getLastRowNum());
-        assertEquals(10, row.getLastCellNum());
+        assertEquals(11, row.getLastCellNum());
         assertEquals("byte", row.getCell((short) 0).getStringCellValue());
         assertEquals("short", row.getCell((short) 1).getStringCellValue());
         assertEquals("integer", row.getCell((short) 2).getStringCellValue());
@@ -164,6 +165,7 @@ public class MockFactory {
         assertEquals("string", row.getCell((short) 8).getStringCellValue());
         assertEquals("foo", row.getCell((short) 9).getStringCellValue());
         assertEquals("date", row.getCell((short) 10).getStringCellValue());
+        assertEquals("null", row.getCell((short) 11).getStringCellValue());
         row = sheet.getRow(1);
 //        assertEquals("1", row.getCell((short) 0).getStringCellValue());
 //        assertEquals("1", row.getCell((short) 1).getStringCellValue());
@@ -177,6 +179,7 @@ public class MockFactory {
         assertEquals("Foo", row.getCell((short) 9).getStringCellValue());
         assertEquals("Thu Feb 01 00:00:00 CET 3900", row.getCell((short) 10)
                 .getStringCellValue());
+        assertEquals("", row.getCell((short) 11).getStringCellValue());
     }
 
     /**

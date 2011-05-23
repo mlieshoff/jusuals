@@ -213,7 +213,6 @@ public class TextTable implements Table {
      * @return the conversion for type
      */
     protected Conversion getConversionForType(Object object) {
-        System.out.println(object.getClass());
         if (object instanceof Byte) {
             return Conversions.DECIMAL;
         } else if (object instanceof Short) {
