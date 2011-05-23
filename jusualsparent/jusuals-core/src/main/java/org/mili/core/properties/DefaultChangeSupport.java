@@ -40,7 +40,7 @@ public class DefaultChangeSupport implements ChangeSupport {
      * @param source the source
      */
     protected DefaultChangeSupport(Object source) {
-        super();
+        Validate.notNull(source);
         this.source = source;
         this.vcs = new VetoableChangeSupport(source);
         this.pcs = new PropertyChangeSupport(source);

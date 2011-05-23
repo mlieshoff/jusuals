@@ -7,6 +7,30 @@
     <property name="release.file" value="${release.dir}/${release.name}-${release.version}.zip"/>
 
     <target name="release" description="makes release.">
-       <copy file="${release.dir}/${release.name}-${release.version}-SNAPSHOT.jar" tofile="${release.dir}/${release.name}-${release.version}.jar"/>
+        <copy file="${release.dir}/${release.name}-${release.version}-SNAPSHOT.jar" tofile="${release.dir}/${release.name}-${release.version}.jar"/>
+        <zip destfile="${release.file}">
+            <!-- binaries -->
+            <zipfileset dir="target" prefix="">
+                <include name="*.jar" />
+                <exclude name="*-javadoc.jar" />
+            </zipfileset>
+            <!-- docs -->
+            <zipfileset dir="target" prefix="javadocs">
+                <include name="*-javadoc.jar" />
+            </zipfileset>
+            <!-- sources -->
+            <zipfileset dir="src/main/java" prefix="src">
+                <include name="**/*.java" />
+            </zipfileset>
+            <!-- test-sources -->
+            <zipfileset dir="src/test/java" prefix="tests/src">
+                <include name="**/*.java" />
+            </zipfileset>
+            <!-- test-classes -->
+            <!--zipfileset dir="target/test-classes" prefix="tests/classes">
+                <include name="**/*.class" />
+            </zipfileset-->
+        </zip>
     </target>
+
 </project>

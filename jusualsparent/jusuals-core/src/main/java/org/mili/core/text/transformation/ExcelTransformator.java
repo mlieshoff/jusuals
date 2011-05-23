@@ -94,21 +94,13 @@ public class ExcelTransformator {
                 String value = o == null ? "" : String.valueOf(o);
                 if (o instanceof Number) {
                     if (o instanceof Integer) {
-                        try {
-                            numberStyle.setDataFormat(format.getFormat(fsInt));
-                            contentCell.setCellValue(Integer.parseInt(value));
-                            contentCell.setCellStyle(numberStyle);
-                        } catch (Exception ee) {
-                            contentCell.setCellValue("");
-                        }
+                        numberStyle.setDataFormat(format.getFormat(fsInt));
+                        contentCell.setCellValue(Integer.parseInt(value));
+                        contentCell.setCellStyle(numberStyle);
                     } else if (o instanceof Float) {
-                        try {
-                            numberStyle.setDataFormat(format.getFormat(fsFloat));
-                            contentCell.setCellValue(Float.parseFloat(value));
-                            contentCell.setCellStyle(numberStyle);
-                        } catch (Exception ee) {
-                            contentCell.setCellValue("");
-                        }
+                        numberStyle.setDataFormat(format.getFormat(fsFloat));
+                        contentCell.setCellValue(Float.parseFloat(value));
+                        contentCell.setCellStyle(numberStyle);
                     }
                 } else {
                     contentCell.setCellValue(value);

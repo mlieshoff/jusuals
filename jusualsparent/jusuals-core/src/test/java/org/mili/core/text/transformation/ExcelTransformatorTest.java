@@ -23,6 +23,8 @@ import org.apache.poi.hssf.usermodel.*;
 import org.junit.*;
 import org.mili.core.text.*;
 
+import static org.junit.Assert.*;
+
 
 /**
  * @author Michael Lieshoff
@@ -40,6 +42,18 @@ public class ExcelTransformatorTest {
     public void shouldTransformEmptyTable() {
         HSSFWorkbook workbook = this.tranformator.transform(new TextTable());
         MockFactory.assertEmptyWorkbook(workbook);
+    }
+
+    @Test
+    public void shouldGetUnknownSheetName() {
+        assertEquals("unknown", this.tranformator.getSheetName(null));
+        assertEquals("unknown", this.tranformator.getSheetName(""));
+    }
+
+    @Test
+    public void shouldGetNormalizedSheetName() {
+        assertEquals("abbasabbasabbasabbasabbasabbasa", this.tranformator
+                .getSheetName("\\/?][\\/?][abbasabbasabbasabbasabbasabbasabbas"));
     }
 
 }
