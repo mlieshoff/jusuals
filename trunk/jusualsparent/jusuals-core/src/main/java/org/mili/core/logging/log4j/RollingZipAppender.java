@@ -23,6 +23,7 @@ import java.io.*;
 import java.text.*;
 import java.util.zip.*;
 
+import org.apache.commons.io.*;
 import org.apache.log4j.*;
 import org.mili.core.logging.*;
 import org.mili.core.logging.Logger;
@@ -53,8 +54,20 @@ public class RollingZipAppender extends RollingFileAppender {
 
     private void deleteOldestLogFile() {
         File file = new File(this.createArchivedLogFilename(this.maxBackupIndex));
+        this.deleteFile(file);
+    }
+
+    private void deleteFile(File file) {
         if (file.exists()) {
             file.delete();
+        }
+        if (file.exists()) {
+            LOG.warn("try to force delete file[", file.getAbsolutePath(), "]");
+            try {
+                FileUtils.forceDelete(file);
+            } catch (IOException e) {
+                LOG.error(e);
+            }
         }
     }
 
@@ -86,7 +99,7 @@ public class RollingZipAppender extends RollingFileAppender {
     private void archiveLogFile(File target) {
         try {
             this.archiver.archiveFile(target);
-            target.delete();
+            this.deleteFile(target);
         } catch (IOException e) {
             LOG.error("Failed to zip file [" + target.getPath() + "].");
         }
