@@ -144,7 +144,7 @@ public class ResourceUtil {
      * Loads resources from xml.
      *
      * @param locale the locale
-     * @param basename the basename
+     * @param baseName the basename
      * @param cl the classloader
      * @throws IOException Signals that an I/O exception has occurred.
      * @throws JAXBException the jAXB exception

@@ -31,6 +31,18 @@
                 <include name="**/*.class" />
             </zipfileset-->
         </zip>
+        <delete dir="${release.dir}/unzipped"/>
+        <unzip src="${release.file}" dest="${release.dir}/unzipped" />
+        <touch>
+            <fileset dir="${release.dir}/unzipped"/>
+        </touch>
+        <delete file="${release.file}"/>
+        <zip destfile="${release.file}">
+            <zipfileset dir="${release.dir}/unzipped" prefix="">
+                <include name="**/*.*" />
+                <exclude name="**/*-SNAPSHOT.jar" />
+            </zipfileset>
+        </zip>
     </target>
 
 </project>

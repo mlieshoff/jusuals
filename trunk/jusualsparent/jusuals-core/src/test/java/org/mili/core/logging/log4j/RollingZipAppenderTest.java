@@ -108,4 +108,10 @@ public class RollingZipAppenderTest {
         assertEquals(5, this.countZips());
     }
 
+    @Test
+    public void shouldHandleBadFiles() throws Exception {
+        this.createLogFile();
+        this.appender.rollOver();
+    }
+
 }
