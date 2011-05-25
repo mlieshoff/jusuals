@@ -86,7 +86,7 @@ public class PropUtil {
      * Util.readProperties(new FileInputStream(new File("example.properties")));
      * </pre>
      *
-     * @param f {@link InputStream} file contains the {@link Properties}.
+     * @param is {@link InputStream} file contains the {@link Properties}.
      * @return readed {@link Properties}.
      */
     public static Properties readProperties(InputStream is) {

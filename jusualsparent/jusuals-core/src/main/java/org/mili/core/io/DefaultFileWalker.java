@@ -28,7 +28,7 @@ import org.apache.commons.io.*;
 import org.apache.commons.lang.*;
 
 /**
- * This class is a default implementation of interface {@link core.io.FileWalker}.
+ * This class is a default implementation of interface {@link FileWalker}.
  *
  * @author Michael Lieshoff
  */

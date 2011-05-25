@@ -22,7 +22,7 @@ package org.mili.core.cache;
 
 
 /**
- * This class is a default implementation of interface {@link core.cache.LazyCache}.
+ * This class is a default implementation of interface {@link LazyCache}.
  *
  * @author Michael Lieshoff
  */

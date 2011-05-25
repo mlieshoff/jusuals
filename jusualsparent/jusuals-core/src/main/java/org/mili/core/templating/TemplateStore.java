@@ -232,7 +232,7 @@ public class TemplateStore {
      * Putting a component sheet into holder with specified unified key.
      *
      * @param key The component sheet key.
-     * @param template The component sheet represented by properties.
+     * @param componentSheet The component sheet represented by properties.
      */
     public void putComponentSheet(String key, Properties componentSheet) {
         if (key != null && key.length() > 0) {
