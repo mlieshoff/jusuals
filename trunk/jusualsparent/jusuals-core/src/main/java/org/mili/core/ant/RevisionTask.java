@@ -103,4 +103,7 @@ public class RevisionTask extends Task {
         this.revisionPrefix = revisionPrefix;
     }
 
+    void setImpl(Revision newImpl) {
+        this.impl = newImpl;
+    }
 }

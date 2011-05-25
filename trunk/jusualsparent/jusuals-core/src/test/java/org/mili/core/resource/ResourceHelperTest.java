@@ -22,182 +22,281 @@ package org.mili.core.resource;
 
 import java.util.*;
 
+import org.easymock.*;
 import org.junit.*;
 
 import static org.junit.Assert.*;
+
 
 /**
  * @author Michael Lieshoff
  *
  */
 public class ResourceHelperTest {
+    private ResourceHelper helper = null;
+    private ResourceHelper helperWithoutClass = null;
+    private ResourceUtilInterface impl = EasyMock.createMock(ResourceUtilInterface.class);
 
-    @Test
-    public void testResourceHelperClassOfQLocaleString() {
-        try {
-            new ResourceHelper(null, Locale.GERMANY, "aaa");
-            fail();
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            new ResourceHelper(String.class, null, "aaa");
-            fail();
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            new ResourceHelper(String.class, Locale.GERMANY, "");
-            fail();
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            new ResourceHelper(String.class, Locale.GERMANY, null);
-            fail();
-        } catch (IllegalArgumentException e) {
-        }
-        new ResourceHelper(String.class, Locale.GERMANY, "aaa");
+    @Before
+    public void setUp() {
+        this.helper = new ResourceHelper(String.class, Locale.GERMAN, "base");
+        this.helper.setImpl(this.impl);
+        this.helperWithoutClass = new ResourceHelper(Locale.GERMAN, "base");
+        this.helperWithoutClass.setImpl(this.impl);
+    }
+
+    @After
+    public void after() {
+        EasyMock.reset(this.impl);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void failConstructBecauseNullClassAndBasename() {
+        new ResourceHelper((Class<?>) null, "a");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void failConstructBecauseClassAndEmptyBasename() {
+        new ResourceHelper(String.class, "");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void failConstructBecauseClassAndNullBasename() {
+        new ResourceHelper(String.class, null);
     }
 
     @Test
-    public void testResourceHelperObjectLocaleString() {
-        try {
-            Object o = null;
-            new ResourceHelper(o, Locale.GERMANY, "aaa");
-            fail();
-        } catch (NullPointerException e) {
-        }
-        try {
-            new ResourceHelper(new Object(), null, "aaa");
-            fail();
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            new ResourceHelper(new Object(), Locale.GERMANY, "");
-            fail();
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            new ResourceHelper(new Object(), Locale.GERMANY, null);
-            fail();
-        } catch (IllegalArgumentException e) {
-        }
-        new ResourceHelper(new Object(), Locale.GERMANY, "aaa");
+    public void shouldConstructClassAndBasename() {
+        new ResourceHelper(String.class, "base");
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void failConstructBecauseNullObjectAndBasename() {
+        new ResourceHelper((Object) null, "a");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void failConstructBecauseObjectAndEmptyBasename() {
+        new ResourceHelper("a", "");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void failConstructBecauseObjectAndNullBasename() {
+        new ResourceHelper("a", null);
     }
 
     @Test
-    public void testResourceHelperString() {
-        try {
-            new ResourceHelper("");
-            fail();
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            new ResourceHelper(null);
-            fail();
-        } catch (IllegalArgumentException e) {
-        }
-        new ResourceHelper("aaa");
+    public void shouldConstructObjectAndBasename() {
+        new ResourceHelper("a", "base");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void failConstructBecauseNullLocaleAndBasename() {
+        new ResourceHelper((Locale) null, "a");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void failConstructBecauseLocaleAndEmptyBasename() {
+        new ResourceHelper(Locale.GERMAN, "");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void failConstructBecauseLocaleAndNullBasename() {
+        new ResourceHelper(Locale.GERMAN, null);
     }
 
     @Test
-    public void testResourceHelperLocaleString() {
-        try {
-            new ResourceHelper(Locale.GERMANY, "");
-            fail();
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            new ResourceHelper(Locale.GERMANY, null);
-            fail();
-        } catch (IllegalArgumentException e) {
-        }
-        new ResourceHelper(Locale.GERMANY, "aaa");
+    public void shouldConstructLocaleAndBasename() {
+        new ResourceHelper(Locale.GERMAN, "base");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void failConstructBecauseEmptyBasename() {
+        new ResourceHelper("");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void failConstructBecauseNullBasename() {
+        new ResourceHelper(null);
     }
 
     @Test
-    public void testResourceHelperObjectString() {
-        try {
-            new ResourceHelper(new Object(), "");
-            fail();
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            new ResourceHelper(new Object(), null);
-            fail();
-        } catch (IllegalArgumentException e) {
-        }
-        new ResourceHelper(new Object(), "aaa");
+    public void shouldConstructBasename() {
+        new ResourceHelper("base");
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void failConstructBecauseNullObjectAndLocaleAndBasename() {
+        new ResourceHelper((Object) null, Locale.GERMAN, "a");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void failConstructBecauseObjectAndNullLocaleAndBasename() {
+        new ResourceHelper("a", null, "a");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void failConstructBecauseObjectAndLocaleAndEmptyBasename() {
+        new ResourceHelper("a", Locale.GERMAN, "");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void failConstructBecauseObjectAndLocaleAndNullBasename() {
+        new ResourceHelper("a", Locale.GERMAN, null);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void failConstructBecauseNullClassAndLocaleAndBasename() {
+        new ResourceHelper((Class<?>) null, Locale.GERMAN, "a");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void failConstructBecauseClassAndNullLocaleAndBasename() {
+        new ResourceHelper(String.class, null, "a");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void failConstructBecauseClassAndLocaleAndEmptyBasename() {
+        new ResourceHelper(String.class, Locale.GERMAN, "");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void failConstructBecauseClassAndLocaleAndNullBasename() {
+        new ResourceHelper(String.class, Locale.GERMAN, null);
     }
 
     @Test
-    public void testResourceHelperClassOfQString() {
-        try {
-            new ResourceHelper(Object.class, "");
-            fail();
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            new ResourceHelper(Object.class, null);
-            fail();
-        } catch (IllegalArgumentException e) {
-        }
-        new ResourceHelper(Object.class, "aaa");
+    public void shouldGetStringFromKeyWithClass() {
+        EasyMock.expect(this.impl.getString(Locale.GERMAN, "base", String.class, "key1"))
+                .andReturn("result");
+        EasyMock.replay(this.impl);
+        assertEquals("result", this.helper.getString("key1"));
+        EasyMock.verify(this.impl);
     }
 
     @Test
-    public void testGetStringString() {
-        try {
-            new ResourceHelper(Object.class, "");
-            fail();
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            new ResourceHelper(Object.class, null);
-            fail();
-        } catch (IllegalArgumentException e) {
-        }
-        new ResourceHelper(Object.class, "aaa");
+    public void shouldGetStringFromKeyWithoutClass() {
+        EasyMock.expect(this.impl.getString(Locale.GERMAN, "base", "key1")).andReturn("result");
+        EasyMock.replay(this.impl);
+        assertEquals("result", this.helperWithoutClass.getString("key1"));
     }
 
     @Test
-    @Ignore
-    public void testGetStringObjectString() {
-        fail("Not yet implemented");
+    public void shouldGetStrings() {
+        String[] result = new String[]{"a", "b"};
+        EasyMock.expect(this.impl.getString(Locale.GERMAN, "base", String.class, "key1"))
+                .andReturn("a");
+        EasyMock.expect(this.impl.getString(Locale.GERMAN, "base", String.class, "key2"))
+                .andReturn("b");
+        EasyMock.replay(this.impl);
+        assertArrayEquals(result, this.helper.getStrings("key1", "key2"));
     }
 
     @Test
-    @Ignore
-    public void testGetStringClassOfQString() {
-        fail("Not yet implemented");
+    public void shouldGetStringFromObjectAndKey() {
+        EasyMock.expect(this.impl.getString(Locale.GERMAN, "base", "object", "key1"))
+                .andReturn("result");
+        EasyMock.replay(this.impl);
+        assertEquals("result", this.helper.getString("object", "key1"));
+        EasyMock.verify(this.impl);
     }
 
     @Test
-    @Ignore
-    public void testGetStringLocaleStringString() {
-        fail("Not yet implemented");
+    public void shouldGetStringFromClassAndKey() {
+        EasyMock.expect(this.impl.getString(Locale.GERMAN, "base", String.class, "key1"))
+                .andReturn("result");
+        EasyMock.replay(this.impl);
+        assertEquals("result", this.helper.getString(String.class, "key1"));
+        EasyMock.verify(this.impl);
     }
 
     @Test
-    @Ignore
-    public void testGetStringLocaleStringClassOfQString() {
-        fail("Not yet implemented");
+    public void shouldGetStringFromLocaleAndBaseNameAndKey() {
+        EasyMock.expect(this.impl.getString(Locale.GERMAN, "base", "key1")).andReturn("result");
+        EasyMock.replay(this.impl);
+        assertEquals("result", this.helper.getString(Locale.GERMAN, "base", "key1"));
+        EasyMock.verify(this.impl);
     }
 
     @Test
-    @Ignore
-    public void testGetStringLocaleStringObjectString() {
-        fail("Not yet implemented");
+    public void shouldGetStringFromLocaleAndBaseNameAndClassAndKey() {
+        EasyMock.expect(this.impl.getString(Locale.GERMAN, "base", String.class, "key1"))
+                .andReturn("result");
+        EasyMock.replay(this.impl);
+        assertEquals("result", this.helper.getString(Locale.GERMAN, "base", String.class,
+                "key1"));
+        EasyMock.verify(this.impl);
     }
 
     @Test
-    @Ignore
-    public void testGetProperty() {
-        fail("Not yet implemented");
+    public void shouldGetStringFromLocaleAndBaseNameAndObjectAndKey() {
+        EasyMock.expect(this.impl.getString(Locale.GERMAN, "base", "object", "key1"))
+                .andReturn("result");
+        EasyMock.replay(this.impl);
+        assertEquals("result", this.helper.getString(Locale.GERMAN, "base", "object", "key1"));
+        EasyMock.verify(this.impl);
     }
 
     @Test
-    @Ignore
-    public void testLoad() {
-        fail("Not yet implemented");
+    public void shouldGetProperty() {
+        EasyMock.expect(this.impl.getString(Locale.GERMAN, "base", "key1")).andReturn("result");
+        EasyMock.replay(this.impl);
+        assertEquals("result", this.helper.getProperty("key1"));
+        EasyMock.verify(this.impl);
+    }
+
+    @Test
+    public void shouldLoad() {
+        this.impl.load(Locale.GERMAN, "base");
+        EasyMock.expectLastCall();
+        EasyMock.replay(this.impl);
+        this.helper.load(Locale.GERMAN, "base");
+        EasyMock.verify(this.impl);
+    }
+
+    @Test
+    public void shouldLoadFromClassLoader() {
+        this.impl.load(Locale.GERMAN, "base", this.getClass().getClassLoader());
+        EasyMock.expectLastCall();
+        EasyMock.replay(this.impl);
+        this.helper.load(Locale.GERMAN, "base", this.getClass().getClassLoader());
+        EasyMock.verify(this.impl);
+    }
+
+    @Test
+    public void shouldContains() {
+        EasyMock.expect(this.impl.contains(Locale.GERMAN, "base", "key")).andReturn(true);
+        EasyMock.replay(this.impl);
+        assertTrue(this.helper.contains("key"));
+    }
+
+    @Test
+    public void shouldListBasenames() {
+        List<String> result = new ArrayList<String>();
+        result.add("a");
+        EasyMock.expect(this.impl.listBasenames()).andReturn(result);
+        EasyMock.replay(this.impl);
+        assertEquals(result, this.helper.listBasenames());
+    }
+
+    @Test
+    public void shouldListLocalesForBasename() {
+        List<Locale> result = new ArrayList<Locale>();
+        result.add(Locale.GERMAN);
+        EasyMock.expect(this.impl.listLocalesForBasename("a")).andReturn(result);
+        EasyMock.replay(this.impl);
+        assertEquals(result, this.helper.listLocalesForBasename("a"));
+    }
+
+    @Test
+    public void shouldGetResourceBundlesForBasenameAndLocale() {
+        Map<String, String> result = new Hashtable<String, String>();
+        result.put("a", "b");
+        EasyMock.expect(this.impl.getResourceBundlesForBasenameAndLocale("a", Locale.GERMAN))
+                .andReturn(result);
+        EasyMock.replay(this.impl);
+        assertEquals(result, this.helper.getResourceBundlesForBasenameAndLocale("a",
+                Locale.GERMAN));
     }
 
 }

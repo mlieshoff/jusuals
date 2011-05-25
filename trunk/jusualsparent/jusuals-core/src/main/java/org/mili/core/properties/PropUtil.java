@@ -31,7 +31,9 @@ import org.apache.commons.lang.*;
  *
  */
 public class PropUtil {
-    private static Wrapper wrapper = new DefaultWrapper();
+    private static Creator creator = new CreatorImpl();
+    private static Closer closer = new CloserImpl();
+    private static Availabler availabler = new AvailablerImpl();
 
     /**
      * Instantiates a new prop util.
@@ -59,14 +61,14 @@ public class PropUtil {
         Validate.isTrue(f.exists());
         InputStream is = null;
         try {
-            is = wrapper.createFileInputStream(f);
+            is = creator.create(f);
             return readProperties(is);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         } finally {
             if (is != null) {
                 try {
-                    is.close();
+                    closer.close(is);
                 } catch (IOException e) {
                     throw new IllegalStateException(e);
                 }
@@ -92,7 +94,7 @@ public class PropUtil {
     public static Properties readProperties(InputStream is) {
         Validate.notNull(is);
         try {
-            Validate.isTrue(is.available() > 0);
+            Validate.isTrue(availabler.available(is) > 0);
             Properties p = new Properties();
             p.load(is);
             return p;
@@ -101,18 +103,49 @@ public class PropUtil {
         }
     }
 
-    static void setWrapper(Wrapper newWrapper) {
-        wrapper = newWrapper;
+    static void setCreator(Creator newCreator) {
+        creator = newCreator;
     }
 
-    interface Wrapper {
-        FileInputStream createFileInputStream(File file) throws IOException ;
+    static void setCloser(Closer newCloser) {
+        closer = newCloser;
     }
 
-    static class DefaultWrapper implements Wrapper {
+    static void setAvailabler(Availabler newAvailabler) {
+        availabler = newAvailabler;
+    }
+
+    interface Creator {
+        FileInputStream create(File file) throws IOException;
+    }
+
+    static class CreatorImpl implements Creator {
         @Override
-        public FileInputStream createFileInputStream(File file) throws IOException {
+        public FileInputStream create(File file) throws IOException {
             return new FileInputStream(file);
         }
     }
+
+    interface Closer {
+        void close(InputStream is) throws IOException;
+    }
+
+    static class CloserImpl implements Closer {
+        @Override
+        public void close(InputStream is) throws IOException {
+            is.close();
+        }
+    }
+
+    interface Availabler {
+        int available(InputStream is) throws IOException;
+    }
+
+    static class AvailablerImpl implements Availabler {
+        @Override
+        public int available(InputStream is) throws IOException {
+            return is.available();
+        }
+    }
+
 }

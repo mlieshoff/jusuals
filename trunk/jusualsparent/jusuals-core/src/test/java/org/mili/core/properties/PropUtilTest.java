@@ -23,6 +23,7 @@ package org.mili.core.properties;
 import java.io.*;
 import java.util.*;
 
+import org.easymock.*;
 import org.junit.*;
 import org.mili.core.io.*;
 import org.mili.core.properties.PropUtil.*;
@@ -35,12 +36,11 @@ import static org.junit.Assert.*;
  */
 public class PropUtilTest {
     private File file = new File(TestUtils.TMP_FOLDER, "abbas.properties");
-    private FileInputStream defectOnAvailableFileInputStream = null;
-    private FileInputStream zeroAvailableFileInputStream = null;
-    private FileInputStream defectOnCloseFileInputStream = null;
-    private Wrapper defectOnCreateFileInputStreamWrapper = null;
-    private Wrapper nullFileInputStreamWrapper = null;
-    private Wrapper wrapperToGetDefectOnCloseInputStream = null;
+    private Creator creatorWithException = EasyMock.createMock(Creator.class);
+    private Creator creatorWithNull = EasyMock.createMock(Creator.class);
+    private Closer closerWithException = EasyMock.createMock(Closer.class);
+    private Availabler availablerWithException = EasyMock.createMock(Availabler.class);
+    private Availabler availablerWithZero = EasyMock.createMock(Availabler.class);
 
     @Before
     public void setUp() throws Exception {
@@ -49,14 +49,16 @@ public class PropUtilTest {
         OutputStream os = new FileOutputStream(this.file);
         p.store(os, "test props.");
         os.close();
-        this.defectOnAvailableFileInputStream = new DefectOnAvailableFileInputStream(this.file);
-        this.zeroAvailableFileInputStream = new ZeroAvailableFileInputStream(this.file);
-        this.defectOnCloseFileInputStream = new DefectOnCloseFileInputStream(this.file);
-        this.defectOnCreateFileInputStreamWrapper = new DefectWrapper();
-        this.nullFileInputStreamWrapper = new NullWrapper();
-        this.wrapperToGetDefectOnCloseInputStream =
-                new WrapperToGetDefectOnCloseFileInputStream();
-        PropUtil.setWrapper(new PropUtil.DefaultWrapper());
+    }
+
+    @After
+    public void after() throws Exception {
+        PropUtil.setCreator(new PropUtil.CreatorImpl());
+        PropUtil.setCloser(new PropUtil.CloserImpl());
+        PropUtil.setAvailabler(new PropUtil.AvailablerImpl());
+        EasyMock.reset(this.creatorWithException, this.creatorWithNull,
+                this.closerWithException, this.availablerWithException,
+                this.availablerWithZero);
     }
 
     @Test
@@ -74,34 +76,6 @@ public class PropUtilTest {
         PropUtil.readProperties(new File("bundy"));
     }
 
-    @Test(expected=IllegalStateException.class)
-    public void shouldFailReadPropertiesBecauseStreamNotAvailable() throws Exception {
-        PropUtil.readProperties(this.defectOnAvailableFileInputStream);
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void shouldFailReadPropertiesBecauseStreamZeroAvailable() throws Exception {
-        PropUtil.readProperties(this.zeroAvailableFileInputStream);
-    }
-
-    @Test(expected=IllegalStateException.class)
-    public void shouldFailReadPropertiesFileBecauseStreamNotAvailable() throws Exception {
-        PropUtil.setWrapper(this.defectOnCreateFileInputStreamWrapper);
-        PropUtil.readProperties(this.file);
-    }
-
-    @Test(expected=IllegalStateException.class)
-    public void shouldFailReadPropertiesFileBecauseExceptionWhileClose() throws Exception {
-        PropUtil.setWrapper(this.wrapperToGetDefectOnCloseInputStream);
-        PropUtil.readProperties(this.file);
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void shouldFailReadPropertiesFileBecauseNullInputStream() throws Exception {
-        PropUtil.setWrapper(this.nullFileInputStreamWrapper);
-        PropUtil.readProperties(this.file);
-    }
-
     @Test
     public void shouldReadPropertiesFile() {
         Properties p = PropUtil.readProperties(this.file);
@@ -115,105 +89,51 @@ public class PropUtilTest {
         assertEquals("4711", p.get("a"));
     }
 
-    class DefectOnAvailableFileInputStream extends FileInputStream {
-
-        public DefectOnAvailableFileInputStream(File file) throws FileNotFoundException {
-            super(file);
-        }
-
-        public DefectOnAvailableFileInputStream(FileDescriptor fdObj) {
-            super(fdObj);
-        }
-
-        public DefectOnAvailableFileInputStream(String name) throws FileNotFoundException {
-            super(name);
-        }
-
-        @Override
-        public int available() throws IOException {
-            throw new IOException();
-        }
-
-        @Override
-        public int read() throws IOException {
-            return 0;
-        }
+    @Test(expected=IllegalStateException.class)
+    public void failGetPropertyFromFileBecauseExceptionWhileGettingInputStream()
+            throws Exception {
+        EasyMock.expect(this.creatorWithException.create(this.file)).andThrow(
+                new IOException());
+        PropUtil.setCreator(this.creatorWithException);
+        EasyMock.replay(this.creatorWithException);
+        PropUtil.readProperties(this.file);
     }
 
-    class ZeroAvailableFileInputStream extends FileInputStream {
-
-        public ZeroAvailableFileInputStream(File file) throws FileNotFoundException {
-            super(file);
-        }
-
-        public ZeroAvailableFileInputStream(FileDescriptor fdObj) {
-            super(fdObj);
-        }
-
-        public ZeroAvailableFileInputStream(String name) throws FileNotFoundException {
-            super(name);
-        }
-
-        @Override
-        public int available() throws IOException {
-            return 0;
-        }
-
-        @Override
-        public int read() throws IOException {
-            return 0;
-        }
+    @Test(expected=IllegalArgumentException.class)
+    public void failGetPropertyFromFileBecauseNullInputStream() throws Exception {
+        EasyMock.expect(this.creatorWithNull.create(this.file)).andReturn(null);
+        PropUtil.setCreator(this.creatorWithNull);
+        EasyMock.replay(this.creatorWithNull);
+        PropUtil.readProperties(this.file);
     }
 
-    class DefectOnCloseFileInputStream extends FileInputStream {
-
-        public DefectOnCloseFileInputStream(File file) throws FileNotFoundException {
-            super(file);
-        }
-
-        public DefectOnCloseFileInputStream(FileDescriptor fdObj) {
-            super(fdObj);
-        }
-
-        public DefectOnCloseFileInputStream(String name) throws FileNotFoundException {
-            super(name);
-        }
-
-        @Override
-        public void close() throws IOException {
-            throw new IOException();
-        }
-
-        @Override
-        public int available() throws IOException {
-            return 1;
-        }
-
-        @Override
-        public int read() throws IOException {
-            return 0;
-        }
+    @Test(expected=IllegalStateException.class)
+    public void failGetPropertyFromFileBecauseExceptionWhileClosingInputStream()
+            throws Exception {
+        this.closerWithException.close((FileInputStream) EasyMock.anyObject());
+        EasyMock.expectLastCall().andThrow(new IOException());
+        PropUtil.setCloser(this.closerWithException);
+        EasyMock.replay(this.closerWithException);
+        PropUtil.readProperties(this.file);
     }
 
-    class DefectWrapper implements Wrapper {
-        @Override
-        public FileInputStream createFileInputStream(File file) throws IOException {
-            throw new IOException();
-        }
+    @Test(expected=IllegalStateException.class)
+    public void failReadPropertyFromInputStreamBecauseExceptionWhileAvailable()
+            throws Exception {
+        this.availablerWithException.available((FileInputStream) EasyMock.anyObject());
+        EasyMock.expectLastCall().andThrow(new IOException());
+        PropUtil.setAvailabler(this.availablerWithException);
+        EasyMock.replay(this.availablerWithException);
+        PropUtil.readProperties(new FileInputStream(this.file));
     }
 
-    class NullWrapper implements Wrapper {
-        @Override
-        public FileInputStream createFileInputStream(File file) throws IOException {
-            throw null;
-        }
-    }
-
-    class WrapperToGetDefectOnCloseFileInputStream implements Wrapper {
-        @Override
-        public FileInputStream createFileInputStream(File file) throws IOException {
-            return defectOnCloseFileInputStream;
-        }
+    @Test(expected=IllegalArgumentException.class)
+    public void failReadPropertyFromInputStreamBecauseAvailableIsZero() throws Exception {
+        EasyMock.expect(this.availablerWithZero.available((FileInputStream) EasyMock
+                    .anyObject())).andReturn(0);
+        PropUtil.setAvailabler(this.availablerWithZero);
+        EasyMock.replay(this.availablerWithZero);
+        PropUtil.readProperties(new FileInputStream(this.file));
     }
 
 }
