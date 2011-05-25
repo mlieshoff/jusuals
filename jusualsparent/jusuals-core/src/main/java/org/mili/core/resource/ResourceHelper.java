@@ -34,6 +34,7 @@ public class ResourceHelper implements ResourceManager {
     private Locale locale = null;
     private String baseName = "";
     private Class<?> cls = null;
+    private ResourceUtilInterface impl = new ResourceUtilImpl();
 
     /**
      * Instantiates a new resource helper.
@@ -43,7 +44,6 @@ public class ResourceHelper implements ResourceManager {
      * @param baseName the base name
      */
     public ResourceHelper(Class<?> cls, Locale locale, String baseName) {
-        super();
         Validate.notNull(cls, "cls");
         Validate.notNull(locale, "locale");
         Validate.notEmpty(baseName, "basename");
@@ -69,7 +69,6 @@ public class ResourceHelper implements ResourceManager {
      * @param baseName the base name
      */
     public ResourceHelper(String baseName) {
-        super();
         Validate.notEmpty(baseName, "basename");
         this.locale = Locale.getDefault();
         this.baseName = baseName;
@@ -108,10 +107,9 @@ public class ResourceHelper implements ResourceManager {
     @Override
     public String getString(String key) {
         if (this.cls == ResourceHelper.class) {
-            return ResourceUtil.getString(this.locale, this.baseName, key);
+            return this.impl.getString(this.locale, this.baseName, key);
         }
-        return ResourceUtil.getString(this.locale, this.baseName, this.cls, key);
-
+        return this.impl.getString(this.locale, this.baseName, this.cls, key);
     }
 
     @Override
@@ -127,63 +125,66 @@ public class ResourceHelper implements ResourceManager {
 
     @Override
     public String getString(Object o, String key) {
-        Validate.notNull(o, "o");
-        return getString(o.getClass(), key);
+        return this.impl.getString(this.locale, this.baseName, o, key);
     }
 
     @Override
     public String getString(Class<?> cls, String key) {
-        return ResourceUtil.getString(this.locale, this.baseName, cls, key);
+        return this.impl.getString(this.locale, this.baseName, cls, key);
     }
 
     @Override
     public String getString(Locale locale, String baseName, String key) {
-        return ResourceUtil.getString(locale, baseName, key);
+        return this.impl.getString(locale, baseName, key);
     }
 
     @Override
     public String getString(Locale locale, String baseName, Class<?> cls, String key) {
-        return ResourceUtil.getString(locale, baseName, cls, key);
+        return this.impl.getString(locale, baseName, cls, key);
     }
 
     @Override
     public String getString(Locale locale, String baseName, Object o, String key) {
-        return ResourceUtil.getString(locale, baseName, o, key);
+        return this.impl.getString(locale, baseName, o, key);
     }
 
     @Override
     public String getProperty(String key) {
-        return ResourceUtil.getString(this.locale, this.baseName, key);
+        return this.impl.getString(this.locale, this.baseName, key);
     }
 
     @Override
     public synchronized void load(Locale locale, String baseName, ClassLoader cl) {
-        ResourceUtil.load(locale, baseName, cl);
+        this.impl.load(locale, baseName, cl);
     }
 
     @Override
     public void load(Locale locale, String baseName) {
-        ResourceUtil.load(locale, baseName);
+        this.impl.load(locale, baseName);
     }
 
     @Override
     public Map<String, String> getResourceBundlesForBasenameAndLocale(String basename, Locale locale) {
-        return ResourceUtil.getResourceBundlesForBasenameAndLocale(basename, locale);
+        return this.impl.getResourceBundlesForBasenameAndLocale(basename, locale);
     }
 
     @Override
     public List<String> listBasenames() {
-        return ResourceUtil.listBasenames();
+        return this.impl.listBasenames();
     }
 
     @Override
     public List<Locale> listLocalesForBasename(String basename) {
-        return ResourceUtil.listLocalesForBasename(basename);
+        return this.impl.listLocalesForBasename(basename);
     }
 
     @Override
     public boolean contains(String key) {
-        return ResourceUtil.contains(this.locale, this.baseName, key);
+        return this.impl.contains(this.locale, this.baseName, key);
+    }
+
+    void setImpl(ResourceUtilInterface newImpl) {
+        this.impl = newImpl;
     }
 
 }

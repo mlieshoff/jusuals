@@ -39,9 +39,9 @@ public class RevisionUtilTest {
     private final static File FILE_WITH_PREFIX_2 = new File(DIR, "file-3.2.1-4711-a2.txt");
     private final static File FILE_WITH_PREFIX_3 = new File(DIR, "file-3.2.1-4711-a3.txt");
     private final static File FILE_1 = new File(DIR, "file-3.2.1-4711.txt");
-    File dir = null;
-    File f0 = null;
-    File f1 = null;
+    private File dir = null;
+    private File f0 = null;
+    private File f1 = null;
 
     /**
      * Sets the up.
@@ -279,15 +279,29 @@ public class RevisionUtilTest {
         return;
     }
 
-    /**
-     * Test_int_get revision_ string.
-     */
     @Test
-    public void test_int_getRevision_String() {
+    public void shouldExtractRevisionNumberFromFile() {
+        assertEquals(1, RevisionUtil.extractRevisionNumber(FILE_WITH_MINUS_1));
+    }
+
+    @Test
+    public void shouldExtractRevisionNumberFromFileWithRevisionPrefix() {
+        assertEquals(1, RevisionUtil.extractRevisionNumber(FILE_WITH_PREFIX_1, "a"));
+    }
+
+    @Test
+    public void shouldExtractRevisionNumberFromFilenameWithoutRevisionPrefix() {
         assertEquals(4, RevisionUtil.extractRevisionNumber("c:/a/b/c/abbas-00004.txt", ""));
-        // negativ
+    }
+
+    @Test
+    public void shouldExtractRevisionNumberFromFilenameWithRevisionPrefix() {
+        assertEquals(8, RevisionUtil.extractRevisionNumber("c:/a/b/c/abbas-a8.txt", "a"));
+    }
+
+    @Test
+    public void shouldExtractDefaultRevisionNumber() {
         assertEquals(-1, RevisionUtil.extractRevisionNumber("blarabbas.txt", ""));
-        return;
     }
 
 }
