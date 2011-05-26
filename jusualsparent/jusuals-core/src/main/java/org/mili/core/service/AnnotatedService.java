@@ -21,6 +21,7 @@ package org.mili.core.service;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.util.*;
 
 import org.apache.commons.lang.*;
 import org.mili.core.annotation.*;
@@ -35,6 +36,7 @@ public class AnnotatedService {
     private Object instance = null;
     private AnnotationSolver solver = new MethodAnnotationSolver();
     private Wrapper wrapper = new DefaultWrapper();
+    private Map<String, String> params = null;
 
     /**
      * Instantiates a new annotated service.
@@ -56,6 +58,20 @@ public class AnnotatedService {
     public void service() {
         this.createInstance();
         this.solver.solve(this.cls);
+    }
+
+    /**
+     * @return the params
+     */
+    public Map<String, String> getParams() {
+        return this.params;
+    }
+
+    /**
+     * @param params the params to set
+     */
+    public void setParams(Map<String, String> params) {
+        this.params = params;
     }
 
     void setWrapper(Wrapper wrapper) {
@@ -101,7 +117,12 @@ public class AnnotatedService {
         @Override
         public void invokeMethod(Object object, Method method) throws IllegalAccessException,
                 InvocationTargetException {
-            method.invoke(object);
+            Class<?>[] paramTypes = method.getParameterTypes();
+            if (paramTypes.length > 0) {
+                method.invoke(object, params);
+            } else {
+                method.invoke(object);
+            }
         }
         @Override
         public <T> T newInstance(Class<T> cls) throws InstantiationException,
