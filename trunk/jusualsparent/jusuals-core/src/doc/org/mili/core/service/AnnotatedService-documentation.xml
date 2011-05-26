@@ -64,6 +64,16 @@
                 Hello world!
                 Stop.
             ]]></pre>
+            <text ressource="Class Foo_7"><![CDATA[
+            How to handle a service method with passed parameters? It's easy to do. Just pass
+            the parameters as map through the service method.
+            ]]></text>
+            <pre ressource="Class Foo_8"><![CDATA[
+                @ServiceMethod
+                public void doFoo(Map<String, String> params) {
+                    System.out.println("Hello world! " + params.get("foo"));
+                }
+            ]]></pre>
         </paragraph>
     </part>
     <changelog>

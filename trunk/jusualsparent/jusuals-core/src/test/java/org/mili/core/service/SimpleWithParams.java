@@ -1,7 +1,7 @@
 /*
- * Simple.java
+ * SimpleWithParams.java
  *
- * 13.05.2011
+ * 26.05.2011
  *
  * Copyright 2011 Michael Lieshoff
  *
@@ -19,13 +19,15 @@
  */
 package org.mili.core.service;
 
+import java.util.*;
+
 /**
  * @author Michael Lieshoff
  */
-public class Simple {
+public class SimpleWithParams {
 
     @ServiceMethod
-    public void foo() {
+    public void foo(Map<String, String> params) {
         AnnotatedServiceTest.countOfServiceMethod ++;
     }
 

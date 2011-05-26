@@ -20,6 +20,7 @@
 package org.mili.core.service;
 
 import java.lang.reflect.*;
+import java.util.*;
 
 import org.junit.*;
 
@@ -32,6 +33,7 @@ public class AnnotatedServiceTest {
     static long countOfServiceMethod = 0;
     static long countOfServiceStopMethod = 0;
     private AnnotatedService service = null;
+    private AnnotatedService serviceWithParams = null;
 
     /**
      * Sets the up.
@@ -41,6 +43,7 @@ public class AnnotatedServiceTest {
         countOfServiceMethod = 0;
         countOfServiceStopMethod = 0;
         this.service = new AnnotatedService(Simple.class);
+        this.serviceWithParams = new AnnotatedService(SimpleWithParams.class);
     }
 
     /**
@@ -100,6 +103,15 @@ public class AnnotatedServiceTest {
     }
 
     /**
+     * Should service with params.
+     */
+    @Test
+    public void shouldServiceWithParams() {
+        this.serviceWithParams.service();
+        assertEquals(1, countOfServiceMethod);
+    }
+
+    /**
      * Should stop.
      */
     @Test
@@ -108,4 +120,13 @@ public class AnnotatedServiceTest {
         assertEquals(1, countOfServiceStopMethod);
     }
 
+    /**
+     * Should get service params.
+     */
+    @Test
+    public void shouldGetServiceParams() {
+        assertNull(this.service.getParams());
+        this.service.setParams(new Hashtable<String, String>());
+        assertNotNull(this.service.getParams());
+    }
 }
