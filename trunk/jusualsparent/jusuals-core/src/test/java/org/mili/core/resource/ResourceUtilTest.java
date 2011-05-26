@@ -136,4 +136,53 @@ public class ResourceUtilTest {
         assertTrue(ResourceUtil.contains(Locale.GERMAN, "a", "b"));
     }
 
+    @Test
+    public void shouldDump() {
+        List<String> basenames = new ArrayList<String>();
+        basenames.add("hunky");
+        basenames.add("dory");
+        EasyMock.expect(this.impl.listBasenames()).andReturn(basenames);
+        List<Locale> locales = new ArrayList<Locale>();
+        locales.add(Locale.GERMAN);
+        locales.add(Locale.ENGLISH);
+        EasyMock.expect(this.impl.listLocalesForBasename("hunky")).andReturn(locales);
+        locales = new ArrayList<Locale>();
+        locales.add(Locale.FRENCH);
+        locales.add(Locale.CHINESE);
+        locales.add(Locale.ITALIAN);
+        EasyMock.expect(this.impl.listLocalesForBasename("dory")).andReturn(locales);
+        Map<String, String> bundle = new Hashtable<String, String>();
+        bundle.put("hunky-de-1", "1");
+        EasyMock.expect(this.impl.getResourceBundlesForBasenameAndLocale("hunky",
+                Locale.GERMAN)).andReturn(bundle);
+        bundle = new Hashtable<String, String>();
+        bundle.put("hunky-en-1", "2");
+        bundle.put("hunky-en-2", "3");
+        EasyMock.expect(this.impl.getResourceBundlesForBasenameAndLocale("hunky",
+                Locale.ENGLISH)).andReturn(bundle);
+        bundle = new Hashtable<String, String>();
+        bundle.put("dory-fr-1", "4");
+        bundle.put("dory-fr-2", "5");
+        bundle.put("dory-fr-3", "6");
+        EasyMock.expect(this.impl.getResourceBundlesForBasenameAndLocale("dory",
+                Locale.FRENCH)).andReturn(bundle);
+        bundle = new Hashtable<String, String>();
+        bundle.put("dory-ch-1", "7");
+        bundle.put("dory-ch-2", "8");
+        bundle.put("dory-ch-3", "9");
+        bundle.put("dory-ch-4", "10");
+        EasyMock.expect(this.impl.getResourceBundlesForBasenameAndLocale("dory",
+                Locale.CHINESE)).andReturn(bundle);
+        bundle = new Hashtable<String, String>();
+        bundle.put("dory-it-1", "11");
+        bundle.put("dory-it-2", "12");
+        bundle.put("dory-it-3", "13");
+        bundle.put("dory-it-4", "14");
+        bundle.put("dory-it-5", "15");
+        EasyMock.expect(this.impl.getResourceBundlesForBasenameAndLocale("dory",
+                Locale.ITALIAN)).andReturn(bundle);
+        EasyMock.replay(this.impl);
+        String s = "+----------+--------+------+| basename | locale | keys |+----------+--------+------+|    hunky |     de |    1 ||    hunky |     en |    2 ||     dory |     fr |    3 ||     dory |     zh |    4 ||     dory |     it |    5 |+----------+--------+------+";
+        assertEquals(s, ResourceUtil.dump().toString().replace("\n", "").replace("\r", ""));
+    }
 }

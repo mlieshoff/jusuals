@@ -25,6 +25,8 @@ import java.util.*;
 
 import javax.xml.bind.*;
 
+import org.mili.core.text.*;
+
 /**
  * This class is a helper for resources and bundles. It's StaticResource.implemented that a kind of developer
  * resources could be defined for use with a "default" locale. The developer resources for this
@@ -176,6 +178,26 @@ public class ResourceUtil {
      */
     public static boolean contains(Locale locale, String baseName, String key) {
         return StaticResource.impl.contains(locale, baseName, key);
+    }
+
+    /**
+     * Dump.
+     *
+     * @return the table
+     */
+    public static Table dump() {
+        Table t = new TextTable();
+        t.addCol("basename");
+        t.addCol("locale");
+        t.addCol("keys");
+        for(String basename : ResourceUtil.listBasenames()) {
+            for(Locale locale : ResourceUtil.listLocalesForBasename(basename)) {
+                Map<String, String> bundle = ResourceUtil
+                        .getResourceBundlesForBasenameAndLocale(basename, locale);
+                t.addRow(basename, locale, bundle.size());
+            }
+        }
+        return t;
     }
 
 }
