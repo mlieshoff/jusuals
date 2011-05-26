@@ -39,10 +39,9 @@ public class ResourceHelperTest {
 
     @Before
     public void setUp() {
+        StaticResource.impl = this.impl;
         this.helper = new ResourceHelper(String.class, Locale.GERMAN, "base");
-        this.helper.setImpl(this.impl);
         this.helperWithoutClass = new ResourceHelper(Locale.GERMAN, "base");
-        this.helperWithoutClass.setImpl(this.impl);
     }
 
     @After

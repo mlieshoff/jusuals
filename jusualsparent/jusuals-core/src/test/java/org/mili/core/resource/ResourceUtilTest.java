@@ -36,13 +36,12 @@ public class ResourceUtilTest {
 
     @Before
     public void setUp() throws Exception {
-        ResourceUtil.setImpl(this.impl);
+        StaticResource.impl = this.impl;
     }
 
     @After
     public void after() throws Exception {
         EasyMock.reset(this.impl);
-        ResourceUtil.setImpl(new ResourceUtilImpl());
     }
 
     @Test
