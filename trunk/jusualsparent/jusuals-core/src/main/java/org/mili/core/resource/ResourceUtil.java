@@ -26,7 +26,7 @@ import java.util.*;
 import javax.xml.bind.*;
 
 /**
- * This class is a helper for resources and bundles. It's implemented that a kind of developer
+ * This class is a helper for resources and bundles. It's StaticResource.implemented that a kind of developer
  * resources could be defined for use with a "default" locale. The developer resources for this
  * locale will be loaded first the originally resources for the same locale then.
  *
@@ -45,7 +45,6 @@ public class ResourceUtil {
     /** the constant for property PROP_THROWEXCEPTIONONMISSINGRESOURCE. */
     public final static String PROP_THROWEXCEPTIONONMISSINGRESOURCE = ResourceUtilImpl
             .PROP_THROWEXCEPTIONONMISSINGRESOURCE;
-    static ResourceUtilInterface impl = new ResourceUtilImpl();
 
     /**
      * List all basenames.
@@ -53,7 +52,7 @@ public class ResourceUtil {
      * @return list with all basenames.
      */
     public static List<String> listBasenames() {
-        return impl.listBasenames();
+        return StaticResource.impl.listBasenames();
     }
 
     /**
@@ -63,7 +62,7 @@ public class ResourceUtil {
      * @return locales for basename
      */
     public static List<Locale> listLocalesForBasename(String basename) {
-        return impl.listLocalesForBasename(basename);
+        return StaticResource.impl.listLocalesForBasename(basename);
     }
 
     /**
@@ -75,7 +74,7 @@ public class ResourceUtil {
      */
     public static Map<String, String> getResourceBundlesForBasenameAndLocale(String basename,
             Locale locale) {
-        return impl.getResourceBundlesForBasenameAndLocale(basename, locale);
+        return StaticResource.impl.getResourceBundlesForBasenameAndLocale(basename, locale);
     }
 
     /**
@@ -85,7 +84,7 @@ public class ResourceUtil {
      * @param baseName the base name
      */
     public static synchronized void load(Locale locale, String baseName) {
-        impl.load(locale, baseName);
+        StaticResource.impl.load(locale, baseName);
     }
 
     /**
@@ -97,7 +96,7 @@ public class ResourceUtil {
      * @param cl classloader
      */
     public static synchronized void load(Locale locale, String baseName, ClassLoader cl) {
-        impl.load(locale, baseName, cl);
+        StaticResource.impl.load(locale, baseName, cl);
     }
 
     /**
@@ -111,7 +110,7 @@ public class ResourceUtil {
      */
     public static synchronized void loadFromXml(Locale locale, String baseName, ClassLoader cl)
             throws IOException, JAXBException {
-        impl.loadFromXml(locale, baseName, cl);
+        StaticResource.impl.loadFromXml(locale, baseName, cl);
     }
 
     /**
@@ -127,7 +126,7 @@ public class ResourceUtil {
      * @throws MissingResourceException i no label could be found
      */
     public static String getString(Locale locale, String baseName, Object o, String key) {
-        return impl.getString(locale, baseName, o, key);
+        return StaticResource.impl.getString(locale, baseName, o, key);
     }
 
     /**
@@ -143,7 +142,7 @@ public class ResourceUtil {
      * @throws MissingResourceException i no label could be found
      */
     public static String getString(Locale locale, String baseName, Class<?> cls, String key) {
-        return impl.getString(locale, baseName, cls, key);
+        return StaticResource.impl.getString(locale, baseName, cls, key);
     }
 
     /**
@@ -157,14 +156,14 @@ public class ResourceUtil {
      * @throws MissingResourceException i no label could be found
      */
     public static String getString(Locale locale, String baseName, String key) {
-        return impl.getString(locale, baseName, key);
+        return StaticResource.impl.getString(locale, baseName, key);
     }
 
     /**
      * Clears the resources.
      */
     public synchronized static void clear() {
-        impl.clear();
+        StaticResource.impl.clear();
     }
 
     /**
@@ -176,10 +175,7 @@ public class ResourceUtil {
      * @return true, if successful
      */
     public static boolean contains(Locale locale, String baseName, String key) {
-        return impl.contains(locale, baseName, key);
+        return StaticResource.impl.contains(locale, baseName, key);
     }
 
-    static void setImpl(ResourceUtilInterface newImpl) {
-        impl = newImpl;
-    }
 }
