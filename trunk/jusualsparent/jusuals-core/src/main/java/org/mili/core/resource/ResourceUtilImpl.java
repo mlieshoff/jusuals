@@ -225,13 +225,11 @@ public class ResourceUtilImpl implements ResourceUtilInterface {
 
     private void cacheText(Resources r, Locale locale, String baseName) {
         List<Text> l = r.getText();
-        System.out.println("baseName: " + baseName);
         Map<String, String> resMap = getResourceMap(baseName, locale);
         for (int i = 0, n = l.size(); i < n; i++) {
             Object o = l.get(i);
             if (o instanceof Text) {
                 Text t = (Text) o;
-                System.out.println(t.getName());
                 resMap.put(t.getName(), StringUtils.strip(t.getContent().toString().trim()));
             }
         }

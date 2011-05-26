@@ -29,6 +29,60 @@ import org.mili.core.annotation.*;
 /**
  * This class defines an annotated service.
  *
+ * <u> What is an annotated service?</u><p>
+ *
+ * An annotated service is created by a class having service annotations. The annotated service
+ * wraps the class into a more serviceable structure, having start()- and stop()-methods.<p>
+ *
+ * <u> Future of annotated services</u><p>
+ *
+ * It's planned to have parameters in service methods and define more then one service method and
+ * service stop method. These method's should be executed by used annotated defined order.<p>
+ * <b>Usage</b><p>
+ *
+ * <u> Wrap an annotated Class</u><p>
+ *
+ * The wrapped class must have at least a service method, e.g. &#064;ServiceMethod placed on a
+ * parameterless method. There can be a &#064;ServiceStopMethod, but not must.<p>
+ * <b>Examples</b><p>
+ *
+ * <u> Class Foo</u><p>
+ *
+ * Start writing a class with a simple method. This method will be annotated with the
+ * &#064;ServiceMethod annotation. Then add a method called at stop, use the &#064;ServiceStopMethod
+ * annotation.<br>
+ * <pre>public class Foo() {
+ *     &#064;ServiceMethod
+ *     public void doFoo() {
+ *         System.out.println(&quot;Hello world!&quot;);
+ *     }
+ *     &#064;ServiceStopMethod
+ *     public void doEnd() {
+ *         System.out.println(&quot;Stop.&quot;);
+ *     }
+ * }
+ * </pre>
+ * Now the class can be wrapped into an annotated service, simple by use the class
+ * AnnotatedService.<br>
+ * <pre>public void somewhere() {
+ *     AnnotatedService service = new AnnotatedService(Foo.class);
+ *     service.start();
+ *     service.stop();
+ * }
+ * </pre>
+ * An execution of somewhere()-method will produce following output:<br>
+ * <pre>Hello world!
+ * Stop.
+ * </pre>
+ * How to handle a service method with passed parameters? It's easy to do. Just pass the parameters
+ * as map through the service method. The only restriction is that the method has just one
+ * parameter and the map ist parametrized as String for keys and values.<br>
+ * <pre>&#064;ServiceMethod
+ * public void doFoo(Map&lt;String, String&gt; params) {
+ *     System.out.println(&quot;Hello world! &quot; + params.get(&quot;foo&quot;));
+ * }
+ * </pre>
+ *
  * @author Michael Lieshoff
  */
 public class AnnotatedService {
