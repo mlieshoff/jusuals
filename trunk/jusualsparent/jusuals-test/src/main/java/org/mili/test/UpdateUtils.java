@@ -27,14 +27,14 @@ import org.apache.commons.lang.*;
 
 /**
  * This utility class provides some useful methods for updates.
- * 
+ *
  * @author Michael Lieshoff
  *
  */
 public class UpdateUtils {
 
     /**
-     * creates a new update util. 
+     * creates a new update util.
      */
     public UpdateUtils() {
     }
@@ -48,7 +48,7 @@ public class UpdateUtils {
      * @throws SQLException if errors occurs
      */
     public static int update(Connection connection, String sql) throws SQLException {
-        Validate.isTrue(sql.length() > 0);
+        Validate.notEmpty(sql, "sql query cannot be empty!");
         Statement statement = connection.createStatement();
         int result = statement.executeUpdate(sql);
         statement.close();
@@ -62,7 +62,7 @@ public class UpdateUtils {
      * @param connection the connection
      * @throws SQLException if errors occurs
      */
-    public static void executeBatch(List<String> sqlCmds, Connection connection) 
+    public static void executeBatch(List<String> sqlCmds, Connection connection)
             throws SQLException {
         for (int i = 0, n = sqlCmds.size(); i < n; i++) {
             update(connection, sqlCmds.get(i));
@@ -76,7 +76,7 @@ public class UpdateUtils {
      * @param databaseName the database name
      * @throws SQLException if errors occurs
      */
-    public static void executeBatch(List<String> sqlCmds, String databaseName) 
+    public static void executeBatch(List<String> sqlCmds, String databaseName)
             throws SQLException {
         executeBatch(sqlCmds,ConnectionUtils.getConnection(databaseName));
     }
