@@ -64,7 +64,7 @@ public class SuiteFactory {
     public static Test createStandardDirectorySuite(String dir) throws Exception {
         return createStandardDirectorySuite(dir, STANDARDFILTER);
     }
-    
+
     /**
      * <p>This method creates a test suite upon a directory containing test sources or classes
      * and throws an <code>IllegalArgumentException</code>, if the directory not exists or is
@@ -81,10 +81,11 @@ public class SuiteFactory {
      * @throws Exception if error occurs.
      * @precondition dir <code>notEmpty</code> and <code>existed</code>.
      */
-    public static Test createStandardDirectorySuite(String dir, final TestFilter filter) 
+    public static Test createStandardDirectorySuite(String dir, final TestFilter filter)
             throws Exception {
-        Validate.notEmpty(dir);
-        Validate.isTrue(new File(dir).exists());
+        Validate.notEmpty(dir, "directory cannot be empty!");
+        Validate.isTrue(new File(dir).exists(), "directoy not exists! Base is: "
+                + new File(""));
         DirectorySuiteBuilder builder = new DirectorySuiteBuilder(filter) {
             @Override
             protected void merge(List classList, TestSuite suite)

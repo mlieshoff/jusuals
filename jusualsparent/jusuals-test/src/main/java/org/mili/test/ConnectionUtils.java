@@ -34,11 +34,11 @@ import org.apache.commons.lang.*;
 public final class ConnectionUtils {
 
     /**
-     * creates a new connection util. 
+     * creates a new connection util.
      */
     public ConnectionUtils() {
     }
-    
+
     /**
      * Gets the db info.
      *
@@ -79,7 +79,7 @@ public final class ConnectionUtils {
      * @throws SQLException if errors occurs
      */
     static Connection getConnection(String name) throws SQLException {
-        Validate.isTrue(name.length() > 0);
+        Validate.notEmpty(name, "name cannot be empty!");
         return getConnection(getDBInfo(name));
     }
 
