@@ -34,7 +34,7 @@ import org.mili.core.benchmarking.*;
 public class AnnotatedBench implements Bench {
     private Class<?> cls = null;
     private Object instance = null;
-    private AnnotationSolver solver = new MethodAnnotationSolver();
+    private AnnotationSolver<?> solver = new MethodAnnotationSolver();
     private long prepareCount = 0;
     private long executeCount = 0;
 
@@ -45,7 +45,7 @@ public class AnnotatedBench implements Bench {
      */
     public AnnotatedBench(Class<?> cls) {
         super();
-        Validate.notNull(cls);
+        Validate.notNull(cls, "class cannot be null!");
         this.cls = cls;
         this.reset();
         this.solver.addAnnotationHandler(Prepare.class, new AnnotationHandler<Method>() {

@@ -57,8 +57,8 @@ public class PropUtil {
      * @return readed {@link Properties}.
      */
     public static Properties readProperties(File f) {
-        Validate.notNull(f);
-        Validate.isTrue(f.exists());
+        Validate.notNull(f, "file cannot be null!");
+        Validate.isTrue(f.exists(), "file not exists! Base is: " + new File(""));
         InputStream is = null;
         try {
             is = creator.create(f);
@@ -92,9 +92,9 @@ public class PropUtil {
      * @return readed {@link Properties}.
      */
     public static Properties readProperties(InputStream is) {
-        Validate.notNull(is);
+        Validate.notNull(is, "input stream cannot be null!");
         try {
-            Validate.isTrue(availabler.available(is) > 0);
+            Validate.isTrue(availabler.available(is) > 0, "input stream not available!");
             Properties p = new Properties();
             p.load(is);
             return p;

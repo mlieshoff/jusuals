@@ -43,8 +43,8 @@ public class DefaultThrowableLogger implements ThrowableLogger {
      * @param baseDir the base dir
      */
     public DefaultThrowableLogger(Class<?> cls, File baseDir) {
-        Validate.notNull(cls);
-        Validate.notNull(baseDir);
+        Validate.notNull(cls, "class cannot be null!");
+        Validate.notNull(baseDir, "base dir cannot be null!");
         baseDir.mkdirs();
         this.baseDir = baseDir;
         this.cls = cls;

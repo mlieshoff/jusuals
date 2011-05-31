@@ -47,7 +47,7 @@ public final class GraphicsUtil {
      * @throws IOException if io exceptrion occurs.
      */
     public static Image readImage(File f) throws IOException {
-        Validate.notNull(f, "f");
+        Validate.notNull(f, "file cannot be null!");
         if (!f.exists()) {
             throw new FileNotFoundException(f.getAbsolutePath() + " not exists !");
         }
@@ -64,10 +64,10 @@ public final class GraphicsUtil {
      * @return new image included image to point.
      */
     public static Image pointImage(Image og, Image i, int x, int y) {
-        Validate.notNull(og, "og");
-        Validate.notNull(i, "i");
-        Validate.isTrue(x >= 0, "x can only be >= 0 !");
-        Validate.isTrue(y >= 0, "y can only be >= 0 !");
+        Validate.notNull(og, "original image cannot be null!");
+        Validate.notNull(i, "image to point cannot be null!");
+        Validate.isTrue(x >= 0, "x can only be >= 0!");
+        Validate.isTrue(y >= 0, "y can only be >= 0!");
         BufferedImage bi = new BufferedImage(og.getWidth(null), og.getHeight(null),
                 BufferedImage.TYPE_INT_RGB);
         og = new ImageIcon(og).getImage();
@@ -87,8 +87,8 @@ public final class GraphicsUtil {
      * @return new image included image to point.
      */
     public static Image centerImage(Image og, Image i) {
-        Validate.notNull(og, "og");
-        Validate.notNull(i, "i");
+        Validate.notNull(og, "original image cannot be null!");
+        Validate.notNull(i, "image to center cannot be null!");
         int x = (og.getWidth(null) - i.getWidth(null)) / 2;
         if (x < 0) {
             x = 0;
@@ -110,8 +110,8 @@ public final class GraphicsUtil {
      * @return new image included image to point.
      */
     public static Image pointCenterImage(Image og, Image i, int x, int y) {
-        Validate.notNull(og, "og");
-        Validate.notNull(i, "i");
+        Validate.notNull(og, "original image cannot be null!");
+        Validate.notNull(i, "image to center cannot be null!");
         int x0 = x - (i.getWidth(null) / 2);
         if (x0 < 0) {
             x0 = 0;
@@ -132,10 +132,10 @@ public final class GraphicsUtil {
      * @throws IOException if io exception occurs.
      */
     public static void writeImage(File f, Image i) throws IOException {
-        Validate.notNull(i, "i");
-        Validate.notNull(f, "f");
+        Validate.notNull(i, "image cannot be null!");
+        Validate.notNull(f, "file cannot be null!");
         String ext = FilenameUtils.getExtension(f.getName());
-        Validate.notEmpty(ext, "ext");
+        Validate.notEmpty(ext, "file extension cannot be empty!");
         if (!f.exists()) {
             f.createNewFile();
         }
@@ -156,9 +156,9 @@ public final class GraphicsUtil {
      * @return scaled image.
      */
     public static Image scaleImage(Image i, int scaleX, int scaleY) {
-        Validate.notNull(i, "i");
-        Validate.isTrue(scaleX >= 0, "scaleX cannot be < 0 !");
-        Validate.isTrue(scaleY >= 0, "scaleY cannot be < 0 !");
+        Validate.notNull(i, "image cannot be null!");
+        Validate.isTrue(scaleX >= 0, "scaleX cannot be < 0!");
+        Validate.isTrue(scaleY >= 0, "scaleY cannot be < 0!");
         if (scaleX == 0 && scaleY == 0) {
             return i;
         }

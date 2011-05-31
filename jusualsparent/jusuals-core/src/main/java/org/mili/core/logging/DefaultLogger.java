@@ -46,7 +46,7 @@ public class DefaultLogger implements Logger {
      * @param clazz the class.
      */
     public DefaultLogger(Class<?> clazz) {
-        Validate.notNull(clazz);
+        Validate.notNull(clazz, "class cannot be null!");
         this.root = create(clazz);
         this.cls = clazz;
     }

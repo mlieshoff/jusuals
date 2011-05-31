@@ -88,7 +88,7 @@ import org.mili.core.annotation.*;
 public class AnnotatedService {
     private Class<?> cls = null;
     private Object instance = null;
-    private AnnotationSolver solver = new MethodAnnotationSolver();
+    private AnnotationSolver<?> solver = new MethodAnnotationSolver();
     private Wrapper wrapper = new DefaultWrapper();
     private Map<String, String> params = null;
 
@@ -98,7 +98,7 @@ public class AnnotatedService {
      * @param cls the class
      */
     public AnnotatedService(Class<?> cls) {
-        Validate.notNull(cls);
+        Validate.notNull(cls, "class cannot be null!");
         this.cls = cls;
         this.solver.addAnnotationHandler(ServiceMethod.class,
                 this.createMethodAnnotationHandler());

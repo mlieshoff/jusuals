@@ -98,8 +98,8 @@ public class VersionUtils {
     }
 
     private static void checkClass(Class<?> cls) {
-        Validate.notNull(cls);
-        Validate.notNull(classWrapper.getPackage(cls));
+        Validate.notNull(cls, "class cannot be null!");
+        Validate.notNull(classWrapper.getPackage(cls), "package cannot be null!");
     }
 
     static void setClassWrapper(ClassWrapper newClassWrapper) {

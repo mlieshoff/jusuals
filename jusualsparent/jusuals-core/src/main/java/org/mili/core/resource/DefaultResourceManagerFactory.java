@@ -47,15 +47,15 @@ public class DefaultResourceManagerFactory {
      * @return resource manager
      */
     public ResourceManager create(Class<?> cls, Locale locale) {
-        Validate.notNull(cls, "class");
-        Validate.notNull(locale, "locale");
+        Validate.notNull(cls, "class cannot be null!");
+        Validate.notNull(locale, "locale cannot be null!");
         String bn = this.createBasename(cls.getPackage().getName());
-        Validate.notEmpty(bn, "basename");
+        Validate.notEmpty(bn, "basename cannot be empty!");
         return new ResourceHelper(cls, locale, bn);
     }
 
     String createBasename(String pn) {
-        Validate.notEmpty(pn, "package name");
+        Validate.notEmpty(pn, "package name cannot be empty!");
         int i0 = pn.indexOf(".");
         if (i0 > 0) {
             // java.lang

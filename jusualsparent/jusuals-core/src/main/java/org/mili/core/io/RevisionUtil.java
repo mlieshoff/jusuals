@@ -52,9 +52,9 @@ public final class RevisionUtil {
      */
     static String insertRevision(String filenameWithoutMinus, int revisionNumber,
             boolean usePattern, String revisionPrefix) {
-        Validate.notEmpty(filenameWithoutMinus, "s");
-        Validate.isTrue(revisionNumber > 0, "revision cannot be <= 0 !");
-        Validate.notNull(revisionPrefix);
+        Validate.notEmpty(filenameWithoutMinus, "filename cannot be empty!");
+        Validate.isTrue(revisionNumber > 0, "revision cannot be <= 0!");
+        Validate.notNull(revisionPrefix, "revision prefix cannot be null!");
         String rev = String.valueOf(revisionNumber);
         if (usePattern) {
             rev = StringUtils.overlay(REV_PATTERN, rev, REV_PATTERN.length() - rev.length(),
@@ -74,7 +74,7 @@ public final class RevisionUtil {
      * @throws FileNotFoundException the file not found exception
      */
     static File[] listFilesWithRevision(File file) throws FileNotFoundException {
-        Validate.notNull(file, "file");
+        Validate.notNull(file, "file cannot be null!");
         final String fn = file.getName().substring(0, file.getName().lastIndexOf("."));
         File dir = file.getParentFile();
         if (!dir.exists()) {
@@ -98,7 +98,7 @@ public final class RevisionUtil {
      * @return the file with highest revision
      */
     static File getFileWithHighestRevision(File[] files, String revisionPrefix) {
-        Validate.notEmpty(files, "fa");
+        Validate.notEmpty(files, "array of files cannot be null!");
         File last = null;
         int revision = -1;
         String prefix = "";
@@ -132,8 +132,8 @@ public final class RevisionUtil {
      * @return the revision number
      */
     static int extractRevisionNumber(String filenameWithRevision, String revisionPrefix) {
-        Validate.notEmpty(filenameWithRevision, "filenameWithRevision");
-        Validate.notNull(revisionPrefix, "revisionPrefix");
+        Validate.notEmpty(filenameWithRevision, "filename cannot be empty!");
+        Validate.notNull(revisionPrefix, "revision prefix cannot be null!");
         String prefix = "";
         if (revisionPrefix.length() > 0) {
             prefix = "[" + revisionPrefix + "]";
@@ -199,8 +199,8 @@ public final class RevisionUtil {
      */
     public static File createNewRevisionFromFile(File fileWithoutRevision, boolean usePattern,
             String revisionPrefix) {
-        Validate.notNull(fileWithoutRevision, "fileWithoutRevision");
-        Validate.notNull(revisionPrefix, "revisionPrefix");
+        Validate.notNull(fileWithoutRevision, "file cannot be null!");
+        Validate.notNull(revisionPrefix, "revision prefix cannot be null!");
         File f = new File(insertRevision(fileWithoutRevision.getAbsolutePath(), 1, usePattern,
                 revisionPrefix));
         return f;
@@ -228,8 +228,8 @@ public final class RevisionUtil {
      */
     public static File getLastRevisionOfFile(File fileWithoutRevision, String revisionPrefix)
             throws FileNotFoundException {
-        Validate.notNull(fileWithoutRevision, "fileWithoutRevision");
-        Validate.notNull(revisionPrefix, "revisionPrefix");
+        Validate.notNull(fileWithoutRevision, "file cannot be null!");
+        Validate.notNull(revisionPrefix, "revision prefix cannot be null!");
         File[] fa = listFilesWithRevision(fileWithoutRevision);
         if (fa != null && fa.length > 0) {
             return getFileWithHighestRevision(fa, revisionPrefix);
@@ -273,8 +273,8 @@ public final class RevisionUtil {
      */
     public static File createNextRevisionFromFile(File fileWithoutRevision, boolean usePattern,
             String revisionPrefix) throws FileNotFoundException {
-        Validate.notNull(fileWithoutRevision, "fileWithRevision");
-        Validate.notNull(revisionPrefix, "revisionPrefix");
+        Validate.notNull(fileWithoutRevision, "file cannot be null!");
+        Validate.notNull(revisionPrefix, "revision prefix cannot be null!");
         File last = getLastRevisionOfFile(fileWithoutRevision, revisionPrefix);
         if (last != null) {
             int r = extractRevisionNumber(last.getName(), revisionPrefix) + 1;
