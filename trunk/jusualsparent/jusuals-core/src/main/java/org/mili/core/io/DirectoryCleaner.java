@@ -100,7 +100,7 @@ public class DirectoryCleaner {
      * @return true, if is file expired
      */
     public boolean isFileExpired(File f, int days) {
-        Validate.notNull(f, "file");
+        Validate.notNull(f, "file cannot be null!");
         Validate.isTrue(f.isFile(), "file is not a file: " + f.getAbsolutePath());
         return this.isFileExpired(f.lastModified(), days);
     }
@@ -112,7 +112,7 @@ public class DirectoryCleaner {
      * @param days the days for expiring
      */
     public void cleanFile(File f, int days) {
-        Validate.notNull(f, "file");
+        Validate.notNull(f, "file cannot be null!");
         Validate.isTrue(days >= 0, "days cannot be negative!");
         Validate.isTrue(f.isFile(), "file is not a file: " + f.getAbsolutePath());
         if(f.exists() && this.isFileExpired(f, days)){
@@ -127,7 +127,7 @@ public class DirectoryCleaner {
      * @param days the days for expiring
      */
     public void cleanFiles(File[] fs, int days) {
-        Validate.notNull(fs, "files");
+        Validate.notNull(fs, "array of files cannot be null!");
         Validate.isTrue(days >= 0, "days cannot be negative!");
         for (int i = 0; i < fs.length; i++) {
             File file = fs[i];
@@ -153,7 +153,7 @@ public class DirectoryCleaner {
      * @param days the days for expiring
      */
     public void cleanDirectory(File d, boolean recursive, int days) {
-        Validate.notNull(d, "directory");
+        Validate.notNull(d, "directory cannot be null!");
         Validate.isTrue(days >= 0, "days cannot be negative!");
         Validate.isTrue(d.isDirectory(), "file is not a directory: " + d.getAbsolutePath());
         if(d.exists()) {
@@ -189,7 +189,7 @@ public class DirectoryCleaner {
      * @param days the days for expiring
      */
     public void cleanDirectories(File[] ds, boolean recursive, int days) {
-        Validate.notNull(ds, "directories");
+        Validate.notNull(ds, "array of directories cannot be null!");
         Validate.isTrue(days >= 0, "days cannot be negative!");
         for (int i = 0; i < ds.length; i++) {
             File file = ds[i];

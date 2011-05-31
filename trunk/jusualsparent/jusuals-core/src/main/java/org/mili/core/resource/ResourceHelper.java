@@ -43,9 +43,9 @@ public class ResourceHelper implements ResourceManager {
      * @param baseName the base name
      */
     public ResourceHelper(Class<?> cls, Locale locale, String baseName) {
-        Validate.notNull(cls, "cls");
-        Validate.notNull(locale, "locale");
-        Validate.notEmpty(baseName, "basename");
+        Validate.notNull(cls, "source cannot be null!");
+        Validate.notNull(locale, "locale cannot be null!");
+        Validate.notEmpty(baseName, "basename cannot be empty!");
         this.locale = locale;
         this.baseName = baseName;
         this.cls = cls;
@@ -68,7 +68,7 @@ public class ResourceHelper implements ResourceManager {
      * @param baseName the base name
      */
     public ResourceHelper(String baseName) {
-        Validate.notEmpty(baseName, "basename");
+        Validate.notEmpty(baseName, "basename cannot be empty!");
         this.locale = Locale.getDefault();
         this.baseName = baseName;
     }
@@ -113,7 +113,7 @@ public class ResourceHelper implements ResourceManager {
 
     @Override
     public String[] getStrings(String... keys) {
-        Validate.notEmpty(keys, "keys");
+        Validate.notEmpty(keys, "keys cannot be empty!");
         String[] s = new String[keys.length];
         for (int i = 0; i < keys.length; i++) {
             String ss = this.getString(keys[i]);

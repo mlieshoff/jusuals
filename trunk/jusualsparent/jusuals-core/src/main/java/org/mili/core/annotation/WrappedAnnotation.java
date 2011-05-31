@@ -37,8 +37,8 @@ public class WrappedAnnotation<T> {
      * @param source the source
      */
     public WrappedAnnotation(Annotation annotation, T source) {
-        Validate.notNull(annotation);
-        Validate.notNull(source);
+        Validate.notNull(annotation, "annotation cannot be null!");
+        Validate.notNull(source, "source cannot be null!");
         this.annotation = annotation;
         this.source = source;
     }

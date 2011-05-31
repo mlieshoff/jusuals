@@ -42,7 +42,7 @@ public class DefaultFileWalker implements FileWalker {
      */
     protected DefaultFileWalker(File root) {
         super();
-        Validate.notNull(root, "root dir");
+        Validate.notNull(root, "root directory cannot be null!");
         this.root = root;
     }
 
@@ -58,7 +58,7 @@ public class DefaultFileWalker implements FileWalker {
 
     @Override
     public void walk(UnaryProcedure<File> f) {
-        Validate.notNull(f, "walk function");
+        Validate.notNull(f, "walk function cannot be null!");
         Iterator<?> fs = FileUtils.iterateFiles(this.root, new String[]{"jar"}, true);
         while (fs.hasNext()) {
             File f0 = (File) fs.next();

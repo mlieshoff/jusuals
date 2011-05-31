@@ -16,7 +16,7 @@
   <classpathentry kind="var" path="M2_REPO/junit-addons/junit-addons/1.4/junit-addons-1.4.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/mili/test/jusuals-test/1.0-SNAPSHOT/jusuals-test-1.0-SNAPSHOT.jar">
     <attributes>
-      <attribute value="jar:file:/home/mlieshoff/.m2/repository/org/mili/test/jusuals-test/1.0-SNAPSHOT/jusuals-test-1.0-SNAPSHOT-javadoc.jar!/" name="javadoc_location"/>
+      <attribute value="jar:file:/home/micha/.m2/repository/org/mili/test/jusuals-test/1.0-SNAPSHOT/jusuals-test-1.0-SNAPSHOT-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.13/log4j-1.2.13.jar"/>

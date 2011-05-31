@@ -147,8 +147,8 @@ public final class MapUtil {
      */
     public static <T, I> Map<I, T> listAsMap(boolean overwrite, List<T> l,
             UnaryFunction<T, I> f) {
-        Validate.notNull(l, "list");
-        Validate.notNull(f, "function");
+        Validate.notNull(l, "list cannot be null!");
+        Validate.notNull(f, "function cannot be null!");
         Map<I, T> m = new Hashtable<I, T>();
         try {
             for (int i = 0, n = l.size(); i < n; i++) {

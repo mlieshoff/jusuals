@@ -82,9 +82,9 @@ public class ResourceUtilImpl implements ResourceUtilInterface {
 
     @Override
     public synchronized void load(Locale locale, String baseName, ClassLoader cl) {
-        Validate.notNull(locale);
-        Validate.notEmpty(baseName);
-        Validate.notNull(cl);
+        Validate.notNull(locale, "locale cannot be null!");
+        Validate.notEmpty(baseName, "basename cannot be empty!");
+        Validate.notNull(cl, "classloader cannot be null!");
         URL url = getUrlFromUrlClassLoader(cl);
         String realBaseName = getRealBaseName(baseName);
         ResourceBundle bundle = ResourceBundle.getBundle(baseName, locale, cl);
@@ -141,24 +141,24 @@ public class ResourceUtilImpl implements ResourceUtilInterface {
 
     @Override
     public String getString(Locale locale, String baseName, Object o, String key) {
-        Validate.notNull(o);
+        Validate.notNull(o, "object cannot be null!");
         return getString(locale, baseName, o.getClass(), key);
     }
 
     @Override
     public String getString(Locale locale, String baseName, Class<?> cls, String key) {
-        Validate.notNull(locale);
-        Validate.notEmpty(baseName);
-        Validate.notNull(cls);
-        Validate.notEmpty(key);
+        Validate.notNull(locale, "locale cannot be null!");
+        Validate.notEmpty(baseName, "basename cannot be empty!");
+        Validate.notNull(cls, "class cannot be null!");
+        Validate.notEmpty(key, "key cannot be empty!");
         return getString(locale, baseName, cls.getName().concat(".").concat(key));
     }
 
     @Override
     public String getString(Locale locale, String baseName, String key) {
-        Validate.notNull(locale);
-        Validate.notEmpty(baseName);
-        Validate.notEmpty(key);
+        Validate.notNull(locale, "locale cannot be null!");
+        Validate.notEmpty(baseName, "basename cannot be empty!");
+        Validate.notEmpty(key, "key cannot be empty!");
         Map<String, String> bundle = getBundle(locale, baseName, key);
         try {
             String res = bundle.get(key);

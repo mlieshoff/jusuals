@@ -55,8 +55,8 @@ public class XmlAccess {
      * @throws JAXBException if JAXB exceptions occurs.
      */
     public static Object read(File file, String namespace) throws IOException, JAXBException {
-        Validate.notNull(file);
-        Validate.notEmpty(namespace);
+        Validate.notNull(file, "file cannot be null!");
+        Validate.notEmpty(namespace, "namespace cannot be empty!");
         return read(FileUtil.getInputStream(file.getAbsolutePath()), namespace);
     }
 
@@ -71,8 +71,8 @@ public class XmlAccess {
      */
     public static Object read(String filename, String namespace) throws IOException,
             JAXBException {
-        Validate.notEmpty(filename);
-        Validate.notEmpty(namespace);
+        Validate.notEmpty(filename, "filename cannot be empty!");
+        Validate.notEmpty(namespace, "namespace cannot be empty!");
         return read(FileUtil.getInputStream(filename), namespace);
     }
 
@@ -87,8 +87,8 @@ public class XmlAccess {
      */
     public static Object read(InputStream is, String namespace) throws IOException,
             JAXBException {
-        Validate.notNull(is);
-        Validate.notEmpty(namespace);
+        Validate.notNull(is, "input stream cannot be null!");
+        Validate.notEmpty(namespace, "namespace cannot be empty!");
         JAXBContext context = JAXBContext.newInstance(namespace);
         Unmarshaller u = context.createUnmarshaller();
         return u.unmarshal(is);
@@ -107,8 +107,7 @@ public class XmlAccess {
      */
     public static boolean write(Object o, String filename, String namespace)
             throws PropertyException, JAXBException, IOException {
-        Validate.notNull(filename);
-        Validate.notEmpty(filename);
+        Validate.notEmpty(filename, "filename cannot be empty!");
         return write(o, new File(filename), namespace);
     }
 
@@ -142,8 +141,8 @@ public class XmlAccess {
      */
     public static boolean write(Object o, String filename, String namespace, String[] cdes)
             throws PropertyException, JAXBException, IOException {
-        Validate.notEmpty(filename);
-        Validate.notEmpty(namespace);
+        Validate.notEmpty(filename, "filename cannot be empty!");
+        Validate.notEmpty(namespace, "namespace cannot be empty!");
         return write(o, new File(filename), namespace, cdes);
     }
 
@@ -161,9 +160,9 @@ public class XmlAccess {
      */
     public static boolean write(Object o, File file, String namespace, String[] cdes)
             throws PropertyException, JAXBException, IOException {
-        Validate.notNull(o);
-        Validate.notNull(file);
-        Validate.notEmpty(namespace);
+        Validate.notNull(o, "object cannot be null!");
+        Validate.notNull(file, "file cannot be null!");
+        Validate.notEmpty(namespace, "namespace cannot be empty!");
         JAXBContext context = JAXBContext.newInstance(namespace);
         Marshaller m = context.createMarshaller();
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
