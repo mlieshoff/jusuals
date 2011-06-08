@@ -88,8 +88,8 @@ public class ResourceUtilImpl implements ResourceUtilInterface {
         URL url = getUrlFromUrlClassLoader(cl);
         String realBaseName = getRealBaseName(baseName);
         ResourceBundle bundle = ResourceBundle.getBundle(baseName, locale, cl);
-        copyResourceBundleInResMap(bundle, realBaseName, locale);
         loadDevResources(locale, url, realBaseName, baseName);
+        copyResourceBundleInResMap(bundle, realBaseName, locale);
     }
 
     private void loadDevResources(Locale locale, URL url, String realBaseName,
@@ -117,12 +117,12 @@ public class ResourceUtilImpl implements ResourceUtilInterface {
     public synchronized void loadFromXml(Locale locale, String baseName, ClassLoader cl)
             throws IOException, JAXBException {
         URL url = getUrlFromUrlClassLoader(cl);
-        String filename = createFilename(url, baseName, locale, ".xml");
-        loadFromXml(filename, locale, baseName, cl);
-        filename = createFilename(url, baseName, null, "_dev.xml");
+        String filename = createFilename(url, baseName, null, "_dev.xml");
         if (new File(filename).exists()) {
             loadFromXml(filename, locale, baseName, cl);
         }
+        filename = createFilename(url, baseName, locale, ".xml");
+        loadFromXml(filename, locale, baseName, cl);
     }
 
     private synchronized void loadFromXml(String filename, Locale locale, String baseName,

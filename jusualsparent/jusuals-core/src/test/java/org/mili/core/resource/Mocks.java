@@ -158,6 +158,7 @@ public class Mocks {
      */
     public void createDevPropertiesForClass() throws IOException {
         Properties p = new Properties();
+        p.setProperty(this.id + ".p1", "spongebob");
         p.setProperty(this.id + ".p2", "selber");
         p.setProperty(this.id + ".p3", "hallo");
         this.createProperties(p, new File(this.root, "test_dev.properties"));
@@ -181,6 +182,10 @@ public class Mocks {
         t = this.factory.createText();
         t.setName(this.id + ".p3");
         t.setContent("hallo");
+        r.getText().add(t);
+        t = this.factory.createText();
+        t.setName(this.id + ".p1");
+        t.setContent("sponge");
         r.getText().add(t);
         XmlAccess.write(r, new File(this.root, "test_dev.xml").getAbsolutePath(),
                 ResourceUtil.NAMESPACE);
