@@ -71,6 +71,18 @@ public class MockFactory {
     }
 
     /**
+     * Creates a new Mock object.
+     *
+     * @return the Html
+     */
+    public static Html createHtml() {
+        Html table = new Html();
+        return fillTable(table);
+    }
+
+
+
+    /**
      * Fill table.
      *
      * @param <T> the generic type
@@ -125,6 +137,17 @@ public class MockFactory {
     public static String getXmlString() {
         StringBuilder s = new StringBuilder();
         s.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><table><header><cell>byte</cell><cell>short</cell><cell>integer</cell><cell>char</cell><cell>long</cell><cell>float</cell><cell>double</cell><cell>boolean</cell><cell>string</cell><cell>foo</cell><cell>date</cell><cell>null</cell></header><row><cell>1</cell><cell>1</cell><cell>1</cell><cell>c</cell><cell>1</cell><cell>1.0</cell><cell>1.0</cell><cell>true</cell><cell>abbas</cell><cell>Foo</cell><cell>Thu Feb 01 00:00:00 CET 3900</cell><cell>null</cell></row></table>");
+        return s.toString();
+    }
+
+    /**
+     * Gets the html string.
+     *
+     * @return the html string
+     */
+    public static String getHtmlString() {
+        StringBuilder s = new StringBuilder();
+        s.append("<table><thead><tr><th>byte</th><th>short</th><th>integer</th><th>char</th><th>long</th><th>float</th><th>double</th><th>boolean</th><th>string</th><th>foo</th><th>date</th><th>null</th></tr></thead><tbody><tr><td>1</td><td>1</td><td>1</td><td>c</td><td>1</td><td>1.0</td><td>1.0</td><td>true</td><td>abbas</td><td>Foo</td><td>Thu Feb 01 00:00:00 CET 3900</td><td>null</td></tr></tbody></table>");
         return s.toString();
     }
 
