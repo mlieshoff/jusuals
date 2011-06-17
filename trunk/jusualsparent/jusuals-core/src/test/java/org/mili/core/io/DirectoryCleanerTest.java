@@ -35,7 +35,7 @@ import static org.junit.Assert.*;
  * @author Michael Lieshoff
  */
 public class DirectoryCleanerTest {
-    private DirectoryCleaner cleaner = DirectoryCleaner.create();
+    private DirectoryCleaner cleaner = null;
     private final static File DIR = TestUtils.getTmpFolder(DirectoryCleanerTest.class);
     private File dir_01 = new File(DIR, "test");
     private File file_01 = new File(dir_01, "1.xml");
@@ -49,27 +49,28 @@ public class DirectoryCleanerTest {
 
     @Before
     public void setUp() throws Exception {
-        if (this.dir_02.exists()) {
+        cleaner = DirectoryCleaner.create();
+        if (dir_02.exists()) {
             try {
-                FileUtils.forceDelete(this.dir_02);
+                FileUtils.forceDelete(dir_02);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        this.dir_02.mkdirs();
-        if (this.dir_04.exists()) {
+        dir_02.mkdirs();
+        if (dir_04.exists()) {
             try {
-                FileUtils.forceDelete(this.dir_04);
+                FileUtils.forceDelete(dir_04);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        this.dir_04.mkdirs();
-        FileUtils.writeStringToFile(this.file_01, "a");
-        FileUtils.writeStringToFile(this.file_02, "b");
-        FileUtils.writeStringToFile(this.file_03, "c");
-        FileUtils.writeStringToFile(this.file_04, "d");
-        FileUtils.writeStringToFile(this.file_05, "e");
+        dir_04.mkdirs();
+        FileUtils.writeStringToFile(file_01, "a");
+        FileUtils.writeStringToFile(file_02, "b");
+        FileUtils.writeStringToFile(file_03, "c");
+        FileUtils.writeStringToFile(file_04, "d");
+        FileUtils.writeStringToFile(file_05, "e");
     }
 
     @Test
@@ -84,156 +85,173 @@ public class DirectoryCleanerTest {
 
     @Test
     public void shouldDeleteOnExit() {
-        this.cleaner.deleter = new UnaryPredicate<File>() {
+        cleaner.deleter = new UnaryPredicate<File>() {
             @Override
             public boolean test(File file) {
                 return false;
             }
         };
-        this.cleaner.delete(this.file_01);
-        assertTrue(this.file_01.exists());
+        cleaner.delete(file_01);
+        assertTrue(file_01.exists());
+    }
+
+    @Test
+    public void shouldChecksBeforeDelete() {
+        final List<File> list = new ArrayList<File>();
+        cleaner = DirectoryCleaner.create(new UnaryFunction<File, Boolean>() {
+            @Override
+            public Boolean evaluate(File file) {
+                list.add(file);
+                return true;
+            }
+        });
+        cleaner.delete(file_01);
+        assertFalse(file_01.exists());
+        assertEquals(1, list.size());
+        assertEquals(file_01, list.get(0));
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failCleanFileBecauseNullFile() {
-        this.cleaner.cleanFile(null, 1);
+        cleaner.cleanFile(null, 1);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failCleanFileBecauseNegativeDays() {
-        this.cleaner.cleanFile(this.file_01, -1);
+        cleaner.cleanFile(file_01, -1);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failCleanFileBecauseDirectory() {
-        this.cleaner.cleanFile(this.dir_01, 1);
+        cleaner.cleanFile(dir_01, 1);
     }
 
     @Test
     public void shouldCleanFile() {
-        this.cleaner.cleanFile(this.file_01, 0);
-        assertEquals(2, this.dir_01.listFiles().length);
+        cleaner.cleanFile(file_01, 0);
+        assertEquals(2, dir_01.listFiles().length);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failCleanFilesBecauseNullFiles() {
-        this.cleaner.cleanFiles(null, 1);
+        cleaner.cleanFiles(null, 1);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failCleanFilesBecauseDir() {
-        this.cleaner.cleanFiles(new File[]{this.dir_01}, 1);
+        cleaner.cleanFiles(new File[]{dir_01}, 1);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failCleanFilesBecauseNegativeDays() {
-        this.cleaner.cleanFiles(new File[]{this.file_01}, -1);
+        cleaner.cleanFiles(new File[]{file_01}, -1);
     }
 
     @Test
     public void cleanFiles() {
         DirectoryCleaner dc = DirectoryCleaner.create();
-        dc.cleanFiles(new File[]{this.file_01, this.file_02}, 1);
-        assertEquals(3, this.dir_01.listFiles().length);
+        dc.cleanFiles(new File[]{file_01, file_02}, 1);
+        assertEquals(3, dir_01.listFiles().length);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failCleanDirectoryBecauseNullDir() {
-        this.cleaner.cleanDirectory(null, 1);
+        cleaner.cleanDirectory(null, 1);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failCleanDirectoryBecauseFile() {
-        this.cleaner.cleanDirectory(this.file_01, 1);
+        cleaner.cleanDirectory(file_01, 1);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failCleanDirectoryBecauseNegativeDays() {
-        this.cleaner.cleanDirectory(this.dir_01, -1);
+        cleaner.cleanDirectory(dir_01, -1);
     }
 
     @Test
     public void shouldCleanDirectory() {
         DirectoryCleaner dc = DirectoryCleaner.create();
-        dc.cleanDirectory(this.dir_01, 5);
-        assertEquals(3, this.dir_01.listFiles().length);
-        assertEquals(1, this.dir_02.listFiles().length);
+        dc.cleanDirectory(dir_01, 5);
+        assertEquals(3, dir_01.listFiles().length);
+        assertEquals(1, dir_02.listFiles().length);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failCleanDirectoryRecursiveBecauseNullDir() {
-        this.cleaner.cleanDirectory(null, true, 1);
+        cleaner.cleanDirectory(null, true, 1);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failCleanDirectoryRecursiveBecauseNegativeDays() {
-        this.cleaner.cleanDirectory(this.dir_01, true, -1);
+        cleaner.cleanDirectory(dir_01, true, -1);
     }
 
     @Test
     public void shouldCleanDirectoryRecursive() {
-        this.cleaner.isExpiring = new BinaryPredicate<Long, Integer>() {
+        cleaner.isExpiring = new BinaryPredicate<Long, Integer>() {
             @Override
             public boolean test(Long time, Integer days) {
                 return true;
             }
         };
-        this.cleaner.cleanDirectory(this.dir_01, true, 1);
-        assertEquals(1, this.dir_01.listFiles().length);
-        assertEquals(0, this.dir_02.listFiles().length);
+        cleaner.cleanDirectory(dir_01, true, 1);
+        assertEquals(1, dir_01.listFiles().length);
+        assertEquals(0, dir_02.listFiles().length);
     }
+
 
     @Test(expected=IllegalArgumentException.class)
     public void failCleanDirectoriesBecauseNullDirs() {
-        this.cleaner.cleanDirectories(null, 1);
+        cleaner.cleanDirectories(null, 1);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failCleanDirectoriesBecauseNegativeDays() {
-        this.cleaner.cleanDirectories(new File[]{this.dir_01}, -1);
+        cleaner.cleanDirectories(new File[]{dir_01}, -1);
     }
 
     @Test
     public void shouldCleanDirectories() {
         DirectoryCleaner dc = DirectoryCleaner.create();
-        dc.cleanDirectories(new File[]{this.dir_01, this.dir_03}, 1);
-        assertEquals(3, this.dir_01.listFiles().length);
-        assertEquals(1, this.dir_02.listFiles().length);
+        dc.cleanDirectories(new File[]{dir_01, dir_03}, 1);
+        assertEquals(3, dir_01.listFiles().length);
+        assertEquals(1, dir_02.listFiles().length);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failCleanDirectoriesRecursiveBecauseNegativeDays() {
-        this.cleaner.cleanDirectories(new File[]{this.dir_01}, true, -1);
+        cleaner.cleanDirectories(new File[]{dir_01}, true, -1);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failCleanDirectoriesRecursiveBecauseNullFiles() {
-        this.cleaner.cleanDirectories(null, true, 1);
+        cleaner.cleanDirectories(null, true, 1);
     }
 
     @Test
     public void shouldCleanDirectoriesRecursive() {
         DirectoryCleaner dc = DirectoryCleaner.create();
-        dc.cleanDirectories(new File[]{this.dir_01, this.dir_03}, true, 10);
-        assertEquals(3, this.dir_01.listFiles().length);
-        assertEquals(1, this.dir_02.listFiles().length);
-        assertEquals(2, this.dir_03.listFiles().length);
-        assertEquals(1, this.dir_04.listFiles().length);
+        dc.cleanDirectories(new File[]{dir_01, dir_03}, true, 10);
+        assertEquals(3, dir_01.listFiles().length);
+        assertEquals(1, dir_02.listFiles().length);
+        assertEquals(2, dir_03.listFiles().length);
+        assertEquals(1, dir_04.listFiles().length);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failIsFileExpiredBecauseNullFile() {
-        this.cleaner.isFileExpired(null, 1);
+        cleaner.isFileExpired(null, 1);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failIsFileExpiredBecauseNegativeDays() {
-        this.cleaner.isFileExpired(this.file_01, -1);
+        cleaner.isFileExpired(file_01, -1);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failIsFileExpiredBecauseDir() {
-        this.cleaner.isFileExpired(this.dir_01, -1);
+        cleaner.isFileExpired(dir_01, -1);
     }
 
     @Test
@@ -249,18 +267,18 @@ public class DirectoryCleanerTest {
     @Test
     public void shouldIsFileExpired() {
         DirectoryCleaner dc = new DirectoryCleaner();
-        assertTrue(dc.isFileExpired(this.file_01, 0));
-        assertFalse(dc.isFileExpired(this.file_01, 1));
-        assertFalse(dc.isFileExpired(this.file_01, 10));
+        assertTrue(dc.isFileExpired(file_01, 0));
+        assertFalse(dc.isFileExpired(file_01, 1));
+        assertFalse(dc.isFileExpired(file_01, 10));
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failIsFileExpiredWithFileTimeBecauseNegativeDays() {
-        this.cleaner.isFileExpired(1, -1);
+        cleaner.isFileExpired(1, -1);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void failIsFileExpiredWithFileTimeBecauseNegativeTime() {
-        this.cleaner.isFileExpired(-1, 1);
+        cleaner.isFileExpired(-1, 1);
     }
 }
