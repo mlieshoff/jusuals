@@ -53,12 +53,22 @@ public class DirectoryCleaner {
             return file.delete();
         }
     };
+    UnaryFunction<File, Boolean> beforeDelete = null;
 
     /**
      * Instantiates a new directory cleaner.
      */
     protected DirectoryCleaner() {
-        super();
+    }
+
+    /**
+     * Creates a new directory cleaner.
+     *
+     * @param beforeDelete the before delete
+     * @return the directory cleaner
+     */
+    protected DirectoryCleaner(UnaryFunction<File, Boolean> beforeDelete) {
+        this.beforeDelete = beforeDelete;
     }
 
     /**
@@ -71,12 +81,28 @@ public class DirectoryCleaner {
     }
 
     /**
+     * Creates a new directory cleaner.
+     *
+     * @param beforeDelete the before delete
+     * @return the directory cleaner
+     */
+    public static DirectoryCleaner create(UnaryFunction<File, Boolean> beforeDelete) {
+        return new DirectoryCleaner(beforeDelete);
+    }
+
+    /**
      * Deletes a file.
      *
      * @param f the file
      */
     void delete(File f) {
-        if (!this.deleter.test(f)) {
+        boolean mustDelete = false;
+        if (beforeDelete != null && beforeDelete.evaluate(f)) {
+            mustDelete = true;
+        } else if (beforeDelete == null) {
+            mustDelete = true;
+        }
+        if (mustDelete && !this.deleter.test(f)) {
             f.deleteOnExit();
         }
     }
@@ -161,7 +187,7 @@ public class DirectoryCleaner {
             for (int i = 0; i < fs.length; i++) {
                 File file = fs[i];
                 if (recursive && file.isDirectory()) {
-                    this.cleanDirectory(file, days);
+                    this.cleanDirectory(file, recursive, days);
                 } else if (file.isFile()) {
                     if (this.isFileExpired(file, days)) {
                         this.delete(file);
