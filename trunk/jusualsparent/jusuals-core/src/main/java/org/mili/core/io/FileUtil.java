@@ -22,6 +22,7 @@ package org.mili.core.io;
 
 import java.io.*;
 import java.net.*;
+import java.util.zip.*;
 
 import org.mili.core.logging.*;
 
@@ -111,6 +112,30 @@ public final class FileUtil {
         throw new FileNotFoundException("File[filename=" + filename
                 + ", file-access-order=" + fao + ", class-loader=" + cl.getClass().getName()
                 + ", file-base=" + (new File("").getAbsolutePath()) + "] not found !");
+    }
+
+    /**
+     * Zip file.
+     *
+     * @param source the source
+     * @param target the target
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public static void zipFile(File source, File target) throws IOException {
+        FileOutputStream fos = new FileOutputStream(target);
+        ZipOutputStream zos = new ZipOutputStream(fos);
+        FileInputStream fis = new FileInputStream(source);
+        BufferedInputStream bis = new BufferedInputStream(fis);
+        ZipEntry entry = new ZipEntry(source.getCanonicalFile().getName());
+        zos.putNextEntry(entry);
+        byte[] barray = new byte[1024];
+        int bytes;
+        while ((bytes = bis.read(barray, 0, 1024)) > -1) {
+            zos.write(barray, 0, bytes);
+        }
+        zos.flush();
+        zos.close();
+        fos.close();
     }
 
     private static boolean findFromCL(String filename, ClassLoader cl) {
