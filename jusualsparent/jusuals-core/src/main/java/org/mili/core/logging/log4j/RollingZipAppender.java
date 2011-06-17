@@ -21,10 +21,10 @@ package org.mili.core.logging.log4j;
 
 import java.io.*;
 import java.text.*;
-import java.util.zip.*;
 
 import org.apache.commons.io.*;
 import org.apache.log4j.*;
+import org.mili.core.io.*;
 import org.mili.core.logging.*;
 import org.mili.core.logging.Logger;
 
@@ -141,20 +141,7 @@ public class RollingZipAppender extends RollingFileAppender {
     class ZipArchiver implements Archiver {
         @Override
         public void archiveFile(File file) throws IOException {
-            FileOutputStream fos = new FileOutputStream(file.getPath() + ".zip");
-            ZipOutputStream zos = new ZipOutputStream(fos);
-            FileInputStream fis = new FileInputStream(file);
-            BufferedInputStream bis = new BufferedInputStream(fis);
-            ZipEntry entry = new ZipEntry(file.getCanonicalFile().getName());
-            zos.putNextEntry(entry);
-            byte[] barray = new byte[1024];
-            int bytes;
-            while ((bytes = bis.read(barray, 0, 1024)) > -1) {
-                zos.write(barray, 0, bytes);
-            }
-            zos.flush();
-            zos.close();
-            fos.close();
+            FileUtil.zipFile(file, new File(file.getPath() + ".zip"));
         }
     }
 }
