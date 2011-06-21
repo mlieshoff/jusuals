@@ -20,9 +20,12 @@
 
 package org.mili.core.logging.log4j;
 
+import java.io.*;
+
 import org.apache.log4j.*;
 import org.apache.log4j.spi.*;
 import org.junit.*;
+import org.mili.core.logging.*;
 import org.mili.core.logging.Logger;
 
 import static org.junit.Assert.*;
@@ -422,5 +425,20 @@ public class Log4jAdapterTest {
 
     }
 
+    public static void foo() throws IOException {
+        throw new IOException("exception message");
+    }
+
+    public static void main(String[] args) {
+        BasicConfigurator.configure();
+        org.apache.log4j.Logger.getRootLogger().setLevel(Level.INFO);
+        Logger log = DefaultLogger.create(String.class);
+        try {
+            log.debug("hello");
+            foo();
+        } catch (IOException e) {
+            log.error(e, "Service[", 4711, "] has failures ! ");
+        }
+    }
 
 }
