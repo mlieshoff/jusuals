@@ -133,6 +133,8 @@ public final class FileUtil {
         while ((bytes = bis.read(barray, 0, 1024)) > -1) {
             zos.write(barray, 0, bytes);
         }
+        bis.close();
+        fis.close();
         zos.flush();
         zos.close();
         fos.close();
