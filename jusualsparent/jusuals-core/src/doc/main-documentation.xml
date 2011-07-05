@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<documentation name="jUsuals-Core" filename-prefix="jusuals-core" creator="Michael Lieshoff"
-        creation="23.05.2011" version="1.0" copyright="org.mili">
-    <written-language token="EN"/>
-    <author name="Michael Lieshoff" token="ML" email="michaellieshoff@gmx.de"/>
-    <changelog>
-        <change date="23.05.2011" version="1.0" who="ML" what="Creation."/>
-    </changelog>
-</documentation>

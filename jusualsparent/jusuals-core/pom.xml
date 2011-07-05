@@ -20,48 +20,17 @@
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.mili.core</groupId>
-    <artifactId>jusuals-core</artifactId>
-    <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
-    <name>jusuals-core</name>
-    <url>http://maven.apache.org</url>
     <parent>
         <groupId>org.mili.jusuals</groupId>
         <artifactId>jusuals</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../jusuals-parent/pom.xml</relativePath>
     </parent>
-    <dependencies>
-        <dependency>
-            <groupId>org.mili.test</groupId>
-            <artifactId>jusuals-test</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <!--scope>test</scope-->
-        </dependency>
-    </dependencies>
-    <build>
-          <plugins>
-             <plugin>
-                <groupId>org.jvnet.jaxb2.maven2</groupId>
-                <artifactId>maven-jaxb2-plugin</artifactId>
-                <executions>
-                   <execution>
-                      <id>resources</id>
-                      <goals>
-                         <goal>generate</goal>
-                      </goals>
-                      <configuration>
-                         <schemaDirectory>src/main/resources/xsd/resources</schemaDirectory>
-                         <schemaIncludes>
-                            <include>resources.xsd</include>
-                         </schemaIncludes>
-                         <generatePackage>org.mili.core.resource.generated</generatePackage>
-                         <generateDirectory>target/generated-sources/xjc/xml/resources</generateDirectory>
-                      </configuration>
-                   </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+    <groupId>org.mili.jusuals.core</groupId>
+    <artifactId>jusuals-core</artifactId>
+    <packaging>pom</packaging>
+    <name>jusuals-core</name>
+    <modules>
+        <module>jusuals-core-api</module>
+        <module>jusuals-core-impl</module>
+    </modules>
 </project>
