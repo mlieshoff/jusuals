@@ -20,24 +20,16 @@
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.mili.test</groupId>
-    <artifactId>jusuals-test</artifactId>
-    <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
-    <name>jusuals-test</name>
-    <url>http://maven.apache.org</url>
     <parent>
         <groupId>org.mili.jusuals</groupId>
         <artifactId>jusuals</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../jusuals-parent/pom.xml</relativePath>
     </parent>
+    <groupId>org.mili.jusuals.test</groupId>
+    <artifactId>jusuals-test</artifactId>
+    <packaging>jar</packaging>
+    <name>jusuals-test</name>
     <dependencies>
-        <!--dependency>
-            <groupId>org.mili.core</groupId>
-            <artifactId>jusuals-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -47,6 +39,11 @@
             <groupId>junit-addons</groupId>
             <artifactId>junit-addons</artifactId>
             <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mili.jusuals.core.api</groupId>
+            <artifactId>jusuals-core-api</artifactId>
+            <version>${version}</version>
         </dependency>
     </dependencies>
 </project>
