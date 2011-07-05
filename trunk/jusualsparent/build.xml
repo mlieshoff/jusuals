@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="helper" default="release">
+
+    <property name="release.name" value="jusuals-core"/>
+    <property name="release.version" value="1.0"/>
+    <property name="release.dir" value="target"/>
+
+    <property name="release.file" value="${release.dir}/jusuals.${release.version}.zip"/>
+    <property name="core.release.jar.file" value="${release.dir}/jusuals-core-${release.version}.jar"/>
+    <property name="core.release.src.file" value="${release.dir}/jusuals-core-sources-${release.version}.jar"/>
+    <property name="test.release.jar.file" value="${release.dir}/jusuals-test-${release.version}.jar"/>
+    <property name="test.release.src.file" value="${release.dir}/jusuals-test-sources-${release.version}.jar"/>
+
+    <target name="release" description="makes releases of all.">
+        <antcall target="release-core"/>
+        <antcall target="release-test"/>
+        <delete file="${release.file}"/>
+        <zip destfile="${release.file}">
+            <zipfileset dir="target" prefix="">
+                <include name="**/*.*" />
+            </zipfileset>
+        </zip>
+    </target>
+
+    <target name="release-core" description="makes releases of jusuals-core.">
+        <mkdir dir="${release.dir}"/>
+        <delete file="${core.release.jar.file}"/>
+        <zip destfile="${core.release.jar.file}">
+            <zipfileset dir="jusuals-core/jusuals-core-api/target/classes" prefix="">
+                <include name="**/*.class" />
+            </zipfileset>
+            <zipfileset dir="jusuals-core/jusuals-core-impl/target/classes" prefix="">
+                <include name="**/*.class" />
+            </zipfileset>
+        </zip>
+        <delete file="${core.release.src.file}"/>
+        <zip destfile="${core.release.src.file}">
+            <zipfileset dir="jusuals-core/jusuals-core-api/src" prefix="">
+                <include name="**/*.java" />
+            </zipfileset>
+            <zipfileset dir="jusuals-core/jusuals-core-impl/src" prefix="">
+                <include name="**/*.java" />
+            </zipfileset>
+        </zip>
+    </target>
+
+    <target name="release-test" description="makes releases of jusuals-test.">
+        <mkdir dir="${release.dir}"/>
+        <delete file="${test.release.jar.file}"/>
+        <zip destfile="${test.release.jar.file}">
+            <zipfileset dir="jusuals-test/target/classes" prefix="">
+                <include name="**/*.class" />
+            </zipfileset>
+        </zip>
+        <delete file="${test.release.src.file}"/>
+        <zip destfile="${test.release.src.file}">
+            <zipfileset dir="jusuals-test/src" prefix="">
+                <include name="**/*.java" />
+            </zipfileset>
+        </zip>
+    </target>
+
+</project>
