@@ -23,6 +23,8 @@ import java.io.*;
 import java.sql.*;
 import java.util.*;
 
+import org.mili.core.api.database.*;
+
 /**
  * This utility class provides some useful methods for testing.
  *
