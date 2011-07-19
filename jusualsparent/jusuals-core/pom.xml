@@ -33,4 +33,5 @@
         <module>jusuals-core-api</module>
         <module>jusuals-core-impl</module>
     </modules>
+    <dependencies />
 </project>
