@@ -8,12 +8,26 @@
     <property name="release.file" value="${release.dir}/jusuals.${release.version}.zip"/>
     <property name="core.release.jar.file" value="${release.dir}/jusuals-core-${release.version}.jar"/>
     <property name="core.release.src.file" value="${release.dir}/jusuals-core-sources-${release.version}.jar"/>
+    <property name="core.release.doc.file" value="${release.dir}/jusuals-core-docs-${release.version}.jar"/>
     <property name="test.release.jar.file" value="${release.dir}/jusuals-test-${release.version}.jar"/>
     <property name="test.release.src.file" value="${release.dir}/jusuals-test-sources-${release.version}.jar"/>
+    <property name="test.release.doc.file" value="${release.dir}/jusuals-test-docs-${release.version}.jar"/>
+    <property name="ant.release.jar.file" value="${release.dir}/jusuals-ant-${release.version}.jar"/>
+    <property name="ant.release.src.file" value="${release.dir}/jusuals-ant-sources-${release.version}.jar"/>
+    <property name="ant.release.doc.file" value="${release.dir}/jusuals-ant-docs-${release.version}.jar"/>
+
+    <property name="release.doc.file" value="${release.dir}/jusuals-docs-${release.version}.jar"/>
 
     <target name="release" description="makes releases of all.">
         <antcall target="release-core"/>
         <antcall target="release-test"/>
+        <antcall target="release-ant"/>
+        <delete file="${release.doc.file}"/>
+        <zip destfile="${release.doc.file}">
+            <zipfileset dir="target/site/apidocs" prefix="">
+                <include name="**/*.*" />
+            </zipfileset>
+        </zip>
         <delete file="${release.file}"/>
         <zip destfile="${release.file}">
             <zipfileset dir="target" prefix="">
@@ -55,6 +69,22 @@
         <delete file="${test.release.src.file}"/>
         <zip destfile="${test.release.src.file}">
             <zipfileset dir="jusuals-test/src" prefix="">
+                <include name="**/*.java" />
+            </zipfileset>
+        </zip>
+    </target>
+
+    <target name="release-ant" description="makes releases of jusuals-ant.">
+        <mkdir dir="${release.dir}"/>
+        <delete file="${ant.release.jar.file}"/>
+        <zip destfile="${ant.release.jar.file}">
+            <zipfileset dir="jusuals-ant/target/classes" prefix="">
+                <include name="**/*.class" />
+            </zipfileset>
+        </zip>
+        <delete file="${ant.release.src.file}"/>
+        <zip destfile="${ant.release.src.file}">
+            <zipfileset dir="jusuals-ant/src" prefix="">
                 <include name="**/*.java" />
             </zipfileset>
         </zip>

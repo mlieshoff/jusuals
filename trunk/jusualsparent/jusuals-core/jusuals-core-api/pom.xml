@@ -9,4 +9,5 @@
     <artifactId>jusuals-core-api</artifactId>
     <packaging>jar</packaging>
     <name>jusuals-core-api</name>
+    <dependencies />
 </project>

@@ -101,9 +101,10 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
+                    <aggregate>true</aggregate>
                     <excludePackageNames>*.internal*</excludePackageNames>
                     <detectJavaApiLink>true</detectJavaApiLink>
-                    <detectLinks>true</detectLinks>
+                    <detectLinks>false</detectLinks>
                     <source>1.6</source>
                     <links>
                         <link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
@@ -123,6 +124,7 @@
 
     <modules>
         <module>jusuals-core</module>
+        <module>jusuals-ant</module>
         <module>jusuals-test</module>
     </modules>
 
