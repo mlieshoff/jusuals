@@ -69,7 +69,7 @@ public class ThroughputAnalyzerTest {
         t2.start();
 //        t3.start();
 
-        Thread.sleep(360000);
+        Thread.sleep(1000);
     }
 
 
