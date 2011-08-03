@@ -1,7 +1,7 @@
 /*
- * Format.java
+ * TimestampFormatter.java
  *
- * 01.08.2011
+ * 03.08.2011
  *
  * Copyright 2011 Michael Lieshoff
  *
@@ -17,31 +17,22 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package org.mili.core.text.annotation;
 
-import java.lang.annotation.*;
+import java.text.*;
+import java.util.*;
 
 /**
- * This annotations defines a format.
+ * The class defines a timestamp formatter.
  *
  * @author Michael Lieshoff
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface Format {
+public class TimestampFormatter implements Formatter {
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
 
-    /**
-     * Name.
-     *
-     * @return the string
-     */
-    public String name();
+    @Override
+    public Object format(Object object) {
+        return DATE_FORMAT.format(new Date(((Long) object).longValue()));
+    }
 
-    /**
-     * Format class.
-     *
-     * @return the class<? extends formatter>
-     */
-    public Class<? extends Formatter> formatClass();
 }
