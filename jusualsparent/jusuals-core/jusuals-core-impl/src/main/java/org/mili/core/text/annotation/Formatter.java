@@ -1,7 +1,7 @@
 /*
- * FormatType.java
+ * Formatter.java
  *
- * 01.08.2011
+ * 03.08.2011
  *
  * Copyright 2011 Michael Lieshoff
  *
@@ -17,19 +17,20 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package org.mili.core.text.annotation;
 
 /**
- * This enum defines a format type.
+ * This interface defines a formatter.
  *
  * @author Michael Lieshoff
- *
  */
-public enum FormatType {
-    /** STRING display. */
-    STRING,
+public interface Formatter {
 
-    /** TIMESTAMP display. */
-    TIMESTAMP;
+    /**
+     * Format.
+     *
+     * @param object the object
+     * @return the r
+     */
+    Object format(Object object);
 }

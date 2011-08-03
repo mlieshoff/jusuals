@@ -19,8 +19,7 @@
  */
 package org.mili.core.text.annotation;
 
-import java.lang.annotation.Annotation;
-import java.text.*;
+import java.lang.annotation.*;
 import java.util.*;
 
 import org.mili.core.annotation.*;
@@ -32,7 +31,6 @@ import org.mili.core.annotation.*;
  */
 public abstract class DataRow<T> {
     private final List<Object> values = new ArrayList<Object>();
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
     private final int no;
 
     protected DataRow(int no, final T msg) {
@@ -124,17 +122,21 @@ public abstract class DataRow<T> {
             public void handle(Annotation annotation, Class source) {
                 if (annotation instanceof Mapping) {
                     Mapping mapping = (Mapping) annotation;
-                    Map<String, FormatType> formatters = new HashMap<String, FormatType>();
+                    Map<String, Formatter> formatters = new HashMap<String, Formatter>();
                     for (Format format : mapping.formatters()) {
-                        formatters.put(format.name(), format.type());
+                        try {
+                            formatters.put(format.name(), format.formatClass().newInstance());
+                        } catch (Exception e) {
+                            throw new IllegalStateException(e);
+                        }
                     }
                     int i = 1;
                     for (Data data : mapping.elements()) {
                         Object value = values.get(i);
                         String key = data.displayName();
                         if (formatters.containsKey(key)) {
-                            if (formatters.get(key) == FormatType.TIMESTAMP)
-                                value = DATE_FORMAT.format(new Date((Long) value));
+                            Formatter formatter = formatters.get(key);
+                            value = formatter.format(value);
                         }
                         list[i] = value;
                         i++;
