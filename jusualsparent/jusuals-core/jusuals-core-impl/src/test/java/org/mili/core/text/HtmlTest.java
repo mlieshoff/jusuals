@@ -37,7 +37,7 @@ public class HtmlTest {
      */
     @Before
     public void setUp() throws Exception {
-        this.table = new Html();
+        table = new Html();
     }
 
     /**
@@ -45,9 +45,14 @@ public class HtmlTest {
      */
     @Test
     public void shouldGetString() {
-        this.table = MockFactory.createHtml();
-        assertEquals(MockFactory.getHtmlString(), this.table.toString().replaceAll("[\r\n]",
-                ""));
+        table = MockFactory.createHtml();
+        assertEquals(MockFactory.getHtmlString(), table.toString().replaceAll("[\r\n]", ""));
     }
 
+    @Test
+    public void shouldRenderWithEmptyRenderers() {
+        table = MockFactory.createEmptyHtml();
+        assertEquals(MockFactory.getHtmlEmptyString(), table.toString().replaceAll("[\r\n]",
+                ""));
+    }
 }
