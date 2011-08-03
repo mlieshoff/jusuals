@@ -15,6 +15,9 @@
     <property name="ant.release.jar.file" value="${release.dir}/jusuals-ant-${release.version}.jar"/>
     <property name="ant.release.src.file" value="${release.dir}/jusuals-ant-sources-${release.version}.jar"/>
     <property name="ant.release.doc.file" value="${release.dir}/jusuals-ant-docs-${release.version}.jar"/>
+    <property name="ejb.release.jar.file" value="${release.dir}/jusuals-ejb-${release.version}.jar"/>
+    <property name="ejb.release.src.file" value="${release.dir}/jusuals-ejb-sources-${release.version}.jar"/>
+    <property name="ejb.release.doc.file" value="${release.dir}/jusuals-ejb-docs-${release.version}.jar"/>
 
     <property name="release.doc.file" value="${release.dir}/jusuals-docs-${release.version}.jar"/>
 
@@ -22,6 +25,7 @@
         <antcall target="release-core"/>
         <antcall target="release-test"/>
         <antcall target="release-ant"/>
+        <antcall target="release-ejb"/>
         <delete file="${release.doc.file}"/>
         <zip destfile="${release.doc.file}">
             <zipfileset dir="target/site/apidocs" prefix="">
@@ -85,6 +89,22 @@
         <delete file="${ant.release.src.file}"/>
         <zip destfile="${ant.release.src.file}">
             <zipfileset dir="jusuals-ant/src" prefix="">
+                <include name="**/*.java" />
+            </zipfileset>
+        </zip>
+    </target>
+
+    <target name="release-ejb" description="makes releases of jusuals-ejb.">
+        <mkdir dir="${release.dir}"/>
+        <delete file="${ejb.release.jar.file}"/>
+        <zip destfile="${ejb.release.jar.file}">
+            <zipfileset dir="jusuals-ejb/target/classes" prefix="">
+                <include name="**/*.class" />
+            </zipfileset>
+        </zip>
+        <delete file="${ejb.release.src.file}"/>
+        <zip destfile="${ejb.release.src.file}">
+            <zipfileset dir="jusuals-ejb/src" prefix="">
                 <include name="**/*.java" />
             </zipfileset>
         </zip>
