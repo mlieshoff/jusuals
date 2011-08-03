@@ -19,7 +19,6 @@
  */
 package org.mili.core.text;
 
-import org.mili.core.templating.*;
 
 /**
  * This class is a Html extension of class {@link TextTable}.
@@ -56,8 +55,16 @@ public class Html extends TextTable {
         super();
     }
 
-    public Html(Renderer<String, String> headCellRenderer, Renderer<String, ?> cellRenderer) {
-        super();
+    /**
+     * Instantiates a new html.
+     *
+     * @param headCellRenderer the head cell renderer
+     * @param cellRenderer the cell renderer
+     */
+    public Html(Renderer<String, String> headCellRenderer, Renderer<String, Object> cellRenderer
+            ) {
+        this.cellRenderer = cellRenderer;
+        this.headCellRenderer = headCellRenderer;
     }
 
     @Override

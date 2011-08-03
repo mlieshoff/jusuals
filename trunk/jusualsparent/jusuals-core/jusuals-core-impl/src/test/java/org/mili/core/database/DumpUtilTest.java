@@ -153,4 +153,10 @@ public class DumpUtilTest {
     public void shouldConsoleOutputShowTableBecauseException() throws Exception {
         DumpUtil.showTable(this.connection, "a", "aaaa=1", new String[] { "a", "b", "c" });
     }
+
+    @Test
+    public void shouldPrintTable() throws Exception {
+        new DumpUtil().printTable(connection, "empty", null, null);
+    }
+
 }

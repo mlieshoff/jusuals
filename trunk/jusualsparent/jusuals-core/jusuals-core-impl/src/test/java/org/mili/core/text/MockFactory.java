@@ -80,6 +80,26 @@ public class MockFactory {
         return fillTable(table);
     }
 
+    /**
+     * Creates a new Mock object.
+     *
+     * @return the empty Html
+     */
+    public static Html createEmptyHtml() {
+        Html table = new Html(new Renderer<String, String>() {
+            @Override
+            public String render(String toRender) {
+                return "";
+            }
+        }, new Renderer<String, Object>() {
+            @Override
+            public String render(Object toRender) {
+                return "";
+            }
+        });
+        return fillTable(table);
+    }
+
 
 
     /**
@@ -148,6 +168,17 @@ public class MockFactory {
     public static String getHtmlString() {
         StringBuilder s = new StringBuilder();
         s.append("<table><thead><tr><th>byte</th><th>short</th><th>integer</th><th>char</th><th>long</th><th>float</th><th>double</th><th>boolean</th><th>string</th><th>foo</th><th>date</th><th>null</th></tr></thead><tbody><tr><td>1</td><td>1</td><td>1</td><td>c</td><td>1</td><td>1.0</td><td>1.0</td><td>true</td><td>abbas</td><td>Foo</td><td>Thu Feb 01 00:00:00 CET 3900</td><td>null</td></tr></tbody></table>");
+        return s.toString();
+    }
+
+    /**
+     * Gets the html empty string.
+     *
+     * @return the html empty string
+     */
+    public static String getHtmlEmptyString() {
+        StringBuilder s = new StringBuilder();
+        s.append("<table><thead><tr></tr></thead><tbody><tr></tr></tbody></table>");
         return s.toString();
     }
 
