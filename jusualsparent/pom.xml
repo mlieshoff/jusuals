@@ -126,6 +126,7 @@
         <module>jusuals-ant</module>
         <module>jusuals-test</module>
     <module>jusuals-ejb</module>
+    <module>jusuals-tools</module>
   </modules>
 
     <dependencies>
