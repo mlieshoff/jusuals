@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.mili.jusuals</groupId>
+        <artifactId>jusuals</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <groupId>org.mili.jusuals.ejb</groupId>
+    <artifactId>jusuals-ejb</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>jusuals-ejb</name>
+    <url>http://maven.apache.org</url>
+    <dependencies>
+        <dependency>
+            <groupId>org.mili.jusuals.core.api</groupId>
+            <artifactId>jusuals-core-api</artifactId>
+            <version>${version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mili.jusuals.core.impl</groupId>
+            <artifactId>jusuals-core-impl</artifactId>
+            <version>${version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mili.jusuals.test</groupId>
+            <artifactId>jusuals-test</artifactId>
+            <version>${version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss</groupId>
+            <artifactId>jbossall-client</artifactId>
+            <version>4.0.5-GA</version>
+        </dependency>
+    </dependencies>
+</project>
