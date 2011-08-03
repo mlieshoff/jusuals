@@ -15,21 +15,9 @@
   <classpathentry kind="var" path="M2_REPO/hsqldb/hsqldb/1.8.0.10/hsqldb-1.8.0.10.jar"/>
   <classpathentry kind="var" path="M2_REPO/junit/junit/4.6/junit-4.6.jar"/>
   <classpathentry kind="var" path="M2_REPO/junit-addons/junit-addons/1.4/junit-addons-1.4.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/mili/jusuals/core/api/jusuals-core-api/1.0-SNAPSHOT/jusuals-core-api-1.0-SNAPSHOT.jar">
-    <attributes>
-      <attribute value="jar:file:/home/mlieshoff/.m2/repository/org/mili/jusuals/core/api/jusuals-core-api/1.0-SNAPSHOT/jusuals-core-api-1.0-SNAPSHOT-javadoc.jar!/" name="javadoc_location"/>
-    </attributes>
-  </classpathentry>
-  <classpathentry kind="var" path="M2_REPO/org/mili/jusuals/core/impl/jusuals-core-impl/1.0-SNAPSHOT/jusuals-core-impl-1.0-SNAPSHOT.jar">
-    <attributes>
-      <attribute value="jar:file:/home/mlieshoff/.m2/repository/org/mili/jusuals/core/impl/jusuals-core-impl/1.0-SNAPSHOT/jusuals-core-impl-1.0-SNAPSHOT-javadoc.jar!/" name="javadoc_location"/>
-    </attributes>
-  </classpathentry>
-  <classpathentry kind="var" path="M2_REPO/org/mili/jusuals/test/jusuals-test/1.0-SNAPSHOT/jusuals-test-1.0-SNAPSHOT.jar">
-    <attributes>
-      <attribute value="jar:file:/home/mlieshoff/.m2/repository/org/mili/jusuals/test/jusuals-test/1.0-SNAPSHOT/jusuals-test-1.0-SNAPSHOT-javadoc.jar!/" name="javadoc_location"/>
-    </attributes>
-  </classpathentry>
+  <classpathentry kind="src" path="/jusuals-core-api"/>
+  <classpathentry kind="src" path="/jusuals-core-impl"/>
+  <classpathentry kind="src" path="/jusuals-test"/>
   <classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.13/log4j-1.2.13.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/poi/poi/3.0.1-FINAL/poi-3.0.1-FINAL.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/poi/poi-scratchpad/3.0.1-FINAL/poi-scratchpad-3.0.1-FINAL.jar"/>

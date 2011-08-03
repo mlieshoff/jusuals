@@ -1,7 +1,11 @@
 <projectDescription>
   <name>jusuals-ant</name>
   <comment>jUsuals- Java usuals. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
-  <projects/>
+  <projects>
+    <project>jusuals-core-api</project>
+    <project>jusuals-core-impl</project>
+    <project>jusuals-test</project>
+  </projects>
   <buildSpec>
     <buildCommand>
       <name>org.eclipse.jdt.core.javabuilder</name>
