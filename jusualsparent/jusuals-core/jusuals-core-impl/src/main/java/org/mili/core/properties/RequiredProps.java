@@ -53,7 +53,8 @@ class RequiredProps extends GenericProps {
 
     @Override
     <T> T getParameter(Map<String, ?> parameters, String key, Class<T> clazz) {
-        throw new UnsupportedOperationException();
+        return Props.getParameter(parameters, null, key, Props.Usage
+                .REQUIRED_NOT_NULL_AND_NOT_EMPTY, clazz);
     }
 
 }

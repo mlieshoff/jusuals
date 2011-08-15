@@ -43,6 +43,7 @@ public class PropUtilTest {
     private Availabler availablerWithException = EasyMock.createMock(Availabler.class);
     private Availabler availablerWithZero = EasyMock.createMock(Availabler.class);
     private Properties props = null;
+    private Foo foo = new Foo();
 
     @Before
     public void setUp() throws Exception {
@@ -688,8 +689,34 @@ public class PropUtilTest {
     @Test
     public void testGetSystemIntegerString() {
         assertEquals(0, PropUtil.getSystemInteger("org.mili.core.properties.Foo.abbas"));
-        assertEquals(Integer.MAX_VALUE, PropUtil.getSystemInteger("org.mili.core.properties.Foo.intmax"));
-        assertEquals(Integer.MIN_VALUE, PropUtil.getSystemInteger("org.mili.core.properties.Foo.intmin"));
+        assertEquals(Integer.MAX_VALUE, PropUtil.getSystemInteger(
+                "org.mili.core.properties.Foo.intmax"));
+        assertEquals(Integer.MIN_VALUE, PropUtil.getSystemInteger(
+                "org.mili.core.properties.Foo.intmin"));
+    }
+
+    @Test
+    public void testSystemIntegerObjectStringInt() {
+        assertEquals(4711, PropUtil.getSystemInteger(foo, "abbas", 4711));
+        assertEquals(Integer.MAX_VALUE, PropUtil.getSystemInteger(foo, "intmax", 4711));
+        assertEquals(Integer.MIN_VALUE, PropUtil.getSystemInteger(foo, "intmin", 4711));
+    }
+
+    @Test
+    public void testSystemIntegerClassStringInt() {
+        assertEquals(4711, PropUtil.getSystemInteger(Foo.class, "abbas", 4711));
+        assertEquals(Integer.MAX_VALUE, PropUtil.getSystemInteger(Foo.class, "intmax", 4711));
+        assertEquals(Integer.MIN_VALUE, PropUtil.getSystemInteger(Foo.class, "intmin", 4711));
+    }
+
+    @Test
+    public void testSystemIntegerStringInt() {
+        assertEquals(4711, PropUtil.getSystemInteger("org.mili.core.properties.Foo.abbas",
+                4711));
+        assertEquals(Integer.MAX_VALUE, PropUtil.getSystemInteger(
+                "org.mili.core.properties.Foo.intmax", 4711));
+        assertEquals(Integer.MIN_VALUE, PropUtil.getSystemInteger(
+                "org.mili.core.properties.Foo.intmin"), 4711);
     }
 
     @Test
@@ -1100,49 +1127,130 @@ public class PropUtilTest {
         assertEquals(Double.MIN_VALUE, PropUtil.getRequiredDouble(props, "org.mili.core.properties.Foo.doublemin"), 0.0);
     }
 
-    /**
-     * Test method for {@link core.properties.PropUtil#getRequiredParameter(java.util.Map, java.util.Properties, java.lang.String)}.
-     */
     @Test
-    @Ignore
-    public void testGetRequiredParameterMapOfStringQPropertiesString() {
-        fail("Not yet implemented");
+    public void testRequiredParameterMapPropertiesString() {
+        Map<String, Object> m = new Hashtable<String, Object>();
+        m.put("string", "abc");
+        try {
+            PropUtil.getRequiredParameter(null, props, "abbas");
+            fail("exception expected!");
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            PropUtil.getRequiredParameter(m, null, "abbas");
+            fail("exception expected!");
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            PropUtil.getRequiredParameter(m, props, "");
+            fail("exception expected!");
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            PropUtil.getRequiredParameter(m, props, null);
+            fail("exception expected!");
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            PropUtil.getRequiredParameter(new Hashtable<String, Object>(),
+                    new Properties(), "abbas");
+            fail("exception expected!");
+        } catch (IllegalArgumentException e) {
+        }
+        assertEquals("abc", PropUtil.getRequiredParameter(m, props, "string"));
     }
 
-    /**
-     * Test method for {@link core.properties.PropUtil#getRequiredParameter(java.util.Map, java.lang.String, java.lang.Class)}.
-     */
     @Test
-    @Ignore
-    public void testGetRequiredParameterMapOfStringQStringClassOfT() {
-        fail("Not yet implemented");
+    public void testRequiredParameterMapStringClass() {
+        Map<String, Object> m = new Hashtable<String, Object>();
+        m.put("string", "abc");
+        try {
+            PropUtil.getRequiredParameter(null, "abbas", String.class);
+            fail("exception expected!");
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            PropUtil.getRequiredParameter(m , null, String.class);
+            fail("exception expected!");
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            PropUtil.getRequiredParameter(m , "", String.class);
+            fail("exception expected!");
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            PropUtil.getRequiredParameter(m , "abbas", null);
+            fail("exception expected!");
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            PropUtil.getRequiredParameter(new Hashtable<String, Object>(), "abbas",
+                    String.class);
+            fail("exception expected!");
+        } catch (IllegalArgumentException e) {
+        }
+        assertEquals("abc", PropUtil.getRequiredParameter(m, "string", String.class));
     }
 
-    /**
-     * Test method for {@link core.properties.PropUtil#getRequiredParameter(java.util.Map, java.util.Properties, java.lang.String, java.lang.Class)}.
-     */
     @Test
-    @Ignore
-    public void testGetRequiredParameterMapOfStringQPropertiesStringClassOfT() {
-        fail("Not yet implemented");
+    public void testRequiredParameterMapPropertiesStringClass() {
+        Map<String, Object> m = new Hashtable<String, Object>();
+        m.put("string", "abc");
+        try {
+            PropUtil.getRequiredParameter(null, props, "abbas", String.class);
+            fail("exception expected!");
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            PropUtil.getRequiredParameter(m, null, "abbas", String.class);
+            fail("exception expected!");
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            PropUtil.getRequiredParameter(m, props, null, String.class);
+            fail("exception expected!");
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            PropUtil.getRequiredParameter(m, props, "", String.class);
+            fail("exception expected!");
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            PropUtil.getRequiredParameter(m, props, "abbas", null);
+            fail("exception expected!");
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            PropUtil.getRequiredParameter(new Hashtable<String, Object>(), props, "abbas",
+                    String.class);
+            fail("exception expected!");
+        } catch (IllegalArgumentException e) {
+        }
+        assertEquals("abc", PropUtil.getRequiredParameter(m, props, "string", String.class));
+        assertEquals("abc", PropUtil.getRequiredParameter(m, props,
+                "org.mili.core.properties.Foo.string", String.class));
     }
 
-    /**
-     * Test method for {@link core.properties.PropUtil#getRequired(java.util.Properties, java.lang.String)}.
-     */
     @Test
-    @Ignore
     public void testGetRequiredPropertiesString() {
-        fail("Not yet implemented");
-    }
-
-    /**
-     * Test method for {@link core.properties.PropUtil#getRequired(java.util.Properties, java.lang.String, java.lang.Class)}.
-     */
-    @Test
-    @Ignore
-    public void testGetRequiredPropertiesStringClassOfT() {
-        fail("Not yet implemented");
+        try {
+            PropUtil.getRequired(null, "abbas");
+            fail("exception expected!");
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            PropUtil.getRequired(props, "");
+            fail("exception expected!");
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            PropUtil.getRequired(props, null);
+            fail("exception expected!");
+        } catch (IllegalArgumentException e) {
+        }
+        assertEquals("abc", PropUtil.getRequired(props, "org.mili.core.properties.Foo.string"));
     }
 
     @Test
@@ -1310,13 +1418,10 @@ public class PropUtilTest {
         assertEquals(Double.MIN_VALUE, PropUtil.getDouble(props, "org.mili.core.properties.Foo.doublemin"), 0.0);
     }
 
-    /**
-     * Test method for {@link core.properties.PropUtil#get(java.util.Properties, java.lang.String)}.
-     */
     @Test
-    @Ignore
     public void testGetPropertiesString() {
-        fail("Not yet implemented");
+        assertEquals("abc", PropUtil.get(props, "org.mili.core.properties.Foo.string"));
+        assertNull(PropUtil.get(props, "lala"));
     }
 
     /**
