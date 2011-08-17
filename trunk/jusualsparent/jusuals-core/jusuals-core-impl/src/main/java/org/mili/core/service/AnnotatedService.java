@@ -29,6 +29,8 @@ import org.mili.core.annotation.*;
 /**
  * This class defines an annotated service.
  *
+ * <p><b>Introduction</b><p>
+ *
  * <u> What is an annotated service?</u><p>
  *
  * An annotated service is created by a class having service annotations. The annotated service
@@ -51,7 +53,8 @@ import org.mili.core.annotation.*;
  * Start writing a class with a simple method. This method will be annotated with the
  * &#064;ServiceMethod annotation. Then add a method called at stop, use the &#064;ServiceStopMethod
  * annotation.<br>
- * <pre>public class Foo() {
+ * <pre>
+ * public class Foo() {
  *     &#064;ServiceMethod
  *     public void doFoo() {
  *         System.out.println(&quot;Hello world!&quot;);
@@ -64,20 +67,23 @@ import org.mili.core.annotation.*;
  * </pre>
  * Now the class can be wrapped into an annotated service, simple by use the class
  * AnnotatedService.<br>
- * <pre>public void somewhere() {
+ * <pre>
+ * public void somewhere() {
  *     AnnotatedService service = new AnnotatedService(Foo.class);
  *     service.start();
  *     service.stop();
  * }
  * </pre>
  * An execution of somewhere()-method will produce following output:<br>
- * <pre>Hello world!
+ * <pre>
+ * Hello world!
  * Stop.
  * </pre>
  * How to handle a service method with passed parameters? It's easy to do. Just pass the parameters
  * as map through the service method. The only restriction is that the method has just one
  * parameter and the map ist parametrized as String for keys and values.<br>
- * <pre>&#064;ServiceMethod
+ * <pre>
+ * &#064;ServiceMethod
  * public void doFoo(Map&lt;String, String&gt; params) {
  *     System.out.println(&quot;Hello world! &quot; + params.get(&quot;foo&quot;));
  * }

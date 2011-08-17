@@ -8,7 +8,7 @@
             <text ressource="What is a default cache?_1"><![CDATA[
 A default cache is a standard simple cache. It stores values under keys and provides binding
 listeners for key changes. It is not thread-safe.
-            ]]></text>
+]]></text>
         </paragraph>
         <!--paragraph name="Future of default cache">
             <text ressource="Future of default cache_1"><![CDATA[
@@ -20,21 +20,21 @@ listeners for key changes. It is not thread-safe.
             <text ressource="Define a default cache_1"><![CDATA[
 The default cache is simple to use and provides some methods to create, modify or traverse a
 cache.
-            ]]></text>
+]]></text>
         </paragraph>
     </part>
     <part name="Examples">
         <paragraph name="Default cache for foo objects">
             <text ressource="Default cache for foo objects_1"><![CDATA[
 Define a simple class called Foo that object wants to be cached in a default cache.
-            ]]></text>
+]]></text>
             <pre ressource="Default cache for foo objects_2"><![CDATA[
 public class Foo() {
 }
-            ]]></pre>
+]]></pre>
             <text ressource="Default cache for foo objects_3"><![CDATA[
 No create a default cache. For simplicity the Foo objects wants to be stored by a String value.
-            ]]></text>
+]]></text>
             <pre ressource="Default cache for foo objects_4"><![CDATA[
 Cache<String, Foo> cache = DefaultCache.create();
 // put some foos
@@ -53,10 +53,10 @@ System.out.println("keys  : " + cache.keySet());
 System.out.println("remove: " + cache.remove("foo 1"));
 // clear the cache
 cache.clear();
-            ]]></pre>
+]]></pre>
             <text ressource="Default cache for foo objects_5"><![CDATA[
 Okay that is simple. Now modify the class Foo to privide an id.
-            ]]></text>
+]]></text>
             <pre ressource="Default cache for foo objects_6"><![CDATA[
 public class Foo() {
     String id;
@@ -69,11 +69,11 @@ public class Foo() {
         return id;
     }
 }
-            ]]></pre>
+]]></pre>
             <text ressource="Default cache for foo objects_7"><![CDATA[
 Create a cache from a collection of Foo objects via the create method that provides an id
 functionality.
-            ]]></text>
+]]></text>
             <pre ressource="Default cache for foo objects_8"><![CDATA[
 Collection<Foo> foos = new ArrayList<Foo>() {{
     add(new Foo("foo 1"));
@@ -85,15 +85,15 @@ Cache<String, Foo> cache = DefaultCache.create(foos, new UnaryFunction<Foo, Stri
         return foo.getId();
     }
 });
-            ]]></pre>
+]]></pre>
             <text ressource="Default cache for foo objects_8"><![CDATA[
 Now the cache contains the two Foo objects with keys "foo 1" and "foo 2".
-            ]]></text>
+]]></text>
             <text ressource="Default cache for foo objects_9"><![CDATA[
 Next use the change support of the cache. With the method getChangeSupport() the possibility is
 getted to add listeners of type java.beans.PropertyChangeListener. The support will fire
 property change events whenever the cache is modified.
-            ]]></text>
+]]></text>
             <pre ressource="Default cache for foo objects_10"><![CDATA[
 cache.getChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
     @Override
@@ -101,7 +101,7 @@ cache.getChangeSupport().addPropertyChangeListener(new PropertyChangeListener() 
         // change stuff here
     }
 });
-            ]]></pre>
+]]></pre>
         </paragraph>
     </part>
     <changelog>

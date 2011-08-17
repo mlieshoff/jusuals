@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<documentation name="classname" filename-prefix="classname" creator="mlieshoff"
+        creation="date" version="1.0" copyright="org.mili">
+    <written-language token="EN"/>
+    <author name="Michael Lieshoff" token="ML" email="michaellieshoff@gmx.de"/>
+    <part name="Introduction">
+        <paragraph name="What is a XXX?">
+            <text ressource="What is a XXX?_1"><![CDATA[
+]]></text>
+        </paragraph>
+        <paragraph name="Future of XXX">
+            <text ressource="Future of XXX_1"><![CDATA[
+]]></text>
+        </paragraph-->
+    </part>
+    <part name="Usage">
+        <paragraph name="Define a XX">
+            <text ressource="Define a XXX_1"><![CDATA[
+]]></text>
+        </paragraph>
+    </part>
+    <part name="Examples">
+        <paragraph name="Examples">
+            <text ressource="Examples_1"><![CDATA[
+]]></text>
+            <pre ressource="Examples_2"><![CDATA[
+]]></pre>
+        </paragraph>
+    </part>
+    <changelog>
+        <change date="date" version="1.0" who="mlieshoff" what="Creation."/>
+    </changelog>
+</documentation>
