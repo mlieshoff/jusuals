@@ -7,7 +7,7 @@ public class JSqlTest {
 
     @Test
     public void shouldStart() throws Exception {
-        JSql.main(new String[]{"--profile="});
+//        JSql.main(new String[]{"--profile="});
     }
 
 }
