@@ -28,6 +28,79 @@ import org.mili.core.properties.*;
 /**
  * This class is a default implementation of interface {@link Cache}.
  *
+ * <p><b>Introduction</b><p>
+ *
+ * <u> What is a default cache?</u><p>
+ *
+ * A default cache is a standard simple cache. It stores values under keys and provides binding
+ * listeners for key changes. It is not thread-safe.<p>
+ * <b>Usage</b><p>
+ *
+ * <u> Define a default cache</u><p>
+ *
+ * The default cache is simple to use and provides some methods to create, modify or traverse a
+ * cache.<p>
+ * <b>Examples</b><p>
+ *
+ * <u> Default cache for foo objects</u><p>
+ *
+ * Define a simple class called Foo that object wants to be cached in a default cache.<br>
+ * <pre>
+ * public class Foo() {
+ * }
+ * </pre>
+ * No create a default cache. For simplicity the Foo objects wants to be stored by a String value.<br>
+ * <pre>
+ * Cache&lt;String, Foo&gt; cache = DefaultCache.create();
+ * // put some foos
+ * cache.put(&quot;foo 1&quot;, new Foo());
+ * cache.put(&quot;foo 2&quot;, new Foo());
+ * // get some foos
+ * System.out.println(&quot;foo 1 : &quot; + cache.get(&quot;foo 1&quot;));
+ * System.out.println(&quot;foo 1 : &quot; + cache.get(&quot;foo 2&quot;));
+ * // get the number of cached entries
+ * System.out.println(&quot;size  : &quot; + cache.size());
+ * // get all values
+ * System.out.println(&quot;values: &quot; + cache.values());
+ * // get all keys
+ * System.out.println(&quot;keys  : &quot; + cache.keySet());
+ * // remove a value
+ * System.out.println(&quot;remove: &quot; + cache.remove(&quot;foo 1&quot;));
+ * // clear the cache
+ * cache.clear();
+ * </pre>
+ * Okay that is simple. Now modify the class Foo to privide an id.<br>
+ * <pre>
+ * public class Foo() {
+ *     String id;
+ *
+ *     public Foo(String id) {
+ *         this.id = id;
+ *     }
+ *
+ *     public String getId() {
+ *         return id;
+ *     }
+ * }
+ * </pre>
+ * Create a cache from a collection of Foo objects via the create method that provides an id
+ * functionality.<br>
+ * <pre>
+ * Now the cache contains the two Foo objects with keys &quot;foo 1&quot; and &quot;foo 2&quot;.
+ * </pre>
+ * Now the cache contains the two Foo objects with keys &quot;foo 1&quot; and &quot;foo 2&quot;.<br>
+ * Next use the change support of the cache. With the method getChangeSupport() the possibility is
+ * getted to add listeners of type java.beans.PropertyChangeListener. The support will fire
+ * property change events whenever the cache is modified.<br>
+ * <pre>
+ * cache.getChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
+ *     &#064;Override
+ *     public void propertyChange(PropertyChangeEvent evt) {
+ *         // change stuff here
+ *     }
+ * });
+ * </pre>
+ *
  * @author Michael Lieshoff
  */
 public class DefaultCache<K, V> implements Cache<K, V> {
