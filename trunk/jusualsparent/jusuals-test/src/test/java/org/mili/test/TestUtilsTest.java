@@ -20,13 +20,13 @@
 package org.mili.test;
 
 
-import static org.junit.Assert.*;
-
 import java.io.*;
 import java.sql.*;
 import java.util.*;
 
 import org.junit.*;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Michael Lieshoff
