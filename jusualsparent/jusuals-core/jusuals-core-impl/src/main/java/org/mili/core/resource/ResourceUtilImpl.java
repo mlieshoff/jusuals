@@ -54,6 +54,17 @@ public class ResourceUtilImpl implements ResourceUtilInterface {
     /** the constant for property PROP_THROWEXCEPTIONONMISSINGRESOURCE. */
     public final static String PROP_THROWEXCEPTIONONMISSINGRESOURCE =
             ID + "ThrowExceptionOnMissingResource";
+    /**
+     * property for the filename of the output file from the missing resource logger. The
+     * pattern %0 will be replaced with the locale's ISO 3 Language.
+     */
+    public final static String PROP_MISSINGRESOURCELOGGERFILENAME = ID
+            + "MissingResourceLoggerFilename";
+    /**
+     * property to log missing resources as warning.
+     */
+    public final static String PROP_LOGMISSINGRESOURCEASWARNING = ID
+            + "LogMissingResourceAsWarning";
     /* map base -> locale -> resourcebundle */
     private Map<String, Map<Locale, Map<String, String>>> cache = new Hashtable<String,
             Map<Locale, Map<String, String>>>();
@@ -175,8 +186,9 @@ public class ResourceUtilImpl implements ResourceUtilInterface {
                 throw new MissingResourceException("Missing resource for locale ! "
                         + getInfo(locale, baseName, key), e.getClassName(), key);
             } else {
-//                log.warn("Missing resource for locale ! ", getInfo(locale, baseName,
-//                        key));
+                if (Boolean.getBoolean(PROP_LOGMISSINGRESOURCEASWARNING)) {
+                    log.warn("Missing resource for locale! ", getInfo(locale, baseName, key));
+                }
                 return createMissingResource(key);
             }
         }

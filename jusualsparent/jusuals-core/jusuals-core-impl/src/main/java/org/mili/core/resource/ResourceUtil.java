@@ -47,6 +47,17 @@ public class ResourceUtil {
     /** the constant for property PROP_THROWEXCEPTIONONMISSINGRESOURCE. */
     public final static String PROP_THROWEXCEPTIONONMISSINGRESOURCE = ResourceUtilImpl
             .PROP_THROWEXCEPTIONONMISSINGRESOURCE;
+    /**
+     * property for the filename of the output file from the missing resource logger. The
+     * pattern %0 will be replaced with the locale's ISO 3 Language.
+     */
+    public final static String PROP_MISSINGRESOURCELOGGERFILENAME = ResourceUtilImpl
+            .PROP_MISSINGRESOURCELOGGERFILENAME;
+    /**
+     * property to log missing resources as warning.
+     */
+    public final static String PROP_LOGMISSINGRESOURCEASWARNING = ResourceUtilImpl
+            .PROP_LOGMISSINGRESOURCEASWARNING;
 
     /**
      * List all basenames.
