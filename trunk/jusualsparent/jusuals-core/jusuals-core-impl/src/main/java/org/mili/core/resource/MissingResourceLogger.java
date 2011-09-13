@@ -23,6 +23,8 @@ package org.mili.core.resource;
 import java.io.*;
 import java.util.*;
 
+import org.apache.commons.lang.*;
+
 /**
  * This enum is used to log missing resources.
  *
@@ -32,18 +34,19 @@ import java.util.*;
 enum MissingResourceLogger {
     INSTANCE;
 
-    private Map<Locale, Map<String, String>> res = new Hashtable<Locale, Map<String,String>>();
+    private Map<Locale, Map<String, String>> model =
+            new Hashtable<Locale, Map<String,String>>();
 
     MissingResourceLogger() {
     }
 
-    void log(Locale l, String s) {
-        Map<String, String> m = res.get(l);
+    void log(Locale locale, String key) {
+        Map<String, String> m = model.get(locale);
         if (m == null) {
             m = new TreeMap<String, String>();
-            res.put(l, m);
+            model.put(locale, m);
         }
-        m.put(s, "");
+        m.put(key, "");
         try {
             this.save();
         } catch (IOException e) {
@@ -53,7 +56,7 @@ enum MissingResourceLogger {
     }
 
     void save() throws IOException {
-        for (Iterator<Locale> i = this.res.keySet().iterator(); i.hasNext();) {
+        for (Iterator<Locale> i = this.model.keySet().iterator(); i.hasNext();) {
             Locale l = i.next();
             this.save(l);
         }
@@ -62,19 +65,26 @@ enum MissingResourceLogger {
 
     void save(Locale l) throws IOException {
         Properties p = new Properties();
-        File f = new File(new File(System.getProperty("java.io.tmpdir")),
-                "missing-properties-" + l.getISO3Language() + ".properties");
-        if (f.exists()) {
-            InputStream is = new FileInputStream(f);
+        String filenameProp = System.getProperty(ResourceUtil
+                .PROP_MISSINGRESOURCELOGGERFILENAME);
+        File file = null;
+        if (StringUtils.isEmpty(filenameProp)) {
+            file = new File(new File(System.getProperty("java.io.tmpdir")),
+                    "missing-properties-" + l.getISO3Language() + ".properties");
+        } else {
+            file = new File(filenameProp.replace("%0", l.getISO3Language()));
+        }
+        if (file.exists()) {
+            InputStream is = new FileInputStream(file);
             p.load(is);
             is.close();
         }
-        Map<String, String> m = this.res.get(l);
+        Map<String, String> m = this.model.get(l);
         for (Iterator<String> i = m.keySet().iterator(); i.hasNext();) {
             String k = i.next();
             p.put(k, "");
         }
-        OutputStream os = new FileOutputStream(f);
+        OutputStream os = new FileOutputStream(file);
         p.store(os, "missing properties found by core.resource.MissingResourceLogger");
         os.close();
         return;
