@@ -173,21 +173,17 @@
         </dependency>
     </dependencies>
 
-    <!--distributionManagement <repository> <id>repo</id> <name>Repository Name</name>
-        <url>scm:svn:https://xxx.googlecode.com/svn/trunk/xxxparent</url> </repository>
-        </distributionManagement-->
-
     <distributionManagement>
         <repository>
-            <id>repo</id>
-            <name>Maven Repo for jUsuals (releases)</name>
-            <url>svn:https://jusuals.googlecode.com/svn/maven-repo/releases</url>
+            <id>org-mili-repo-releases</id>
+            <name>Maven Repo for org.mili (releases)</name>
+            <url>svn:https://org-mili-repo.googlecode.com/svn/maven-repo/releases</url>
             <uniqueVersion>false</uniqueVersion>
         </repository>
         <snapshotRepository>
-            <id>repo-snapshot</id>
-            <name>Maven Repo jUsuals (snapshots)</name>
-            <url>svn:https://jusuals.googlecode.com/svn/maven-repo/snapshots</url>
+            <id>org-mili-repo-snapshots</id>
+            <name>Maven Repo for org.mili (snapshots)</name>
+            <url>svn:https://org-mili-repo.googlecode.com/svn/maven-repo/snapshots</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
     </distributionManagement>

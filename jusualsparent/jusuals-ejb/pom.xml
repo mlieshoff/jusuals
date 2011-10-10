@@ -35,4 +35,13 @@
             <version>4.0.5-GA</version>
         </dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>codehaus repository</id>
+            <url>https://nexus.codehaus.org/content/groups/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
 </project>
