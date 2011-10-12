@@ -2,6 +2,7 @@
 <project name="helper" default="release">
 
     <property name="release.name" value="jusuals-core"/>
+    <property name="release.version" value="1.0"/>
     <property name="release.version" value="1.0-SNAPSHOT"/>
     <property name="release.dir" value="target"/>
 
