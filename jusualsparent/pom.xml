@@ -55,10 +55,11 @@
         <otherArchives> <otherArchive> </otherArchive> </otherArchives> </mailingList>
         </mailingLists-->
 
-    <!--scm <connection>scm:svn:http://xxx.googlecode.com/svn/trunk/xxxparent</connection>
-        <developerConnection>scm:svn:https://xxx.googlecode.com/svn/trunk/xxxparent</developerConnection>
-        <url>http://code.google.com/p/xxx/source/browse/#svn/trunk/xxxparent</url>
-        </scm-->
+    <scm>
+        <connection>scm:svn:http://jusuals.googlecode.com/svn/trunk/jusualsparent</connection>
+        <developerConnection>scm:svn:https://jusuals.googlecode.com/svn/trunk/jusualsparent</developerConnection>
+        <url>http://code.google.com/p/jusuals/source/browse/#svn/trunk/jusualsparent</url>
+    </scm>
 
     <build>
         <plugins>
