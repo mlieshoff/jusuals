@@ -19,7 +19,7 @@
    limitations under the License.
  --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <version>1.0</version>
+    <version>1.1-SNAPSHOT</version>
     <artifactId>jusuals</artifactId>
     <groupId>org.mili.jusuals</groupId>
     <packaging>pom</packaging>
@@ -55,9 +55,9 @@
         </mailingLists-->
 
     <scm>
-        <connection>scm:svn:http://jusuals.googlecode.com/svn/tags/jusuals-1.0</connection>
-        <developerConnection>scm:svn:https://jusuals.googlecode.com/svn/tags/jusuals-1.0</developerConnection>
-        <url>http://code.google.com/p/jusuals/source/browse/#svn/tags/jusuals-1.0</url>
+        <connection>scm:svn:http://jusuals.googlecode.com/svn/trunk/jusualsparent</connection>
+        <developerConnection>scm:svn:https://jusuals.googlecode.com/svn/trunk/jusualsparent</developerConnection>
+        <url>http://code.google.com/p/jusuals/source/browse/#svn/trunk/jusualsparent</url>
     </scm>
 
     <build>
