@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.mili.jusuals.core</groupId>
         <artifactId>jusuals-core</artifactId>
-        <version>1.0</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
     <groupId>org.mili.jusuals.core.api</groupId>
     <artifactId>jusuals-core-api</artifactId>
