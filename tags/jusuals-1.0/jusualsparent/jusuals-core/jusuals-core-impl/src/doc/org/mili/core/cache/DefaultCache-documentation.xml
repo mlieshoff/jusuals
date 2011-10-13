@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='utf-8'?>
+<documentation name="DefaultCache" filename-prefix="defaultcache" creator="mlieshoff"
+        creation="11.08.2011 19:50" version="1.0" copyright="org.mili">
+    <written-language token="EN"/>
+    <author name="Michael Lieshoff" token="ML" email="michaellieshoff@gmx.de"/>
+    <part name="Introduction">
+        <paragraph name="What is a default cache?">
+            <text ressource="What is a default cache?_1"><![CDATA[
+A default cache is a standard simple cache. It stores values under keys and provides binding
+listeners for key changes. It is not thread-safe.
+]]></text>
+        </paragraph>
+        <!--paragraph name="Future of default cache">
+            <text ressource="Future of default cache_1"><![CDATA[
+            ]]></text>
+        </paragraph-->
+    </part>
+    <part name="Usage">
+        <paragraph name="Define a default cache">
+            <text ressource="Define a default cache_1"><![CDATA[
+The default cache is simple to use and provides some methods to create, modify or traverse a
+cache.
+]]></text>
+        </paragraph>
+    </part>
+    <part name="Examples">
+        <paragraph name="Default cache for foo objects">
+            <text ressource="Default cache for foo objects_1"><![CDATA[
+Define a simple class called Foo that object wants to be cached in a default cache.
+]]></text>
+            <pre ressource="Default cache for foo objects_2"><![CDATA[
+public class Foo() {
+}
+]]></pre>
+            <text ressource="Default cache for foo objects_3"><![CDATA[
+No create a default cache. For simplicity the Foo objects wants to be stored by a String value.
+]]></text>
+            <pre ressource="Default cache for foo objects_4"><![CDATA[
+Cache<String, Foo> cache = DefaultCache.create();
+// put some foos
+cache.put("foo 1", new Foo());
+cache.put("foo 2", new Foo());
+// get some foos
+System.out.println("foo 1 : " + cache.get("foo 1"));
+System.out.println("foo 1 : " + cache.get("foo 2"));
+// get the number of cached entries
+System.out.println("size  : " + cache.size());
+// get all values
+System.out.println("values: " + cache.values());
+// get all keys
+System.out.println("keys  : " + cache.keySet());
+// remove a value
+System.out.println("remove: " + cache.remove("foo 1"));
+// clear the cache
+cache.clear();
+]]></pre>
+            <text ressource="Default cache for foo objects_5"><![CDATA[
+Okay that is simple. Now modify the class Foo to privide an id.
+]]></text>
+            <pre ressource="Default cache for foo objects_6"><![CDATA[
+public class Foo() {
+    String id;
+
+    public Foo(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+}
+]]></pre>
+            <text ressource="Default cache for foo objects_7"><![CDATA[
+Create a cache from a collection of Foo objects via the create method that provides an id
+functionality.
+]]></text>
+            <pre ressource="Default cache for foo objects_8"><![CDATA[
+Collection<Foo> foos = new ArrayList<Foo>() {{
+    add(new Foo("foo 1"));
+    add(new Foo("foo 2"));
+]};
+Cache<String, Foo> cache = DefaultCache.create(foos, new UnaryFunction<Foo, String>() {
+    @Override
+    public String evaluate(Foo foo) {
+        return foo.getId();
+    }
+});
+]]></pre>
+            <text ressource="Default cache for foo objects_8"><![CDATA[
+Now the cache contains the two Foo objects with keys "foo 1" and "foo 2".
+]]></text>
+            <text ressource="Default cache for foo objects_9"><![CDATA[
+Next use the change support of the cache. With the method getChangeSupport() the possibility is
+getted to add listeners of type java.beans.PropertyChangeListener. The support will fire
+property change events whenever the cache is modified.
+]]></text>
+            <pre ressource="Default cache for foo objects_10"><![CDATA[
+cache.getChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        // change stuff here
+    }
+});
+]]></pre>
+        </paragraph>
+    </part>
+    <changelog>
+        <change date="11.08.2011 19:50" version="1.0" who="mlieshoff" what="Creation."/>
+    </changelog>
+</documentation>
