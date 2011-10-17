@@ -20,9 +20,12 @@
 package org.mili.core.logging;
 
 import java.io.*;
+import java.lang.reflect.*;
 
 import org.apache.commons.lang.*;
+import org.apache.commons.lang.reflect.*;
 import org.mili.core.logging.log4j.*;
+import org.mili.core.properties.*;
 
 
 /**
@@ -32,10 +35,15 @@ import org.mili.core.logging.log4j.*;
  *
  */
 public class DefaultLogger implements Logger {
+    /** property to log throwables onto filesystem. */
     public final static String PROP_LOGTHROWABLES = DefaultLogger.class.getName()
             + ".LogThrowables";
+    /** property to set throwables log directory. */
     public final static String PROP_LOGTHROWABLESDIR = DefaultLogger.class.getName()
             + ".LogThrowablesDir";
+    /** property for used adapter class. */
+    public final static String PROP_ADAPTERCLASS = DefaultLogger.class.getName()
+            + ".AdapterClass";
     private Logger root = null;
     private ThrowableLogger throwableLogger = null;
     private Class<?> cls = null;
@@ -68,7 +76,21 @@ public class DefaultLogger implements Logger {
      * @return logger.
      */
     public static Logger create(Class<?> clazz) {
-        return new Log4jAdapter(clazz);
+        String adapterClassname = PropUtil.getSystem(PROP_ADAPTERCLASS, Log4jAdapter.class
+                .getName());
+        Class<?> cls;
+        try {
+            cls = Class.forName(adapterClassname);
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException(e);
+        }
+        Constructor<Logger> constructor = ConstructorUtils.getAccessibleConstructor(cls,
+                Class.class);
+        try {
+            return constructor.newInstance(clazz);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     @Override
