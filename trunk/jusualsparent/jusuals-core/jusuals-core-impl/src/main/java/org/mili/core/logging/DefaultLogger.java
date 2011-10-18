@@ -29,10 +29,139 @@ import org.mili.core.properties.*;
 
 
 /**
- * This class defines a logger factory.
+ * This class defines an implementation of the facade defines in interface Logger.
+ *
+ * <p><b>Introduction</b><p>
+ *
+ * <u> What is DefaultLogger?</u><p>
+ *
+ * DefaultLogger is a logging facade for Java. Technical it is an implementation of interface
+ * org.mili.logging.Logger where a logging facade is defined. This interface provides a couple of
+ * methods to log like in Log4j and little bit more. The logger is independent of the underlying
+ * logging system. So by default Log4j is used but it is very easy to switch to java.util.logging
+ * with this facade changing absolutely nothing in your implementation.<p>
+ *
+ * <u> Future of DefaultLogger</u><p>
+ *
+ * <p>
+ * <b>Usage</b><p>
+ *
+ * <u> How to setup?</u><p>
+ *
+ * The setup of the DefaultLogger is easy as well. Just define a member in your class and set up
+ * a Log4j configuration.<br>
+ * <pre>
+ * import org.mili.logging.*;
+ * public class Foo {
+ *     private final static Logger LOG = DefaultLogger.getLogger(Foo.class);
+ * }
+ * </pre>
+ * How to switch to java.util.logging ? It is quite easy. Feel free to set a property file for
+ * logging configuration and just set a system property like this:<br>
+ * <pre>
+ * System.setProperty(org.mili.logging.DefaultLogger.PROP_ADAPTERCLASS, org.mili.logging.java.JavaAdapter.getName());
+ * </pre>
+ *
+ * <u> What methods are there for logging?</u><p>
+ *
+ * There are methods to log for every log levels known in Log4j. The DefaultLogger maps the
+ * java.util.logging Levels to these levels. The mapped levels are in braces.<br>
+ * <pre>
+ * - trace    (finest)
+ * - debug    (fine, finer)
+ * - info     (info, config)
+ * - warn     (warning)
+ * - error    (severe)
+ * - fatal    (severe)
+ * </pre>
+ * This basic methods can be parametrized in two ways. &lt;level&gt; stands for one of the levels. The
+ * objects parameter will be transformed to a string like &quot;a=1, b=4711&quot; for example &quot;a, 1, b, 4711&quot; and so on. Do not
+ * concatenate string at this point it will decrease performance! The string will only and only
+ * calculated if the log levels fits otherwise it will be ignored and do not costs performance.<br>
+ * <pre>
+ * void &lt;level&gt;(Throwable t, Object... o)
+ * void &lt;level&gt;(Object... o)
+ * </pre>
+ * For more structural logs you can mark a block for delegating, beginning and ending. Use
+ * delegate if your methods just delegates to another one. Use beginning to mark the
+ * beginning of a levelled block and ending to mark it's ending.<br>
+ * <pre>
+ * void begin&lt;Level&gt;(String method, Object... o)
+ * void end&lt;Level&gt;(String method, Object... o)
+ * void delegate&lt;Level&gt;(String method, Object... o)
+ * </pre>
+ * The received output is:<br>
+ * <pre>
+ * BEGIN method1: a, 1, b, abbas
+ * ...
+ * BEGIN method3: s, hello
+ * ...
+ * END method3.
+ * ...
+ * DELEGATE method2: x, 4711
+ * ...
+ * END method1.
+ * </pre>
+ * You can use methods to generate this logged string as object array:<br>
+ * <pre>
+ * Object[] delegate(String method, Object... o)
+ * Object[] end(String method, Object... o)
+ * Object[] delegate(String method, Object... o)
+ * </pre>
+ * To generate more readable parameter informations for log entries you can use the methods:<br>
+ * <pre>
+ * String &lt;level&gt;VarArgsToParamString(Object... o);
+ * ...
+ * System.out.println(LOG.debugVarArgsToParamString(&quot;a&quot;, 1, &quot;s&quot;, &quot;abbas&quot;));
+ * </pre>
+ * Results in:<br>
+ * <pre>
+ * a=1, s=abbas
+ * </pre>
+ * Only and only if the log levels fits for debug.<br>
+ * Feel free to combine everything:<br>
+ * <pre>
+ * try {
+ *     ...
+ * } catch(Exception e) {
+ *     LOG.error(e, LOG.delegate(&quot;my delegate for errors&quot;, LOG.debugVarArgsToParamString(&quot;a&quot;, 1, &quot;s&quot;, &quot;abbas&quot;)));
+ *     // shortcut is
+ *     // LOG.delegateError(&quot;my delegate for errors&quot;, e, LOG.debugVarArgsToParamString(&quot;a&quot;, 1, &quot;s&quot;, &quot;abbas&quot;));
+ * }
+ * </pre>
+ * What happens for log level error?<br>
+ * <pre>
+ * ERROR delegate my delegate for errors:
+ * </pre>
+ * And for debug?<br>
+ * <pre>
+ * ERROR delegate my delegate for errors: a=1, s=abbas
+ * </pre>
+ *
+ * <u> How to log throwables in separate?</u><p>
+ *
+ * You can log throwables in separate directory and file structure. At each time a throwable is
+ * logged it will be logged on filesystem too. To turn on this behaviour just set a system property:<br>
+ * <pre>
+ * System.setProperty(org.mili.logging.DefaultLogger.PROP_LOGTHROWABLES, &quot;true&quot;);
+ * </pre>
+ * And if another base dir then system property &quot;java.io.tmpdir&quot; is wanted:<br>
+ * <pre>
+ * System.setProperty(org.mili.logging.DefaultLogger.PROP_LOGTHROWABLESDIR, &quot;what/ever/you/want&quot;);
+ * </pre>
+ * The resulting structure should look like this:<br>
+ * <pre>
+ * - what
+ *     - ever
+ *         - you
+ *             - want
+ *                 - 20110101
+ *                     - my.package.and.my.class.Foo
+ * </pre>
+ * The stacktrace of the throwbables occured in the referenced class will be appended at this
+ * file. A timestamp and a special string is used to separate the stacktraces<p>
  *
  * @author Michael Lieshoff
- *
  */
 public class DefaultLogger implements Logger {
     /** property to log throwables onto filesystem. */

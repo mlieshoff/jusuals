@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='utf-8'?>
+<documentation name="DefaultLogger" filename-prefix="defaultlogger" creator="mlieshoff"
+        creation="09.05.2011 20:20" version="1.0" copyright="org.mili">
+    <written-language token="EN"/>
+    <author name="Michael Lieshoff" token="ML" email="michaellieshoff@gmx.de"/>
+    <part name="Introduction">
+        <paragraph name="What is DefaultLogger?">
+            <text ressource="What is DefaultLogger?_1"><![CDATA[
+DefaultLogger is a logging facade for Java. Technical it is an implementation of interface
+org.mili.logging.Logger where a logging facade is defined. This interface provides a couple of
+methods to log like in Log4j and little bit more. The logger is independent of the underlying
+logging system. So by default Log4j is used but it is very easy to switch to java.util.logging
+with this facade changing absolutely nothing in your implementation.
+            ]]></text>
+        </paragraph>
+        <paragraph name="Future of DefaultLogger">
+            <text ressource="Future of DefaultLogger_1"><![CDATA[
+            ]]></text>
+        </paragraph>
+    </part>
+    <part name="Usage">
+        <paragraph name="How to setup?">
+            <text ressource="How to setup?_1"><![CDATA[
+The setup of the DefaultLogger is easy as well. Just define a member in your class and set up
+a Log4j configuration.
+            ]]></text>
+            <pre ressource="How to setup?_2"><![CDATA[
+import org.mili.logging.*;
+public class Foo {
+    private final static Logger LOG = DefaultLogger.getLogger(Foo.class);
+}
+            ]]></pre>
+            <text ressource="How to setup?_3"><![CDATA[
+How to switch to java.util.logging ? It is quite easy. Feel free to set a property file for
+logging configuration and just set a system property like this:
+            ]]></text>
+            <pre ressource="How to setup?_4"><![CDATA[
+    System.setProperty(org.mili.logging.DefaultLogger.PROP_ADAPTERCLASS, org.mili.logging.java.JavaAdapter.getName());
+            ]]></pre>
+        </paragraph>
+        <paragraph name="What methods are there for logging?">
+            <text ressource="What methods are there for logging?_1"><![CDATA[
+There are methods to log for every log levels known in Log4j. The DefaultLogger maps the
+java.util.logging Levels to these levels. The mapped levels are in braces.
+            ]]></text>
+            <pre ressource="What methods are there for logging?_2"><![CDATA[
+- trace    (finest)
+- debug    (fine, finer)
+- info     (info, config)
+- warn     (warning)
+- error    (severe)
+- fatal    (severe)
+            ]]></pre>
+            <text ressource="What methods are there for logging?_3"><![CDATA[
+This basic methods can be parametrized in two ways. <level> stands for one of the levels. The
+objects parameter will be transformed to a string like "a=1, b=4711" for example "a, 1, b, 4711" and so on. Do not
+concatenate string at this point it will decrease performance! The string will only and only
+calculated if the log levels fits otherwise it will be ignored and do not costs performance.
+            ]]></text>
+            <pre ressource="What methods are there for logging?_4"><![CDATA[
+void <level>(Throwable t, Object... o)
+void <level>(Object... o)
+            ]]></pre>
+            <text ressource="What methods are there for logging?_5"><![CDATA[
+For more structural logs you can mark a block for delegating, beginning and ending. Use
+delegate if your methods just delegates to another one. Use beginning to mark the
+beginning of a levelled block and ending to mark it's ending.
+            ]]></text>
+            <pre ressource="What methods are there for logging?_6"><![CDATA[
+void begin<Level>(String method, Object... o)
+void end<Level>(String method, Object... o)
+void delegate<Level>(String method, Object... o)
+            ]]></pre>
+            <text ressource="What methods are there for logging?_7"><![CDATA[
+The received output is:
+            ]]></text>
+            <pre ressource="What methods are there for logging?_8"><![CDATA[
+BEGIN method1: a, 1, b, abbas
+...
+BEGIN method3: s, hello
+...
+END method3.
+...
+DELEGATE method2: x, 4711
+...
+END method1.
+            ]]></pre>
+            <text ressource="What methods are there for logging?_9"><![CDATA[
+You can use methods to generate this logged string as object array:
+            ]]></text>
+            <pre ressource="What methods are there for logging?_10"><![CDATA[
+Object[] delegate(String method, Object... o)
+Object[] end(String method, Object... o)
+Object[] delegate(String method, Object... o)
+            ]]></pre>
+            <text ressource="What methods are there for logging?_11"><![CDATA[
+To generate more readable parameter informations for log entries you can use the methods:
+            ]]></text>
+            <pre ressource="What methods are there for logging?_12"><![CDATA[
+String <level>VarArgsToParamString(Object... o);
+...
+System.out.println(LOG.debugVarArgsToParamString("a", 1, "s", "abbas"));
+            ]]></pre>
+            <text ressource="What methods are there for logging?_13"><![CDATA[
+Results in:
+            ]]></text>
+            <pre ressource="What methods are there for logging?_14"><![CDATA[
+a=1, s=abbas
+            ]]></pre>
+            <text ressource="What methods are there for logging?_15"><![CDATA[
+Only and only if the log levels fits for debug.
+            ]]></text>
+            <text ressource="What methods are there for logging?_16"><![CDATA[
+Feel free to combine everything:
+            ]]></text>
+            <pre ressource="What methods are there for logging?_17"><![CDATA[
+try {
+    ...
+} catch(Exception e) {
+    LOG.error(e, LOG.delegate("my delegate for errors", LOG.debugVarArgsToParamString("a", 1, "s", "abbas")));
+    // shortcut is
+    // LOG.delegateError("my delegate for errors", e, LOG.debugVarArgsToParamString("a", 1, "s", "abbas"));
+}
+            ]]></pre>
+            <text ressource="What methods are there for logging?_18"><![CDATA[
+What happens for log level error?
+            ]]></text>
+            <pre ressource="What methods are there for logging?_19"><![CDATA[
+ERROR delegate my delegate for errors:
+            ]]></pre>
+            <text ressource="What methods are there for logging?_20"><![CDATA[
+And for debug?
+            ]]></text>
+            <pre ressource="What methods are there for logging?_21"><![CDATA[
+ERROR delegate my delegate for errors: a=1, s=abbas
+            ]]></pre>
+        </paragraph>
+        <paragraph name="How to log throwables in separate?">
+            <text ressource="How to log throwables in separate?_1"><![CDATA[
+You can log throwables in separate directory and file structure. At each time a throwable is
+logged it will be logged on filesystem too. To turn on this behaviour just set a system property:
+            ]]></text>
+            <pre ressource="How to log throwables in separate?_2"><![CDATA[
+System.setProperty(org.mili.logging.DefaultLogger.PROP_LOGTHROWABLES, "true");
+            ]]></pre>
+            <text ressource="How to log throwables in separate?_3"><![CDATA[
+And if another base dir then system property "java.io.tmpdir" is wanted:
+            ]]></text>
+            <pre ressource="How to log throwables in separate?_4"><![CDATA[
+System.setProperty(org.mili.logging.DefaultLogger.PROP_LOGTHROWABLESDIR, "what/ever/you/want");
+            ]]></pre>
+            <text ressource="How to log throwables in separate?_5"><![CDATA[
+The resulting structure should look like this:
+            ]]></text>
+            <pre ressource="How to log throwables in separate?_6"><![CDATA[
+- what
+    - ever
+        - you
+            - want
+                - 20110101
+                    - my.package.and.my.class.Foo
+            ]]></pre>
+            <text ressource="How to log throwables in separate?_7"><![CDATA[
+The stacktrace of the throwbables occured in the referenced class will be appended at this
+file. A timestamp and a special string is used to separate the stacktraces
+            ]]></text>
+        </paragraph>
+    </part>
+    <changelog>
+        <change date="09.05.2011 20:20" version="1.0" who="mlieshoff" what="Creation."/>
+    </changelog>
+</documentation>
