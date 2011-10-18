@@ -43,7 +43,7 @@ import org.mili.core.properties.*;
  *
  * <u> Future of DefaultLogger</u><p>
  *
- * <p>
+ * The DefaultLogger is used in three companies and a couple of open-source projects.<p>
  * <b>Usage</b><p>
  *
  * <u> How to setup?</u><p>

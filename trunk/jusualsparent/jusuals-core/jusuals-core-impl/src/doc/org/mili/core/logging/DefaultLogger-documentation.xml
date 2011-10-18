@@ -15,6 +15,7 @@ with this facade changing absolutely nothing in your implementation.
         </paragraph>
         <paragraph name="Future of DefaultLogger">
             <text ressource="Future of DefaultLogger_1"><![CDATA[
+The DefaultLogger is used in three companies and a couple of open-source projects.
             ]]></text>
         </paragraph>
     </part>
