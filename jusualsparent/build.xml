@@ -2,9 +2,11 @@
 <project name="helper" default="release">
 
     <property name="release.name" value="jusuals-core"/>
-    <property name="release.version" value="1.1pre"/>
+    <property name="release.version" value="1.1-pre"/>
     <property name="release.version" value="1.1-SNAPSHOT"/>
     <property name="release.dir" value="target"/>
+
+    <property name="tmp.dir" value="tmp"/>
 
     <property name="release.file" value="${release.dir}/jusuals-${release.version}.zip"/>
     <property name="core.release.jar.file" value="${release.dir}/jusuals-core-${release.version}.jar"/>
@@ -36,14 +38,15 @@
     </target>
 
     <target name="release-core" description="makes releases of jusuals-core.">
+        <delete file="${tmp.dir}"/>
+        <mkdir dir="${tmp.dir}"/>
+        <unzip src="jusuals-core/jusuals-core-api/target/jusuals-core-api-${release.version}.jar" dest="${tmp.dir}" />
+        <unzip src="jusuals-core/jusuals-core-impl/target/jusuals-core-impl-${release.version}.jar" dest="${tmp.dir}" />
         <mkdir dir="${release.dir}"/>
         <delete file="${core.release.jar.file}"/>
         <zip destfile="${core.release.jar.file}">
-            <zipfileset dir="jusuals-core/jusuals-core-api/target/classes" prefix="">
-                <include name="**/*.class" />
-            </zipfileset>
-            <zipfileset dir="jusuals-core/jusuals-core-impl/target/classes" prefix="">
-                <include name="**/*.class" />
+            <zipfileset dir="${tmp.dir}" prefix="">
+                <include name="**/*" />
             </zipfileset>
         </zip>
         <delete file="${core.release.src.file}"/>
@@ -87,11 +90,14 @@
     <macrodef name="release-project">
         <attribute name="project"/>
         <sequential>
+            <delete file="${tmp.dir}"/>
+            <mkdir dir="${tmp.dir}"/>
+            <unzip src="@{project}/target/@{project}-${release.version}.jar" dest="${tmp.dir}" />
             <mkdir dir="${release.dir}"/>
             <delete file="${release.dir}/@{project}-${release.version}.jar"/>
             <zip destfile="${release.dir}/@{project}-${release.version}.jar">
-                <zipfileset dir="@{project}/target/classes" prefix="">
-                    <include name="**/*.class" />
+                <zipfileset dir="${tmp.dir}" prefix="">
+                    <include name="**/*" />
                 </zipfileset>
             </zip>
             <delete file="${release.dir}/@{project}-sources-${release.version}.jar"/>
