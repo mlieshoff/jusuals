@@ -2,8 +2,8 @@
 <project name="helper" default="release">
 
     <property name="release.name" value="jusuals-core"/>
-    <property name="release.version" value="1.0"/>
-    <property name="release.version" value="1.0-SNAPSHOT"/>
+    <property name="release.version" value="1.1pre"/>
+    <property name="release.version" value="1.1-SNAPSHOT"/>
     <property name="release.dir" value="target"/>
 
     <property name="release.file" value="${release.dir}/jusuals-${release.version}.zip"/>
