@@ -24,8 +24,11 @@ import java.lang.reflect.*;
 
 import org.apache.commons.lang.*;
 import org.apache.commons.lang.reflect.*;
+import org.mili.core.logging.java.*;
 import org.mili.core.logging.log4j.*;
 import org.mili.core.properties.*;
+
+import sun.reflect.*;
 
 
 /**
@@ -53,13 +56,25 @@ import org.mili.core.properties.*;
  * <pre>
  * import org.mili.logging.*;
  * public class Foo {
+ *     private final static Logger LOG = new DefaultLogger(Foo.class);
  *     private final static Logger LOG = DefaultLogger.getLogger(Foo.class);
+ *     private final static Logger LOG = DefaultLogger.create(Foo.class);
+ *
+ *     // or for implicitly use in Foo.class
+ *
+ *     private final static Logger LOG = new DefaultLogger();
+ *     private final static Logger LOG = DefaultLogger.getLoggerForCaller();
+ *     private final static Logger LOG = DefaultLogger.createForCaller();
  * }
  * </pre>
  * How to switch to java.util.logging ? It is quite easy. Feel free to set a property file for
  * logging configuration and just set a system property like this:<br>
  * <pre>
  * System.setProperty(org.mili.logging.DefaultLogger.PROP_ADAPTERCLASS, org.mili.logging.java.JavaAdapter.getName());
+ *
+ * // or
+ *
+ * DefaultLogger.setAdapterClass(org.mili.logging.java.JavaAdapter.class);
  * </pre>
  *
  * <u> What methods are there for logging?</u><p>
@@ -178,6 +193,14 @@ public class DefaultLogger implements Logger {
     private Class<?> cls = null;
 
     /**
+     * Create a new logger for a caller.
+     */
+    public DefaultLogger() {
+        this.root = create(Reflection.getCallerClass(2));
+        this.cls = this.root.getLoggedClass();
+    }
+
+    /**
      * Create a new logger from class clazz.
      *
      * @param clazz the class.
@@ -196,6 +219,19 @@ public class DefaultLogger implements Logger {
      */
     public static DefaultLogger getLogger(Class<?> clazz) {
         return new DefaultLogger(clazz);
+    }
+
+    /**
+     * Gets the logger for caller.
+     *
+     * @return the logger for caller
+     */
+    public static DefaultLogger getLoggerForCaller() {
+        return getLogger(getCaller());
+    }
+
+    private static Class<?> getCaller() {
+        return Reflection.getCallerClass(3);
     }
 
     /**
@@ -220,6 +256,15 @@ public class DefaultLogger implements Logger {
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    /**
+     * Creates the logger for the caller.
+     *
+     * @return the logger
+     */
+    public static Logger createForCaller() {
+        return create(getCaller());
     }
 
     @Override
@@ -434,6 +479,20 @@ public class DefaultLogger implements Logger {
 
     void setRoot(Logger logger) {
         this.root = logger;
+    }
+
+    @Override
+    public Class<?> getLoggedClass() {
+        return cls;
+    }
+
+    /**
+     * Sets the adapter class.
+     *
+     * @param adapterClass the new adapter class
+     */
+    public static void setAdapterClass(Class<JavaAdapter> adapterClass) {
+        PropUtil.setSystem(DefaultLogger.PROP_ADAPTERCLASS, adapterClass.getName());
     }
 
 }

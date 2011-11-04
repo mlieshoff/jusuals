@@ -46,12 +46,12 @@ import org.mili.core.logging.Logger;
 
 public class JavaAdapter implements Logger {
     private java.util.logging.Logger logger = java.util.logging.Logger.getAnonymousLogger();
+    private Class<?> clazz;
 
     /**
      * Creates a new default logger.
      */
     public JavaAdapter() {
-        super();
     }
 
     /**
@@ -61,6 +61,7 @@ public class JavaAdapter implements Logger {
      */
     public JavaAdapter(Class<?> clazz) {
         logger = java.util.logging.Logger.getLogger(clazz.getName());
+        this.clazz = clazz;
     }
 
     boolean isOn() {
@@ -367,6 +368,11 @@ public class JavaAdapter implements Logger {
     @Override
     public Object getLogger() {
         return this.logger;
+    }
+
+    @Override
+    public Class<?> getLoggedClass() {
+        return clazz;
     }
 
     private String getO(Object... o) {
