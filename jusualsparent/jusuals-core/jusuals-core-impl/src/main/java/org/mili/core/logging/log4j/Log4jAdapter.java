@@ -57,12 +57,12 @@ import org.mili.core.logging.Logger;
 
 public class Log4jAdapter implements Logger {
     private org.apache.log4j.Logger logger = org.apache.log4j.Logger.getRootLogger();
+    private Class<?> clazz = Log4jAdapter.class;
 
     /**
      * Creates a new default logger.
      */
     public Log4jAdapter() {
-        super();
     }
 
     /**
@@ -71,8 +71,8 @@ public class Log4jAdapter implements Logger {
      * @param clazz The class.
      */
     public Log4jAdapter(Class<?> clazz) {
-        super();
         this.logger = org.apache.log4j.Logger.getLogger(clazz);
+        this.clazz = clazz;
     }
 
     @Override
@@ -372,6 +372,11 @@ public class Log4jAdapter implements Logger {
     @Override
     public Object getLogger() {
         return this.logger;
+    }
+
+    @Override
+    public Class<?> getLoggedClass() {
+        return clazz;
     }
 
     private String getO(Object... o) {

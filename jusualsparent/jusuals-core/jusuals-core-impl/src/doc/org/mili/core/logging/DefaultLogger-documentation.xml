@@ -28,7 +28,15 @@ a Log4j configuration.
             <pre ressource="How to setup?_2"><![CDATA[
 import org.mili.logging.*;
 public class Foo {
+    private final static Logger LOG = new DefaultLogger(Foo.class);
     private final static Logger LOG = DefaultLogger.getLogger(Foo.class);
+    private final static Logger LOG = DefaultLogger.create(Foo.class);
+
+    // or for implicitly use in Foo.class
+
+    private final static Logger LOG = new DefaultLogger();
+    private final static Logger LOG = DefaultLogger.getLoggerForCaller();
+    private final static Logger LOG = DefaultLogger.createForCaller();
 }
             ]]></pre>
             <text ressource="How to setup?_3"><![CDATA[
@@ -36,7 +44,11 @@ How to switch to java.util.logging ? It is quite easy. Feel free to set a proper
 logging configuration and just set a system property like this:
             ]]></text>
             <pre ressource="How to setup?_4"><![CDATA[
-    System.setProperty(org.mili.logging.DefaultLogger.PROP_ADAPTERCLASS, org.mili.logging.java.JavaAdapter.getName());
+System.setProperty(org.mili.logging.DefaultLogger.PROP_ADAPTERCLASS, org.mili.logging.java.JavaAdapter.getName());
+
+// or
+
+DefaultLogger.setAdapterClass(org.mili.logging.java.JavaAdapter.class);
             ]]></pre>
         </paragraph>
         <paragraph name="What methods are there for logging?">

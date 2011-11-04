@@ -26,6 +26,7 @@ import java.util.*;
 
 import org.easymock.*;
 import org.junit.*;
+import org.mili.core.logging.java.*;
 import org.mili.test.*;
 
 import static org.junit.Assert.*;
@@ -54,8 +55,45 @@ public class DefaultLoggerTest {
     public void setUp() {
         System.clearProperty(DefaultLogger.PROP_LOGTHROWABLES);
         System.clearProperty(DefaultLogger.PROP_LOGTHROWABLESDIR);
+        System.clearProperty(DefaultLogger.PROP_ADAPTERCLASS);
         this.root = EasyMock.createMock(Logger.class);
         this.logger.setRoot(this.root);
+    }
+
+    @Test
+    public void shouldInstantiateParameterlessWithCreateForCaller() {
+        Logger log = DefaultLogger.createForCaller();
+        assertEquals(getClass(), log.getLoggedClass());
+    }
+
+    @Test
+    public void shouldInstantiateParameterlessWithGetLoggerForCaller() {
+        DefaultLogger log = DefaultLogger.getLoggerForCaller();
+        assertEquals(getClass(), log.getLoggedClass());
+    }
+
+    @Test
+    public void shouldInstantiateParameterlessWithConstructor() {
+        DefaultLogger log = new DefaultLogger();
+        assertEquals(getClass(), log.getLoggedClass());
+    }
+
+    @Test
+    public void shouldSetAdapterClassWithProp() {
+        Logger log = DefaultLogger.getLoggerForCaller();
+        assertEquals(org.apache.log4j.Logger.class, log.getLogger().getClass());
+        System.setProperty(DefaultLogger.PROP_ADAPTERCLASS, JavaAdapter.class.getName());
+        log = DefaultLogger.getLoggerForCaller();
+        assertEquals(java.util.logging.Logger.class, log.getLogger().getClass());
+    }
+
+    @Test
+    public void shouldSetAdapterClassWithSetMethod() {
+        Logger log = DefaultLogger.getLoggerForCaller();
+        assertEquals(org.apache.log4j.Logger.class, log.getLogger().getClass());
+        DefaultLogger.setAdapterClass(JavaAdapter.class);
+        log = DefaultLogger.getLoggerForCaller();
+        assertEquals(java.util.logging.Logger.class, log.getLogger().getClass());
     }
 
     @Test
