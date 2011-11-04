@@ -91,7 +91,7 @@
                     <version>[2.6]</version>
                     <aggregate>false</aggregate>
                     <excludePackageNames>*.internal*</excludePackageNames>
-                    <detectJavaApiLink>true</detectJavaApiLink>
+                    <detectJavaApiLink>false</detectJavaApiLink>
                     <detectLinks>false</detectLinks>
                     <source>1.6</source>
                     <links>
