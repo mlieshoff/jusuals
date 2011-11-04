@@ -53,11 +53,15 @@ public class DefaultLoggerTest {
 
     @Before
     public void setUp() {
+        this.root = EasyMock.createMock(Logger.class);
+        this.logger.setRoot(this.root);
+    }
+
+    @After
+    public void tearDown() {
         System.clearProperty(DefaultLogger.PROP_LOGTHROWABLES);
         System.clearProperty(DefaultLogger.PROP_LOGTHROWABLESDIR);
         System.clearProperty(DefaultLogger.PROP_ADAPTERCLASS);
-        this.root = EasyMock.createMock(Logger.class);
-        this.logger.setRoot(this.root);
     }
 
     @Test

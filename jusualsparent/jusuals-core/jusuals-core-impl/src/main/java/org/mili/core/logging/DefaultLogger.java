@@ -26,7 +26,6 @@ import org.apache.commons.lang.*;
 import org.apache.commons.lang.reflect.*;
 import org.mili.core.logging.java.*;
 import org.mili.core.logging.log4j.*;
-import org.mili.core.properties.*;
 
 import sun.reflect.*;
 
@@ -241,7 +240,7 @@ public class DefaultLogger implements Logger {
      * @return logger.
      */
     public static Logger create(Class<?> clazz) {
-        String adapterClassname = PropUtil.getSystem(PROP_ADAPTERCLASS, Log4jAdapter.class
+        String adapterClassname = System.getProperty(PROP_ADAPTERCLASS, Log4jAdapter.class
                 .getName());
         Class<?> cls;
         try {
@@ -492,7 +491,7 @@ public class DefaultLogger implements Logger {
      * @param adapterClass the new adapter class
      */
     public static void setAdapterClass(Class<JavaAdapter> adapterClass) {
-        PropUtil.setSystem(DefaultLogger.PROP_ADAPTERCLASS, adapterClass.getName());
+        System.setProperty(DefaultLogger.PROP_ADAPTERCLASS, adapterClass.getName());
     }
 
 }
