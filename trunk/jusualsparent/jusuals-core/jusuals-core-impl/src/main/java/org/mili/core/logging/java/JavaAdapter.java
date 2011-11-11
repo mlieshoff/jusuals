@@ -52,6 +52,7 @@ public class JavaAdapter implements Logger {
      * Creates a new default logger.
      */
     public JavaAdapter() {
+        fixNullLevel();
     }
 
     /**
@@ -61,11 +62,18 @@ public class JavaAdapter implements Logger {
      */
     public JavaAdapter(Class<?> clazz) {
         logger = java.util.logging.Logger.getLogger(clazz.getName());
+        fixNullLevel();
         this.clazz = clazz;
     }
 
+    void fixNullLevel() {
+        if (logger.getLevel() == null) {
+            logger.setLevel(Level.ALL);
+        }
+    }
+
     boolean isOn() {
-        return logger.getLevel() != null && logger.getLevel() != Level.OFF;
+        return logger.getLevel() != Level.OFF;
     }
 
     boolean isAll() {
