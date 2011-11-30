@@ -381,6 +381,13 @@ public class DefaultLoggerTest {
         this.logger.trace(new IllegalArgumentException());
     }
 
+    @Test
+    public void shouldGetLevel() {
+        EasyMock.expect(root.getLevel()).andReturn(Level.INFO);
+        EasyMock.replay(root);
+        assertEquals(Level.INFO, logger.getLevel());
+    }
+
     class IOExceptionThrowableLogger implements ThrowableLogger {
         @Override
         public void log(Throwable throwable) throws IOException {

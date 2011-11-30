@@ -22,8 +22,9 @@ package org.mili.core.logging.java;
 
 
 import java.util.*;
-import java.util.logging.*;
+import java.util.logging.Level;
 
+import org.apache.commons.lang.*;
 import org.mili.core.collection.*;
 import org.mili.core.logging.Logger;
 
@@ -64,6 +65,23 @@ public class JavaAdapter implements Logger {
         logger = java.util.logging.Logger.getLogger(clazz.getName());
         fixNullLevel();
         this.clazz = clazz;
+    }
+
+    org.mili.core.logging.Level transformLevel(Level level) {
+        Validate.notNull(level, "level cannot be null!");
+        if (level == Level.ALL || level == Level.FINEST) {
+            return org.mili.core.logging.Level.TRACE;
+        } else if (level == Level.FINE || level == Level.FINER) {
+            return org.mili.core.logging.Level.DEBUG;
+        } else if (level == Level.INFO || level == Level.CONFIG) {
+            return org.mili.core.logging.Level.INFO;
+        } else if (level == Level.WARNING) {
+            return org.mili.core.logging.Level.WARN;
+        } else if (level == Level.SEVERE) {
+            return org.mili.core.logging.Level.ERROR;
+        } else {
+            return org.mili.core.logging.Level.FATAL;
+        }
     }
 
     void fixNullLevel() {
@@ -114,7 +132,7 @@ public class JavaAdapter implements Logger {
     @Override
     public void warn(Throwable t, Object... o) {
         if (isWarn()) {
-            logger.warning(this.getO(o));
+            logger.warning(getO(o));
             logException(t);
         }
     }
@@ -122,14 +140,14 @@ public class JavaAdapter implements Logger {
     @Override
     public void warn(Object... o) {
         if (isWarn()) {
-            logger.warning(this.getO(o));
+            logger.warning(getO(o));
         }
     }
 
     @Override
     public void debug(Throwable t, Object... o) {
         if (isDebug()) {
-            logger.fine(this.getO(o));
+            logger.fine(getO(o));
             logException(t);
         }
     }
@@ -137,14 +155,14 @@ public class JavaAdapter implements Logger {
     @Override
     public void debug(Object... o) {
         if (isDebug()) {
-            logger.finest(this.getO(o));
+            logger.finest(getO(o));
         }
     }
 
     @Override
     public void info(Throwable t, Object... o) {
         if (isInfo()) {
-            logger.info(this.getO(o));
+            logger.info(getO(o));
             logException(t);
         }
     }
@@ -152,14 +170,14 @@ public class JavaAdapter implements Logger {
     @Override
     public void info(Object... o) {
         if (isInfo()) {
-            this.logger.info(this.getO(o));
+            logger.info(getO(o));
         }
     }
 
     @Override
     public void error(Throwable t, Object... o) {
         if (isError()) {
-            logger.severe(this.getO(o));
+            logger.severe(getO(o));
             logException(t);
         }
     }
@@ -167,14 +185,14 @@ public class JavaAdapter implements Logger {
     @Override
     public void error(Object... o) {
         if (isError()) {
-            this.logger.severe(this.getO(o));
+            logger.severe(getO(o));
         }
     }
 
     @Override
     public void trace(Throwable t, Object... o) {
         if (isTrace()) {
-            this.logger.finest(this.getO(o));
+            logger.finest(getO(o));
             logException(t);
         }
     }
@@ -182,57 +200,57 @@ public class JavaAdapter implements Logger {
     @Override
     public void trace(Object... o) {
         if (isTrace()) {
-            this.logger.finest(this.getO(o));
+            logger.finest(getO(o));
         }
     }
 
     @Override
     public void fatal(Throwable t, Object... o) {
         if (isFatal()) {
-            this.logger.severe(this.getO(o));
-            this.logException(t);
+            logger.severe(getO(o));
+            logException(t);
         }
     }
 
     @Override
     public void fatal(Object... o) {
         if (isFatal()) {
-            this.logger.severe(this.getO(o));
+            logger.severe(getO(o));
         }
     }
 
     @Override
     public void beginWarn(String method, Object... o) {
         if (isWarn()) {
-            this.warn(this.begin(method, o));
+            warn(begin(method, o));
         }
     }
 
     @Override
     public void beginDebug(String method, Object... o) {
         if (isDebug()) {
-            this.debug(this.begin(method, o));
+            debug(begin(method, o));
         }
     }
 
     @Override
     public void beginInfo(String method, Object... o) {
         if (isInfo()) {
-            this.info(this.begin(method, o));
+            info(begin(method, o));
         }
     }
 
     @Override
     public void beginError(String method, Object... o) {
         if (isError()) {
-            this.error(this.begin(method, o));
+            error(begin(method, o));
         }
     }
 
     @Override
     public void beginFatal(String method, Object... o) {
         if (isFatal()) {
-            this.fatal(this.begin(method, o));
+            fatal(begin(method, o));
         }
     }
 
@@ -248,35 +266,35 @@ public class JavaAdapter implements Logger {
     @Override
     public void delegateWarn(String method, Object... o) {
         if (isWarn()) {
-            this.warn(this.delegate(method, o));
+            warn(delegate(method, o));
         }
     }
 
     @Override
     public void delegateDebug(String method, Object... o) {
         if (isDebug()) {
-            this.debug(this.delegate(method, o));
+            debug(delegate(method, o));
         }
     }
 
     @Override
     public void delegateInfo(String method, Object... o) {
         if (isInfo()) {
-            this.info(this.delegate(method, o));
+            info(delegate(method, o));
         }
     }
 
     @Override
     public void delegateError(String method, Object... o) {
         if (isError()) {
-            this.error(this.delegate(method, o));
+            error(delegate(method, o));
         }
     }
 
     @Override
     public void delegateFatal(String method, Object... o) {
         if (isFatal()) {
-            this.fatal(this.delegate(method, o));
+            fatal(delegate(method, o));
         }
     }
 
@@ -292,35 +310,35 @@ public class JavaAdapter implements Logger {
     @Override
     public void endWarn(String method, Object... o) {
         if (isWarn()) {
-            this.warn(this.end(method, o));
+            warn(end(method, o));
         }
     }
 
     @Override
     public void endDebug(String method, Object... o) {
         if (isDebug()) {
-            this.debug(this.end(method, o));
+            debug(end(method, o));
         }
     }
 
     @Override
     public void endInfo(String method, Object... o) {
         if (isInfo()) {
-            this.info(this.end(method, o));
+            info(end(method, o));
         }
     }
 
     @Override
     public void endError(String method, Object... o) {
         if (isError()) {
-            this.error(this.end(method, o));
+            error(end(method, o));
         }
     }
 
     @Override
     public void endFatal(String method, Object... o) {
         if (isFatal()) {
-            this.fatal(this.end(method, o));
+            fatal(end(method, o));
         }
     }
 
@@ -375,12 +393,17 @@ public class JavaAdapter implements Logger {
 
     @Override
     public Object getLogger() {
-        return this.logger;
+        return logger;
     }
 
     @Override
     public Class<?> getLoggedClass() {
         return clazz;
+    }
+
+    @Override
+    public org.mili.core.logging.Level getLevel() {
+        return transformLevel(logger.getLevel());
     }
 
     private String getO(Object... o) {
@@ -401,13 +424,13 @@ public class JavaAdapter implements Logger {
 
     private void log(Object... o) {
         if (isDebug()) {
-            logger.finer(this.getO(o));
+            logger.finer(getO(o));
         } else if (isInfo()) {
-            logger.info(this.getO(o));
+            logger.info(getO(o));
         } else if (isWarn()) {
-            logger.warning(this.getO(o));
+            logger.warning(getO(o));
         } else if (isError() || isFatal()) {
-            logger.severe(this.getO(o));
+            logger.severe(getO(o));
         }
     }
 

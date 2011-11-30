@@ -219,4 +219,52 @@ public class JavaAdapterTest {
         logger.trace(new NullArgumentException("an exception"), "abbas");
     }
 
+    @Test
+    public void shouldGetTraceLevelForAll() {
+        log.setLevel(Level.ALL);
+        assertEquals(org.mili.core.logging.Level.TRACE, logger.getLevel());
+    }
+
+    @Test
+    public void shouldGetTraceLevelForFinest() {
+        log.setLevel(Level.FINEST);
+        assertEquals(org.mili.core.logging.Level.TRACE, logger.getLevel());
+    }
+
+    @Test
+    public void shouldGetDebugLevelForFine() {
+        log.setLevel(Level.FINE);
+        assertEquals(org.mili.core.logging.Level.DEBUG, logger.getLevel());
+    }
+
+    @Test
+    public void shouldGetDebugLevelForFiner() {
+        log.setLevel(Level.FINER);
+        assertEquals(org.mili.core.logging.Level.DEBUG, logger.getLevel());
+    }
+
+    @Test
+    public void shouldGetInfoLevelForInfo() {
+        log.setLevel(Level.INFO);
+        assertEquals(org.mili.core.logging.Level.INFO, logger.getLevel());
+    }
+
+    @Test
+    public void shouldGetInfoLevelForConfig() {
+        log.setLevel(Level.INFO);
+        assertEquals(org.mili.core.logging.Level.INFO, logger.getLevel());
+    }
+
+    @Test
+    public void shouldGetWarnLevelForWarning() {
+        log.setLevel(Level.WARNING);
+        assertEquals(org.mili.core.logging.Level.WARN, logger.getLevel());
+    }
+
+    @Test
+    public void shouldGetErrorOrFatalLevelForError() {
+        log.setLevel(Level.SEVERE);
+        assertEquals(org.mili.core.logging.Level.ERROR, logger.getLevel());
+    }
+
 }

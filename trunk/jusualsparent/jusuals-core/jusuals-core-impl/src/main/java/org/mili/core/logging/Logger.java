@@ -318,4 +318,11 @@ public interface Logger {
      */
     Class<?> getLoggedClass();
 
+    /**
+     * Gets the level.
+     *
+     * @return the level
+     */
+    Level getLevel();
+
 }
