@@ -23,6 +23,7 @@ package org.mili.core.logging.log4j;
 import java.io.*;
 
 import org.apache.log4j.*;
+import org.apache.log4j.Level;
 import org.apache.log4j.spi.*;
 import org.junit.*;
 import org.mili.core.logging.*;
@@ -320,6 +321,42 @@ public class Log4jAdapterTest {
         this.baseLogger.setLevel(Level.TRACE);
         this.logger.trace(new NullPointerException(), "a");
         assertNotNull(this.actMessage);
+    }
+
+    @Test
+    public void shouldGetTraceLevel() {
+        baseLogger.setLevel(Level.TRACE);
+        assertEquals(org.mili.core.logging.Level.TRACE, logger.getLevel());
+    }
+
+    @Test
+    public void shouldGetDebugLevel() {
+        baseLogger.setLevel(Level.DEBUG);
+        assertEquals(org.mili.core.logging.Level.DEBUG, logger.getLevel());
+    }
+
+    @Test
+    public void shouldGetInfoLevel() {
+        baseLogger.setLevel(Level.INFO);
+        assertEquals(org.mili.core.logging.Level.INFO, logger.getLevel());
+    }
+
+    @Test
+    public void shouldGetWarnLevel() {
+        baseLogger.setLevel(Level.WARN);
+        assertEquals(org.mili.core.logging.Level.WARN, logger.getLevel());
+    }
+
+    @Test
+    public void shouldGetErrorLevel() {
+        baseLogger.setLevel(Level.ERROR);
+        assertEquals(org.mili.core.logging.Level.ERROR, logger.getLevel());
+    }
+
+    @Test
+    public void shouldGetFatalLevel() {
+        baseLogger.setLevel(Level.FATAL);
+        assertEquals(org.mili.core.logging.Level.FATAL, logger.getLevel());
     }
 
     class TestAppender implements Appender {

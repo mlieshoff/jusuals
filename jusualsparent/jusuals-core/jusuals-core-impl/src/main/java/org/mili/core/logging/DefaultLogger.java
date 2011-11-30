@@ -81,7 +81,7 @@ import sun.reflect.*;
  * There are methods to log for every log levels known in Log4j. The DefaultLogger maps the
  * java.util.logging Levels to these levels. The mapped levels are in braces.<br>
  * <pre>
- * - trace    (finest)
+ * - trace    (finest, all)
  * - debug    (fine, finer)
  * - info     (info, config)
  * - warn     (warning)
@@ -483,6 +483,11 @@ public class DefaultLogger implements Logger {
     @Override
     public Class<?> getLoggedClass() {
         return cls;
+    }
+
+    @Override
+    public Level getLevel() {
+        return root.getLevel();
     }
 
     /**

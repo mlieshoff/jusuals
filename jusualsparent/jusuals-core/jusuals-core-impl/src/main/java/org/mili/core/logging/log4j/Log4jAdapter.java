@@ -23,7 +23,8 @@ package org.mili.core.logging.log4j;
 
 import java.util.*;
 
-import org.apache.log4j.*;
+import org.apache.commons.lang.*;
+import org.apache.log4j.Level;
 import org.mili.core.collection.*;
 import org.mili.core.logging.Logger;
 
@@ -73,6 +74,30 @@ public class Log4jAdapter implements Logger {
     public Log4jAdapter(Class<?> clazz) {
         this.logger = org.apache.log4j.Logger.getLogger(clazz);
         this.clazz = clazz;
+    }
+
+    org.mili.core.logging.Level transformLevel(Level level) {
+        Validate.notNull(level, "level cannot be null!");
+        if (level == Level.ALL || level == Level.TRACE) {
+            return org.mili.core.logging.Level.TRACE;
+        } else if (level == Level.DEBUG) {
+            return org.mili.core.logging.Level.DEBUG;
+        } else if (level == Level.INFO) {
+            return org.mili.core.logging.Level.INFO;
+        } else if (level == Level.WARN) {
+            return org.mili.core.logging.Level.WARN;
+        } else if (level == Level.ERROR) {
+            return org.mili.core.logging.Level.ERROR;
+        } else if (level == Level.FATAL) {
+            return org.mili.core.logging.Level.FATAL;
+        } else {
+            return org.mili.core.logging.Level.FATAL;
+        }
+    }
+
+    @Override
+    public org.mili.core.logging.Level getLevel() {
+        return transformLevel(logger.getLevel());
     }
 
     @Override
