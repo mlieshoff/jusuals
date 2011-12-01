@@ -406,6 +406,36 @@ public class JavaAdapter implements Logger {
         return transformLevel(logger.getLevel());
     }
 
+    @Override
+    public boolean isDebugEnabled() {
+        return getLevel() == org.mili.core.logging.Level.DEBUG;
+    }
+
+    @Override
+    public boolean isErrorEnabled() {
+        return getLevel() == org.mili.core.logging.Level.ERROR;
+    }
+
+    @Override
+    public boolean isFatalEnabled() {
+        return getLevel() == org.mili.core.logging.Level.FATAL;
+    }
+
+    @Override
+    public boolean isInfoEnabled() {
+        return getLevel() == org.mili.core.logging.Level.INFO;
+    }
+
+    @Override
+    public boolean isTraceEnabled() {
+        return getLevel() == org.mili.core.logging.Level.TRACE;
+    }
+
+    @Override
+    public boolean isWarnEnabled() {
+        return getLevel() == org.mili.core.logging.Level.WARN;
+    }
+
     private String getO(Object... o) {
         List<Object> l = new ArrayList<Object>();
         for (int i = 0; i < o.length; i++) {

@@ -490,6 +490,36 @@ public class DefaultLogger implements Logger {
         return root.getLevel();
     }
 
+    @Override
+    public boolean isDebugEnabled() {
+        return getLevel() == Level.DEBUG;
+    }
+
+    @Override
+    public boolean isErrorEnabled() {
+        return getLevel() == Level.ERROR;
+    }
+
+    @Override
+    public boolean isFatalEnabled() {
+        return getLevel() == Level.FATAL;
+    }
+
+    @Override
+    public boolean isInfoEnabled() {
+        return getLevel() == Level.INFO;
+    }
+
+    @Override
+    public boolean isTraceEnabled() {
+        return getLevel() == Level.TRACE;
+    }
+
+    @Override
+    public boolean isWarnEnabled() {
+        return getLevel() == Level.WARN;
+    }
+
     /**
      * Sets the adapter class.
      *
