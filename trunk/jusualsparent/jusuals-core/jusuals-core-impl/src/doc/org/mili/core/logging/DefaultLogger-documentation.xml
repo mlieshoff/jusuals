@@ -147,6 +147,28 @@ And for debug?
             <pre ressource="What methods are there for logging?_21"><![CDATA[
 ERROR delegate my delegate for errors: a=1, s=abbas
             ]]></pre>
+
+            <text ressource="What methods are there for logging?_22"><![CDATA[
+How to get the actually setted log level? It's quite simple, just use the method
+            ]]></text>
+            <pre ressource="What methods are there for logging?_23"><![CDATA[
+Level getLevel();
+            ]]></pre>
+            <text ressource="What methods are there for logging?_24"><![CDATA[
+and you will receive an abstracted log level with values of Level enum TRACE, DEBUG, INFO, WARN,
+ERROR or FATAL. Methods like
+            ]]></text>
+            <pre ressource="What methods are there for logging?_25"><![CDATA[
+boolean isTraceEnabled();
+boolean isDebugEnabled();
+boolean isInfoEnabled();
+boolean isWarnEnabled();
+boolean isErrorEnabled();
+boolean isFatalEnabled();
+            ]]></pre>
+            <text ressource="What methods are there for logging?_26"><![CDATA[
+checks, if an expected level is actually setted or not.
+            ]]></text>
         </paragraph>
         <paragraph name="How to log throwables in separate?">
             <text ressource="How to log throwables in separate?_1"><![CDATA[

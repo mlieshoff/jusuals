@@ -81,7 +81,7 @@ import sun.reflect.*;
  * There are methods to log for every log levels known in Log4j. The DefaultLogger maps the
  * java.util.logging Levels to these levels. The mapped levels are in braces.<br>
  * <pre>
- * - trace    (finest, all)
+ * - trace    (finest)
  * - debug    (fine, finer)
  * - info     (info, config)
  * - warn     (warning)
@@ -151,6 +151,21 @@ import sun.reflect.*;
  * <pre>
  * ERROR delegate my delegate for errors: a=1, s=abbas
  * </pre>
+ * How to get the actually setted log level? It's quite simple, just use the method<br>
+ * <pre>
+ * Level getLevel();
+ * </pre>
+ * and you will receive an abstracted log level with values of Level enum TRACE, DEBUG, INFO, WARN,
+ * ERROR or FATAL. Methods like<br>
+ * <pre>
+ * boolean isTraceEnabled();
+ * boolean isDebugEnabled();
+ * boolean isInfoEnabled();
+ * boolean isWarnEnabled();
+ * boolean isErrorEnabled();
+ * boolean isFatalEnabled();
+ * </pre>
+ * checks, if an expected level is actually setted or not.<p>
  *
  * <u> How to log throwables in separate?</u><p>
  *
