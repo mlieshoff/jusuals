@@ -35,7 +35,7 @@ import static org.junit.Assert.*;
  * @author Michael Lieshoff
  */
 public class Log4jAdapterTest {
-    private Logger logger = new Log4jAdapter(String.class);
+    private Log4jAdapter logger = new Log4jAdapter(String.class);
     private org.apache.log4j.Logger baseLogger = (org.apache.log4j.Logger) this.logger
             .getLogger();
     private TestAppender testAppender = new TestAppender();
@@ -357,6 +357,44 @@ public class Log4jAdapterTest {
     public void shouldGetFatalLevel() {
         baseLogger.setLevel(Level.FATAL);
         assertEquals(org.mili.core.logging.Level.FATAL, logger.getLevel());
+    }
+
+    @Test
+    public void shouldIsTraceEnabled() {
+        baseLogger.setLevel(Level.TRACE);
+        assertTrue(logger.isTraceEnabled());
+    }
+
+    @Test
+    public void shouldIsDebugEnabled() {
+        baseLogger.setLevel(Level.DEBUG);
+        assertTrue(logger.isDebugEnabled());
+    }
+
+
+    @Test
+    public void shouldIsInfoEnabled() {
+        baseLogger.setLevel(Level.INFO);
+        assertTrue(logger.isInfoEnabled());
+    }
+
+    @Test
+    public void shouldIsWarnEnabled() {
+        baseLogger.setLevel(Level.WARN);
+        assertTrue(logger.isWarnEnabled());
+    }
+
+
+    @Test
+    public void shouldIsErrorEnabled() {
+        baseLogger.setLevel(Level.ERROR);
+        assertTrue(logger.isErrorEnabled());
+    }
+
+    @Test
+    public void shouldIsFatalEnabled() {
+        baseLogger.setLevel(Level.FATAL);
+        assertTrue(logger.isFatalEnabled());
     }
 
     class TestAppender implements Appender {

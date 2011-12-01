@@ -325,4 +325,46 @@ public interface Logger {
      */
     Level getLevel();
 
+    /**
+     * Checks if is trace enabled.
+     *
+     * @return true, if is trace enabled
+     */
+    boolean isTraceEnabled();
+
+    /**
+     * Checks if is debug enabled.
+     *
+     * @return true, if is debug enabled
+     */
+    boolean isDebugEnabled();
+
+    /**
+     * Checks if is info enabled.
+     *
+     * @return true, if is info enabled
+     */
+    boolean isInfoEnabled();
+
+    /**
+     * Checks if is warn enabled.
+     *
+     * @return true, if is warn enabled
+     */
+    boolean isWarnEnabled();
+
+    /**
+     * Checks if is error enabled.
+     *
+     * @return true, if is error enabled
+     */
+    boolean isErrorEnabled();
+
+    /**
+     * Checks if is fatal enabled.
+     *
+     * @return true, if is fatal enabled
+     */
+    boolean isFatalEnabled();
+
 }

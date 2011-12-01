@@ -388,6 +388,50 @@ public class DefaultLoggerTest {
         assertEquals(Level.INFO, logger.getLevel());
     }
 
+    @Test
+    public void shouldIsTraceEnabled() {
+        EasyMock.expect(root.getLevel()).andReturn(Level.TRACE);
+        EasyMock.replay(root);
+        assertTrue(logger.isTraceEnabled());
+    }
+
+    @Test
+    public void shouldIsDebugEnabled() {
+        EasyMock.expect(root.getLevel()).andReturn(Level.DEBUG);
+        EasyMock.replay(root);
+        assertTrue(logger.isDebugEnabled());
+    }
+
+
+    @Test
+    public void shouldIsInfoEnabled() {
+        EasyMock.expect(root.getLevel()).andReturn(Level.INFO);
+        EasyMock.replay(root);
+        assertTrue(logger.isInfoEnabled());
+    }
+
+    @Test
+    public void shouldIsWarnEnabled() {
+        EasyMock.expect(root.getLevel()).andReturn(Level.WARN);
+        EasyMock.replay(root);
+        assertTrue(logger.isWarnEnabled());
+    }
+
+
+    @Test
+    public void shouldIsErrorEnabled() {
+        EasyMock.expect(root.getLevel()).andReturn(Level.ERROR);
+        EasyMock.replay(root);
+        assertTrue(logger.isErrorEnabled());
+    }
+
+    @Test
+    public void shouldIsFatalEnabled() {
+        EasyMock.expect(root.getLevel()).andReturn(Level.FATAL);
+        EasyMock.replay(root);
+        assertTrue(logger.isFatalEnabled());
+    }
+
     class IOExceptionThrowableLogger implements ThrowableLogger {
         @Override
         public void log(Throwable throwable) throws IOException {

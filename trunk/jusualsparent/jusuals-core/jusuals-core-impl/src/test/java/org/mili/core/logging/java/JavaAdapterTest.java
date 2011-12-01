@@ -251,7 +251,7 @@ public class JavaAdapterTest {
 
     @Test
     public void shouldGetInfoLevelForConfig() {
-        log.setLevel(Level.INFO);
+        log.setLevel(Level.CONFIG);
         assertEquals(org.mili.core.logging.Level.INFO, logger.getLevel());
     }
 
@@ -265,6 +265,44 @@ public class JavaAdapterTest {
     public void shouldGetErrorOrFatalLevelForError() {
         log.setLevel(Level.SEVERE);
         assertEquals(org.mili.core.logging.Level.ERROR, logger.getLevel());
+    }
+
+    @Test
+    public void shouldIsTraceEnabled() {
+        log.setLevel(Level.FINEST);
+        assertTrue(logger.isTraceEnabled());
+        log.setLevel(Level.ALL);
+        assertTrue(logger.isTraceEnabled());
+    }
+
+    @Test
+    public void shouldIsDebugEnabled() {
+        log.setLevel(Level.FINE);
+        assertTrue(logger.isDebugEnabled());
+        log.setLevel(Level.FINER);
+        assertTrue(logger.isDebugEnabled());
+    }
+
+
+    @Test
+    public void shouldIsInfoEnabled() {
+        log.setLevel(Level.INFO);
+        assertTrue(logger.isInfoEnabled());
+        log.setLevel(Level.CONFIG);
+        assertTrue(logger.isInfoEnabled());
+    }
+
+    @Test
+    public void shouldIsWarnEnabled() {
+        log.setLevel(Level.WARNING);
+        assertTrue(logger.isWarnEnabled());
+    }
+
+
+    @Test
+    public void shouldIsErrorEnabled() {
+        log.setLevel(Level.SEVERE);
+        assertTrue(logger.isErrorEnabled());
     }
 
 }
