@@ -57,7 +57,8 @@ import org.mili.core.logging.Logger;
  */
 
 public class Log4jAdapter implements Logger {
-    private org.apache.log4j.Logger logger = org.apache.log4j.Logger.getRootLogger();
+    private org.apache.log4j.Logger root = org.apache.log4j.Logger.getRootLogger();
+    private org.apache.log4j.Logger logger = root;
     private Class<?> clazz = Log4jAdapter.class;
 
     /**
@@ -77,7 +78,6 @@ public class Log4jAdapter implements Logger {
     }
 
     org.mili.core.logging.Level transformLevel(Level level) {
-        Validate.notNull(level, "level cannot be null!");
         if (level == Level.ALL || level == Level.TRACE) {
             return org.mili.core.logging.Level.TRACE;
         } else if (level == Level.DEBUG) {
@@ -91,13 +91,17 @@ public class Log4jAdapter implements Logger {
         } else if (level == Level.FATAL) {
             return org.mili.core.logging.Level.FATAL;
         } else {
-            return org.mili.core.logging.Level.FATAL;
+            return null;
         }
     }
 
     @Override
     public org.mili.core.logging.Level getLevel() {
-        return transformLevel(logger.getLevel());
+        org.mili.core.logging.Level lvl = transformLevel(logger.getLevel());
+        if (lvl == null) {
+            lvl = transformLevel(root.getLevel());
+        }
+        return lvl;
     }
 
     @Override
