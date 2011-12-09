@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.mili.jusuals.core</groupId>
         <artifactId>jusuals-core</artifactId>
-        <version>1.1-pre2</version>
+        <version>1.1-pre3</version>
     </parent>
     <groupId>org.mili.jusuals.core.impl</groupId>
     <artifactId>jusuals-core-impl</artifactId>
