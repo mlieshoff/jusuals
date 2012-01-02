@@ -33,17 +33,17 @@
         <dependency>
             <groupId>org.mili.jusuals.core.api</groupId>
             <artifactId>jusuals-core-api</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mili.jusuals.core.impl</groupId>
             <artifactId>jusuals-core-impl</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mili.jusuals.test</groupId>
             <artifactId>jusuals-test</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

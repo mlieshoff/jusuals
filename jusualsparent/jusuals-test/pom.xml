@@ -43,7 +43,7 @@
         <dependency>
             <groupId>org.mili.jusuals.core.api</groupId>
             <artifactId>jusuals-core-api</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>
