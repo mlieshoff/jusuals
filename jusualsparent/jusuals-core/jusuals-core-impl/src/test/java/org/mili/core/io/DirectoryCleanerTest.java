@@ -255,6 +255,7 @@ public class DirectoryCleanerTest {
     }
 
     @Test
+    @Ignore // use another variant to set the actual date
     public void shouldIsFileExpiredWithFileTime() throws Exception {
         DirectoryCleaner dc = new DirectoryCleaner();
         GregorianCalendar gc = new GregorianCalendar();
