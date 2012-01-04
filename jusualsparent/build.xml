@@ -38,7 +38,7 @@
     </target>
 
     <target name="release-core" description="makes releases of jusuals-core.">
-        <delete file="${tmp.dir}"/>
+        <delete dir="${tmp.dir}"/>
         <mkdir dir="${tmp.dir}"/>
         <unzip src="jusuals-core/jusuals-core-api/target/jusuals-core-api-${release.version}.jar" dest="${tmp.dir}" />
         <unzip src="jusuals-core/jusuals-core-impl/target/jusuals-core-impl-${release.version}.jar" dest="${tmp.dir}" />
@@ -90,7 +90,7 @@
     <macrodef name="release-project">
         <attribute name="project"/>
         <sequential>
-            <delete file="${tmp.dir}"/>
+            <delete dir="${tmp.dir}"/>
             <mkdir dir="${tmp.dir}"/>
             <unzip src="@{project}/target/@{project}-${release.version}.jar" dest="${tmp.dir}" />
             <mkdir dir="${release.dir}"/>
